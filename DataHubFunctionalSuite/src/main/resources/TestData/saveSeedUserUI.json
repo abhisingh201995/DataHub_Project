@@ -1,0 +1,60 @@
+{
+  "SeedConfigurationDetailsSaveUpdateTest.validateSaveSeedConfigurationTest": [
+    {
+      "input": {
+        "parameter": {
+          "appkey": "Fa8fEBWRm4HsRCOqhXfH2CTwuVxF3gy6",
+          "username": "SeanIvan",
+          "password": "Kr0n0s@Cloud",
+          "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+        },
+        "testcaseId": "227001"
+      },
+      "output": {
+        "message": "The seed configurations have been updated successfully."
+      }
+    },
+    {
+        "input": {
+          "parameter": {
+            "appkey": "Fa8fEBWRm4HsRCOqhXfH2CTwuVxF3gy6",
+            "username": "SeanIv",
+            "password": "Kr0n0s@Cloud",
+            "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+          },
+          "testcaseId": "227002"
+        },
+        "output": {
+          "message": "The authentication failed. Try entering the information again. : EDAP-2069"
+      }
+    }],
+    "SeedConfigurationDetailsSaveUpdateTest.validateEditSeedConfigurationTest": [
+      {
+        "input": {
+          "parameter": {
+            "appkey": "qhXfH2CTwuVxF3gy6",
+            "username": "SeanIvan",
+            "password": "Kr0n0s@Cloud",
+            "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+          },
+          "testcaseId": "227184"
+        },
+        "output": {
+          "message": "The seed configurations have been updated successfully."
+        }
+      },
+      {
+        "input": {
+          "parameter": {
+            "appkey": "Fa8fEBWRm4HsRCOqhXfH2CTwuVxF3gy6",
+            "username": "SeanIvan",
+            "password": "KrClo",
+            "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+          },
+          "testcaseId": "227185"
+        },
+        "output": {
+          "message": "The authentication failed. Try entering the information again. : EDAP-2069"
+        }
+      }
+  ]}

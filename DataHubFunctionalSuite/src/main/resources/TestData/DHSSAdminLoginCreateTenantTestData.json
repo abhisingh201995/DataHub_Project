@@ -1,0 +1,117 @@
+{
+  "DHSSAdminLoginApiServicesTest.dhssAdminAuthTest": [
+    {
+      "input": {
+        "description": "Validate the API response for admin login into DHSS",
+        "URL": "admin/tenant/login",
+        "method": "POST",
+        "payload": "{\"username\": \"{username}\",\"password\": \"{password}\"}",
+        "parameter": {
+          "username": "admin",
+          "password": "Kr0n0s@Cloud"
+        },
+        "testcaseId": "226365"
+      },
+      "output": {
+        "statusCode": "201",
+        "response": ""
+      }
+    }
+  ],
+  "DHSSAdminLoginApiServicesTest.dhssAdminNegativeAuthTest": [
+    {
+      "input": {
+        "description": "Validate the API response for invalid admin login into dhss",
+        "URL": "admin/tenant/login",
+        "method": "POST",
+        "payload": "{\"username\": \"{username}\",\"password\": \"{password}\"}",
+        "parameter": {
+        },
+        "testcaseId": "226369"
+      },
+      "output": {
+        "statusCode": "500",
+        "response": ""
+      }
+    }
+  ],
+  "DHSSAdminLoginApiServicesTest.adminLoginCreateTenantTest": [
+    {
+      "input": {
+        "description": "Validate the API response for creation of new DH tenant with Admin user in DHSS",
+        "URL": "admin/tenant/provisioning/create",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientId": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://a",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja{addUniqueChar}.dev.mykronos.com",
+          "environment": "Production",
+          "solution": "1234",
+          "tenantSeedUser": "SeanIvan",
+          "isSSOEnabled": "false",
+          "createdBy": "admin",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "226232"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"status\": \"Success\"\n}",
+        "outputParameter": {
+          "headersSize": 18,
+          "Content-Type": "application/json",
+          "Server": "nginx/1.19.9"
+        }
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the API response for the creation of new DH tenant for same WFDURL with Admin user in DHSS",
+        "URL": "admin/tenant/provisioning/create",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientId": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://a",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja.dev.mykronos.com",
+          "environment": "Production",
+          "solution": "1234",
+          "tenantSeedUser": "SeanIvan",
+          "isSSOEnabled": "false",
+          "createdBy": "admin",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "226234"
+      },
+      "output": {
+        "statusCode": "500",
+        "response": "{\n    \"errorMessage\": \"The Tenant vanity URL is already registered with another tenant. Enter a different URL. : EDAP-2007\",\n    \"errorCode\": \"EDAP-GEN-2002\"\n}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TenantListPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhss</a> &gt; <span class="el_source">TenantListPage.java</span></div><h1>TenantListPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhss;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class TenantListPage {
+
+    private WebDriver driver;
+<span class="nc" id="L10">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+<span class="nc" id="L12">    private By addTenantButton= By.xpath(&quot;//div[@title='New']//div//button[@aria-label='New']&quot;);</span>
+<span class="nc" id="L13">    private By editTenantButton= By.xpath(&quot;//div[@title='Edit']//div//button[@aria-label='Edit']&quot;);</span>
+
+<span class="nc" id="L15">    private By menuBar=By.xpath(&quot;//button[@automation-id='openCloseMenuHeaderButton']&quot;);</span>
+<span class="nc" id="L16">    private By signOutButton=By.xpath(&quot;//button[@title='Sign Out']&quot;);</span>
+
+<span class="nc" id="L18">    private By searchBar = By.xpath(&quot;//div[@col-id='tenantName']//span[@class='ag-icon ag-icon-menu']&quot;);</span>
+
+<span class="nc" id="L20">    private By searchTextBox = By.xpath(&quot;//input[@id='filterText']&quot;);</span>
+<span class="nc" id="L21">    private By additionalPropertiesBtn = By.xpath(&quot;//div[@class='icon-label']//span[contains(text(),'Additional Properties')]&quot;);</span>
+
+<span class="nc" id="L23">    private By refreshBtn = By.xpath(&quot;//span[@class='icon-k-loop']&quot;);</span>
+
+
+<span class="nc" id="L26">    public TenantListPage(WebDriver driver) {</span>
+<span class="nc" id="L27">        this.driver = driver;</span>
+<span class="nc" id="L28">    }</span>
+
+    public void selectTenantIdFromGrid(String tenantId){
+<span class="nc" id="L31">        seleniumHelper.clickElement(driver,By.xpath(&quot;//div[normalize-space()='&quot;+tenantId+&quot;']&quot;));</span>
+<span class="nc" id="L32">    }</span>
+
+    public void clickRefresh(){
+<span class="nc" id="L35">        seleniumHelper.clickElement(driver,this.refreshBtn);</span>
+<span class="nc" id="L36">    }</span>
+
+    public void scrollPageTillTenantFound(String tenantId){
+<span class="nc" id="L39">        seleniumHelper.scrollToBottomOfPage(driver , By.xpath(&quot;//div[normalize-space()='&quot;+tenantId+&quot;']&quot;));</span>
+<span class="nc" id="L40">    }</span>
+
+    public void searchTenant(String tenantName){
+<span class="nc" id="L43">        seleniumHelper.clickElement(driver,searchBar);</span>
+<span class="nc" id="L44">        seleniumHelper.enterTextElement(driver,searchTextBox,tenantName);</span>
+
+<span class="nc" id="L46">        seleniumHelper.pressEnter(driver,searchTextBox);</span>
+<span class="nc" id="L47">    }</span>
+
+    public TenantRegistrationPage clickOnAddTenant(){
+<span class="nc" id="L50">        seleniumHelper.clickElement(driver,addTenantButton);</span>
+<span class="nc" id="L51">        return new TenantRegistrationPage(driver);</span>
+    }
+
+    public TenantRegistrationPage clickOnEditTenant(){
+<span class="nc" id="L55">        seleniumHelper.clickElement(driver,editTenantButton);</span>
+<span class="nc" id="L56">        return new TenantRegistrationPage(driver);</span>
+    }
+
+    public TMSAdminAdditionalProperties clickOnAdditionalProperties(){
+<span class="nc" id="L60">        seleniumHelper.clickElement(driver, additionalPropertiesBtn);</span>
+<span class="nc" id="L61">        return new TMSAdminAdditionalProperties(driver);</span>
+    }
+
+    public DhssLoginPage signOutAdminUser(){
+<span class="nc" id="L65">        seleniumHelper.clickElement(driver,menuBar);</span>
+<span class="nc" id="L66">        seleniumHelper.clickElement(driver,signOutButton);</span>
+<span class="nc" id="L67">        return new DhssLoginPage(driver);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

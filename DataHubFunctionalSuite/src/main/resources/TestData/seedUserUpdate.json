@@ -1,0 +1,43 @@
+{
+  "DHSSSeedUserSaveApiServicesTest.updateSeedUserTest": [
+    {
+      "input": {
+        "description": "Validate the API response update seed user API",
+        "URL": "tenant/seeduser",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "appkey": "{appkey}",
+          "username": "{username}",
+          "password": "{password}",
+          "createdBy": "{createdBy}",
+          "seedUserDetailsQuery": "select * from public.tenantmgr_tenant;"
+        },
+        "testcaseId": "226400"
+      },
+      "output": {
+        "statuscode": "200",
+        "response": "",
+        "Content-Type": "application/json"
+      }
+    }
+    ,
+    {
+      "input": {
+      "description": "Validate the API response with blank created by for update seed user API",
+      "URL": "tenant/seeduser",
+      "method": "PUT",
+      "payload": "",
+      "parameter": {
+        "appkey": "{appkey}",
+        "username": "{username}",
+        "password": "{password}",
+        "createdBy": ""
+      },
+      "testcaseId": "226401"
+    },
+      "output": {
+        "statuscode": "400",
+        "response": ""
+      }}
+  ]}

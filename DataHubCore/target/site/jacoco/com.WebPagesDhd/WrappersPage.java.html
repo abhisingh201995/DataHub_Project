@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WrappersPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">WrappersPage.java</span></div><h1>WrappersPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+import java.util.List;
+
+public class WrappersPage {
+
+    private MasterPage masterPage;
+<span class="nc" id="L12">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+
+    private WebDriver driver;
+
+<span class="nc" id="L17">    public WrappersPage(WebDriver driver) {</span>
+<span class="nc" id="L18">        this.driver = driver;</span>
+<span class="nc" id="L19">        masterPage=new MasterPage(driver);</span>
+<span class="nc" id="L20">    }</span>
+
+    public MasterPage getMasterPage() {
+<span class="nc" id="L23">        return masterPage;</span>
+    }
+
+    public void setMasterPage(MasterPage masterPage) {
+<span class="nc" id="L27">        this.masterPage = masterPage;</span>
+<span class="nc" id="L28">    }</span>
+
+<span class="nc" id="L30">    private By addWrapperButton = By.xpath(&quot;//a[normalize-space()='Add wrapper']&quot;);</span>
+<span class="nc" id="L31">    private By homePageLink = By.xpath(&quot;//a[normalize-space()='Home']&quot;);</span>
+
+<span class="nc" id="L33">    private By wrapperNameTextBox = By.xpath(&quot;//input[@id='id_wrapper_name']&quot;);</span>
+<span class="nc" id="L34">    private By selectTenantDropDown = By.xpath(&quot;//select[@id='id_wrapper_tenant']&quot;);</span>
+<span class="nc" id="L35">    private By saveWrapper = By.xpath(&quot;//input[@name='_save']&quot;);</span>
+
+<span class="nc" id="L37">    private By wrapperStatus = By.xpath(&quot;//li[@class='success']&quot;);</span>
+
+<span class="nc" id="L39">    private By actionDropdown = By.xpath(&quot;//select[@name='action']&quot;);</span>
+<span class="nc" id="L40">    private By actionGoButton = By.xpath(&quot;//button[normalize-space()='Go']&quot;);</span>
+
+<span class="nc" id="L42">    private By deleteConfirmationButton = By.xpath(&quot;//input[@value='Yes, I’m sure']&quot;);</span>
+
+<span class="nc" id="L44">    private By operationSuccessMessage = By.xpath(&quot;//li[@class='success']&quot;);</span>
+<span class="nc" id="L45">    private By operationFailedMessage = By.xpath(&quot;//li[@class='error']&quot;);</span>
+
+    public void clickAddWrapperButton(){
+<span class="nc" id="L48">        seleniumHelper.clickElement(driver,addWrapperButton);</span>
+<span class="nc" id="L49">    }</span>
+
+    public void createNewWrapper(String wrapper, String tenant){
+<span class="nc" id="L52">        seleniumHelper.enterTextElement(driver,wrapperNameTextBox,wrapper);</span>
+<span class="nc" id="L53">        seleniumHelper.selectFromDropdown(driver,selectTenantDropDown,tenant);</span>
+<span class="nc" id="L54">        seleniumHelper.clickElement(driver,saveWrapper);</span>
+<span class="nc" id="L55">        seleniumHelper.validateElementPresent(driver,wrapperStatus);</span>
+<span class="nc" id="L56">    }</span>
+
+
+    public void selectWrapperCheckBox(String wrapper){
+<span class="nc" id="L60">        seleniumHelper.clickElement(driver,By.xpath(&quot;//input[@value='&quot;+wrapper+&quot;']&quot;));</span>
+<span class="nc" id="L61">    }</span>
+
+    public void selectAndGoActionForSelectedWrapper(String operation){
+<span class="nc" id="L64">        seleniumHelper.selectFromDropdown(driver,actionDropdown,operation);</span>
+<span class="nc" id="L65">        seleniumHelper.clickElement(driver,actionGoButton);</span>
+<span class="nc" id="L66">    }</span>
+
+    public List&lt;String&gt; getListOfTenants(){
+<span class="nc" id="L69">        return seleniumHelper.getListOfElementsInDropDown(driver, selectTenantDropDown);</span>
+    }
+
+    public void clickDeleteConfirmationSuccess(){
+        //seleniumHelper.clickElement(driver,deleteConfirmationButton);
+<span class="nc" id="L74">        seleniumHelper.validateElementPresent(driver,operationSuccessMessage);</span>
+<span class="nc" id="L75">    }</span>
+
+    public void clickDeleteConfirmationFailed(){
+        //seleniumHelper.clickElement(driver,deleteConfirmationButton);
+<span class="nc" id="L79">        seleniumHelper.validateElementPresent(driver,operationFailedMessage);</span>
+<span class="nc" id="L80">    }</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

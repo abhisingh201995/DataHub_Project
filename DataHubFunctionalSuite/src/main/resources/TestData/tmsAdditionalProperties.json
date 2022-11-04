@@ -1,0 +1,162 @@
+{
+  "TMSAdminAdditionalPropertiesUITest.validateSaveAdditionalPropertiesViewpointYes": [
+    {
+      "input": {
+        "parameter": {
+          "isUkgProCustomer": "No",
+          "isDataHubLicensed": "No",
+          "isGcpUkgOwned": "No",
+          "isViewpointTenant": "Yes"
+        },
+        "testcaseId": "228981"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateUpdateAdditionalPropertiesViewPointYes": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "Yes",
+          "isUkgProCustomer": "No",
+          "isDataHubLicensed": "No",
+          "isGcpUkgOwned": "No"
+        },
+        "testcaseId": "228982"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateSaveAdditionalPropertiesViewpointNoJointCustYes": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "Yes",
+          "isDataHubLicensed": "Yes",
+          "isGcpUkgOwned": "Yes",
+          "projectName": "GCP-Projectdesc12"
+        },
+        "testcaseId": "228983"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateUpdateAdditionalPropertiesViewPointNoJointCustYes": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "Yes",
+          "isDataHubLicensed": "Yes",
+          "isGcpUkgOwned": "Yes",
+          "projectName": "Update-Projectname14!"
+        },
+        "testcaseId": "228984"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateSaveAdditionalPropertiesViewpointNoJointCustYesDhNo": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "Yes",
+          "isDataHubLicensed": "No",
+          "isGcpUkgOwned": "Yes",
+          "projectName": "GCP-Projectdesc1278"
+        },
+        "testcaseId": "232689"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateSaveAdditionalPropertiesViewpointNoJointCustYesDhYes": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "Yes",
+          "isDataHubLicensed": "Yes",
+          "isGcpUkgOwned": "No",
+          "projectName": "GCP-Projectdesc127890"
+        },
+        "testcaseId": "234714"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateSaveAdditionalPropertiesViewpointNoUkgProNoGcpOwnedNo": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isDataHubLicensed": "Yes",
+          "isUkgProCustomer": "No",
+          "isGcpUkgOwned": "No"
+        },
+        "testcaseId": "228985"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateUpdateAdditionalPropertiesViewPointNoUkgProNo": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "No",
+          "isDataHubLicensed": "Yes",
+          "isGcpUkgOwned": "No"
+        },
+        "testcaseId": "228986"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateSaveAdditionalPropertiesViewpointNoUkgProNoGcpOwnedYes": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "No",
+          "isDataHubLicensed": "Yes",
+          "isGcpUkgOwned": "Yes",
+          "projectName": "'Newgcppro12'"
+        },
+        "testcaseId": "228987"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateUpdateAdditionalPropertiesViewpointNoUkgProNoGcpOwnedYes": [
+    {
+      "input": {
+        "parameter": {
+          "isViewpointTenant": "No",
+          "isUkgProCustomer": "No",
+          "isDataHubLicensed": "Yes",
+          "isGcpUkgOwned": "Yes",
+          "projectName": "update-gcpCSyes"
+        },
+        "testcaseId": "228988"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateCancelAdditionalProperties": [
+    {
+      "input": {
+        "parameter": {
+          "isUkgProCustomer": "No",
+          "isGcpUkgOwned": "No",
+          "isDataHubLicensed": "No"
+        },
+        "testcaseId": "228989"
+      }
+    }
+  ],
+  "TMSAdminAdditionalPropertiesUITest.validateErrorWithInvalidProjectName": [
+    {
+      "input": {
+        "parameter": {
+          "projectNameMin": "min",
+          "projectNameMax": "maximumcharacterlengthisthirty30",
+          "projectNameInvalid": "Invalid@"
+        },
+        "testcaseId": "230482"
+      }
+    }
+  ]
+}

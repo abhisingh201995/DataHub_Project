@@ -1,0 +1,192 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="DATAHUB performance suit with Partial DR for timecardMetrics" parallel="tests" thread-count="10">
+
+    <listeners>
+        <listener class-name="com.ukg.datahub.perf.listeners.ExecutionListener"/>
+        <listener class-name="com.ukg.datahub.perf.listeners.PerfTestReporterListener"/>
+    </listeners>
+
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0010_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0010_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0011_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0011_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0012_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0012_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+   <!-- <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0013_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0013_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0014_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0014_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0015_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0015_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0016_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0016_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0017_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0017_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0018_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0018_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>
+
+    <test name="DHD Scalability test for Performance Tier PerfTest_upto_500K-OnDemand timecardMetrics mfgold0019_int_01" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="overrideStartDate" value="2021-09-01"/>
+        <parameter name="overrideEndDate" value="2021-09-05"/>
+        <parameter name="performanceTier" value="PerfTest_7000-14000 - OnDemand"></parameter>
+        <parameter name="tenantName" value="mfgold0019_int_01"></parameter>
+        <parameter name="runType" value="Partial DR"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'25', 'dayCount':'7'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithIncrementalDRTest"/>
+        </classes>
+    </test>-->
+
+</suite>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SampleAngularPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhss</a> &gt; <span class="el_source">SampleAngularPage.java</span></div><h1>SampleAngularPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhss;
+
+import com.Utilities.NgUtilities;
+import com.Utilities.SeleniumHelper;
+import com.paulhammant.ngwebdriver.ByAngular;
+import com.paulhammant.ngwebdriver.ByAngularButtonText;
+import com.paulhammant.ngwebdriver.ByAngularModel;
+import com.paulhammant.ngwebdriver.NgWebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class SampleAngularPage {
+
+    private WebDriver driver;
+    private NgWebDriver ngWebDriver;
+<span class="nc" id="L16">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+<span class="nc" id="L17">    private NgUtilities ngUtilities = new NgUtilities();</span>
+
+
+
+    //Angular Web Element
+
+<span class="nc" id="L23">    ByAngularModel element = ByAngular.model(&quot;//model name replace&quot;);</span>
+<span class="nc" id="L24">    ByAngularModel element2 = ByAngular.model(&quot;//model name replace&quot;);</span>
+
+<span class="nc" id="L26">    ByAngularButtonText sampleButton = ByAngular.buttonText(&quot;//button text&quot;);</span>
+
+    //HTML web element
+
+<span class="nc" id="L30">    By sample1 = By.xpath(&quot;//xpath locater&quot;);</span>
+
+    //constructor to initialize selenium and Ng webdriver
+<span class="nc" id="L33">    public SampleAngularPage(WebDriver driver, NgWebDriver ngWebDriver) {</span>
+<span class="nc" id="L34">        this.driver = driver;</span>
+<span class="nc" id="L35">        this.ngWebDriver = ngWebDriver;</span>
+<span class="nc" id="L36">    }</span>
+
+    // sample page interaction
+
+    public void fillAngularForm(ByAngularModel element, String text){
+<span class="nc" id="L41">        ngUtilities.enterTextToNgElement(driver,ngWebDriver,text,element);</span>
+<span class="nc" id="L42">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

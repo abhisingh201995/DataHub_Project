@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TenantRegistrationPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhss</a> &gt; <span class="el_source">TenantRegistrationPage.java</span></div><h1>TenantRegistrationPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhss;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+
+public class TenantRegistrationPage {
+
+    private WebDriver driver;
+<span class="nc" id="L11">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+<span class="nc" id="L13">    private By pageHeader = By.xpath(&quot;//h1[normalize-space()='Add tenant']&quot;);</span>
+
+<span class="nc" id="L15">    private By TEXTFIELD_TNTNAME= By.id(&quot;tenantName&quot;);</span>
+<span class="nc" id="L16">    private By TEXTFIELD_TNTSRTNAME= By.id(&quot;shortName&quot;);</span>
+<span class="nc" id="L17">    private By TEXTFIELD_TNTVANITYURL=By.id(&quot;tenantVanityURL&quot;);</span>
+<span class="nc" id="L18">    private By TEXTFIELD_TNTAUTHURL= By.id(&quot;OpenAMURL&quot;);</span>
+<span class="nc" id="L19">    private By TEXTFIELD_TNTWFDURL= By.id(&quot;WFDURL&quot;);</span>
+<span class="nc" id="L20">    private By TEXTFIELD_TNTCLNTID= By.id(&quot;ClientId&quot;);</span>
+<span class="nc" id="L21">    private By TEXTFIELD_TNTCLNTSCRT=By.id(&quot;ClientSecret&quot;);</span>
+<span class="nc" id="L22">    private By DROPDOWN_TNTLOCL=By.xpath(&quot;//edap-smartcombo[@id='localePolicy']//input[1]&quot;);</span>
+<span class="nc" id="L23">    private By DROPDOWN_TNTLOCLVAL= By.xpath(&quot;//edap-smartcombo[@id='localePolicy']//li[1]&quot;);</span>
+<span class="nc" id="L24">    private By DROPDOWN_TNTENV=By.xpath(&quot;//edap-smartcombo[@id='environment']//input&quot;);</span>
+<span class="nc" id="L25">    private By DROPDOWN_TNTENVVAL=By.xpath(&quot;//span[@title='Production']&quot;);</span>
+<span class="nc" id="L26">    private By TEXTFIELD_TNTSOL= By.xpath(&quot;//input[@id='solution']&quot;);</span>
+<span class="nc" id="L27">    private By TEXTFIELD_TNTSEED= By.xpath(&quot;//input[@id='tenantSeedUser']&quot;);</span>
+<span class="nc" id="L28">    private By BUTTON_TNTRGSTR= By.id(&quot;btnRegister&quot;);</span>
+<span class="nc" id="L29">    private By MSGWRAPPER= By.xpath(&quot;//div[contains(@class, 'edap-alert')]//span[contains(@class, 'msg-text')]&quot;);</span>
+<span class="nc" id="L30">    private By BUTTON_MSGWRAPPERCLOSE=By.xpath(&quot;//div[contains(@class, 'edap-alert')]//button[contains(@class, 'btn close')]&quot;);</span>
+<span class="nc" id="L31">    private By FORM_ERRORMESSAGES= By.xpath(&quot;//small[@class='error error-required']/div&quot;);</span>
+<span class="nc" id="L32">    private By successSaveNotification=By.xpath(&quot;//div[@class='alert alert-success']&quot;);</span>
+<span class="nc" id="L33">    private By saveNotification = By.xpath(&quot;//div[@role='alert']&quot;);</span>
+<span class="nc" id="L34">    private By successUpdateNotification=By.xpath(&quot;//div[@class='alert alert-success']&quot;);</span>
+<span class="nc" id="L35">    private By updateNotification = By.xpath(&quot;//div[@role='alert']&quot;);</span>
+
+<span class="nc" id="L37">    private By ssoCheckbox = By.xpath(&quot;//label[@class='edap-checkbox sso-checkbox']/i[@class='edap-checkbox-icon']&quot;);</span>
+<span class="nc" id="L38">    private By dimensionFedratedUrlTextBox= By.id(&quot;tenantSSOURL&quot;);</span>
+
+
+<span class="nc" id="L41">    public TenantRegistrationPage(WebDriver driver) {</span>
+<span class="nc" id="L42">        this.driver = driver;</span>
+<span class="nc" id="L43">    }</span>
+
+    public Boolean validatePageHeader(){
+<span class="nc" id="L46">        Boolean status=seleniumHelper.validateElementPresent(driver,pageHeader);</span>
+<span class="nc" id="L47">        Assert.assertTrue(status);</span>
+<span class="nc" id="L48">        return status;</span>
+    }
+
+    public void addDHSSTenant(String TEXTFIELD_TNTNAME,
+                          String TEXTFIELD_TNTSRTNAME,
+                          String TEXTFIELD_TNTVANITYURL,
+                          String TEXTFIELD_TNTAUTHURL,
+                          String TEXTFIELD_TNTWFDURL,
+                          String TEXTFIELD_TNTCLNTID,
+                          String TEXTFIELD_TNTCLNTSCRT,
+                          String TEXTFIELD_TNTSOL,
+                          String TEXTFIELD_TNTSEED
+                          ,String fedrated,String fedratedUrl){
+
+<span class="nc" id="L62">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTNAME,TEXTFIELD_TNTNAME);</span>
+<span class="nc" id="L63">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTSRTNAME,TEXTFIELD_TNTSRTNAME);</span>
+<span class="nc" id="L64">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTVANITYURL,TEXTFIELD_TNTVANITYURL);</span>
+<span class="nc" id="L65">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTAUTHURL,TEXTFIELD_TNTAUTHURL);</span>
+<span class="nc" id="L66">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTWFDURL,TEXTFIELD_TNTWFDURL);</span>
+<span class="nc" id="L67">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTCLNTID,TEXTFIELD_TNTCLNTID);</span>
+<span class="nc" id="L68">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTCLNTSCRT,TEXTFIELD_TNTCLNTSCRT);</span>
+<span class="nc" id="L69">        seleniumHelper.clickElement(driver,this.DROPDOWN_TNTLOCL);</span>
+<span class="nc" id="L70">        seleniumHelper.clickElement(driver,this.DROPDOWN_TNTLOCLVAL);</span>
+<span class="nc" id="L71">        seleniumHelper.clickElement(driver, this.DROPDOWN_TNTENV);</span>
+<span class="nc" id="L72">        seleniumHelper.clickElement(driver,this.DROPDOWN_TNTENVVAL);</span>
+<span class="nc" id="L73">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTSOL,TEXTFIELD_TNTSOL);</span>
+<span class="nc" id="L74">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTSEED,TEXTFIELD_TNTSEED);</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if(fedrated.equals(&quot;true&quot;)){</span>
+<span class="nc" id="L77">            seleniumHelper.clickElement(driver,this.ssoCheckbox);</span>
+<span class="nc" id="L78">            seleniumHelper.enterTextElement(driver,dimensionFedratedUrlTextBox,fedratedUrl);</span>
+        }
+<span class="nc" id="L80">    }</span>
+
+    public void updateDHSSTenant(String TEXTFIELD_TNTNAME,
+                              String TEXTFIELD_TNTVANITYURL,
+                              String TEXTFIELD_TNTAUTHURL,
+                              String TEXTFIELD_TNTWFDURL,
+                              String TEXTFIELD_TNTCLNTID,
+                              String TEXTFIELD_TNTCLNTSCRT,
+                              String TEXTFIELD_TNTSOL,
+                              String TEXTFIELD_TNTSEED
+    ){
+
+<span class="nc" id="L92">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTNAME,TEXTFIELD_TNTNAME);</span>
+<span class="nc" id="L93">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTVANITYURL,TEXTFIELD_TNTVANITYURL);</span>
+<span class="nc" id="L94">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTAUTHURL,TEXTFIELD_TNTAUTHURL);</span>
+<span class="nc" id="L95">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTWFDURL,TEXTFIELD_TNTWFDURL);</span>
+<span class="nc" id="L96">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTCLNTID,TEXTFIELD_TNTCLNTID);</span>
+<span class="nc" id="L97">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTCLNTSCRT,TEXTFIELD_TNTCLNTSCRT);</span>
+<span class="nc" id="L98">        seleniumHelper.clickElement(driver,this.DROPDOWN_TNTLOCL);</span>
+<span class="nc" id="L99">        seleniumHelper.clickElement(driver,this.DROPDOWN_TNTLOCLVAL);</span>
+<span class="nc" id="L100">        seleniumHelper.clickElement(driver, this.DROPDOWN_TNTENV);</span>
+<span class="nc" id="L101">        seleniumHelper.clickElement(driver,this.DROPDOWN_TNTENVVAL);</span>
+<span class="nc" id="L102">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTSOL,TEXTFIELD_TNTSOL);</span>
+<span class="nc" id="L103">        seleniumHelper.enterTextElement(driver,this.TEXTFIELD_TNTSEED,TEXTFIELD_TNTSEED);</span>
+<span class="nc" id="L104">    }</span>
+
+<span class="nc" id="L106">    public void clickRegisterButton(){ seleniumHelper.clickElement(driver,BUTTON_TNTRGSTR);</span>
+<span class="nc" id="L107">    }</span>
+
+    public String getTenantCreateStatusMessage(){
+<span class="nc" id="L110">        return seleniumHelper.getElementText(driver,saveNotification);</span>
+    }
+
+<span class="nc" id="L113">    public void validateSuccessTenantSaveMessage(){ seleniumHelper.validateElementPresent(driver,successSaveNotification);</span>
+<span class="nc" id="L114">    }</span>
+
+    public String getTenantUpdateStatusMessage(){
+<span class="nc" id="L117">        return seleniumHelper.getElementText(driver,updateNotification);</span>
+    }
+
+<span class="nc" id="L120">    public void validateSuccessTenantUpdateMessage(){ seleniumHelper.validateElementPresent(driver,successUpdateNotification);</span>
+<span class="nc" id="L121">    }</span>
+
+
+<span class="nc" id="L124">    public void getTenantFailedStatusMessage(){ seleniumHelper.getElementText(driver,MSGWRAPPER);</span>
+<span class="nc" id="L125">    }</span>
+
+<span class="nc" id="L127">    public void validateFailureTenantErrorMessage(){ seleniumHelper.validateElementPresent(driver,FORM_ERRORMESSAGES);</span>
+<span class="nc" id="L128">    }</span>
+
+<span class="nc" id="L130">    public void closeTenantFailedStatusMessageAlert(){ seleniumHelper.clickElement(driver,BUTTON_MSGWRAPPERCLOSE);</span>
+<span class="nc" id="L131">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

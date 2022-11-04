@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaycodeMappingDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">PaycodeMappingDto.java</span></div><h1>PaycodeMappingDto.java</h1><pre class="source lang-java linenums">
+
+package com.DataObjects.DhssDataObject;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+/**
+ * @author: pooja.g.gupta
+ * @desc: This class will be used as POJO.
+ */
+
+<span class="nc" id="L14">public class PaycodeMappingDto {</span>
+    @JsonProperty(&quot;edapTenantId&quot;)
+    public String edapTenantId;
+	public String tenantId;
+	public String shortName;
+	public List&lt;DhssPaycodeMappingsDTO&gt; paycodeMappings;
+
+	public String getEdapTenantId() {
+<span class="nc" id="L22">		return edapTenantId;</span>
+	}
+
+	public void setEdapTenantId(String edapTenantId) {
+<span class="nc" id="L26">		this.edapTenantId = edapTenantId;</span>
+<span class="nc" id="L27">	}</span>
+
+	public String getTenantId() {
+<span class="nc" id="L30">		return tenantId;</span>
+	}
+
+	public void setTenantId(String tenantId) {
+<span class="nc" id="L34">		this.tenantId = tenantId;</span>
+<span class="nc" id="L35">	}</span>
+
+	public String getShortName() {
+<span class="nc" id="L38">		return shortName;</span>
+	}
+
+	public void setShortName(String shortName) {
+<span class="nc" id="L42">		this.shortName = shortName;</span>
+<span class="nc" id="L43">	}</span>
+<span class="nc" id="L44">	public List&lt;String&gt; payCategoryList = null;</span>
+<span class="nc" id="L45">	public List&lt;String&gt; absenceCategoryList = null;</span>
+	//public List&lt;PayCodeMappingDHSSDTO.PaycodeMapping&gt; paycodeMappings = null;
+
+	public List&lt;DhssPaycodeMappingsDTO&gt; getPaycodeMappings() {
+<span class="nc" id="L49">		return paycodeMappings;</span>
+	}
+
+	public void setPaycodeMappings(List&lt;DhssPaycodeMappingsDTO&gt; paycodeMappings) {
+<span class="nc" id="L53">		this.paycodeMappings= paycodeMappings;</span>
+<span class="nc" id="L54">	}</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommonUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">CommonUtils.java</span></div><h1>CommonUtils.java</h1><pre class="source lang-java linenums">package com.Utilities;
+
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+
+<span class="nc" id="L6">public class CommonUtils {</span>
+	
+	
+
+    public  void sleep(long in_waitTimeMs) {
+        try {
+<span class="nc" id="L12">            Thread.sleep(in_waitTimeMs);</span>
+<span class="nc" id="L13">        } catch (InterruptedException var3) {</span>
+<span class="nc" id="L14">            Thread.currentThread().interrupt();</span>
+<span class="nc" id="L15">        }</span>
+<span class="nc" id="L16">    }</span>
+
+	public void waitForPageToLoad(WebDriver driver) {
+		
+<span class="nc" id="L20">		String checkPageLoad = &quot;checking&quot;;</span>
+<span class="nc" id="L21">		JavascriptExecutor jsexec = (JavascriptExecutor) driver;</span>
+
+<span class="nc bnc" id="L23" title="All 2 branches missed.">		while(!(checkPageLoad.equals(&quot;complete&quot;)))</span>
+		{
+			try {
+<span class="nc" id="L26">				Thread.sleep(10);</span>
+<span class="nc" id="L27">				checkPageLoad=jsexec.executeScript(&quot;return document.readyState&quot;).toString();</span>
+				//		System.out.println(&quot;Page load status is....  &quot;+checkPageLoad);
+<span class="nc" id="L29">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L30">				e.printStackTrace();</span>
+<span class="nc" id="L31">			}</span>
+		}
+		
+		
+		
+<span class="nc" id="L36">	}</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

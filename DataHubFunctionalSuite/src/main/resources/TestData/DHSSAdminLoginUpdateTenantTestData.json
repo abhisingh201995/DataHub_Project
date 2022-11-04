@@ -1,0 +1,76 @@
+{
+  "DHSSAdminLoginApiServicesTest.adminLoginUpdateTenantTest": [
+    {
+      "input": {
+        "description": "Validate the API response for update of DH tenant with Admin user in DHSS",
+        "URL": "admin/tenant/provisioning/update",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientId": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://a",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja{addUniqueChar}.dev.mykronos.com",
+          "environment": "Production",
+          "solution": "12345678",
+          "tenantSeedUser": "SeanIvan",
+          "isSSOEnabled": "false",
+          "updatedBy": "admin",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "226225"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"status\": \"Success\"\n}"
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the API response for update of DH tenant for same WFDURL with Admin user in DHSS",
+        "URL": "admin/tenant/provisioning/update",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientId": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://a",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja.dev.mykronos.com",
+          "environment": "Production",
+          "solution": "1234",
+          "tenantSeedUser": "SeanIvan",
+          "isSSOEnabled": "false",
+          "updatedBy": "admin",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "226227"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"status\": \"Success\"\n}"
+      }
+    }
+  ]
+}

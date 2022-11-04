@@ -1,0 +1,139 @@
+{
+  "PipelineSettingsTests.dhssGetlPipelineSettingsForValidTenantId": [
+    {
+      "input": {
+        "description": "Validate the list of pipeline settings present inside system for a valid tenant.",
+        "URL": "/v1/dhss/tenant/pipelinesettings/",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          "tenantId": "ets_nonprd_05"
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "",
+        "desiredResponse": {
+          "edapTenantId": "ets_nonprd_05",
+          "tenantName": "ets_nonprd_05",
+          "shortName": "ets_nonprd_05",
+          "tenantPipelineSettings": [
+            {
+              "pipelineName": "test_naman",
+              "settingName": "test_naman",
+              "settingType": "JSON",
+              "settingValue": {
+                "asjkdfhgaskhjdakhdkahdkashd": "4545454545"
+              },
+              "settingHelpText": "Enter a valid json format",
+              "updatedDateTime": "2021-10-14T06:42:54.027442Z"
+            },
+            {
+              "pipelineName": "volumeForecast",
+              "settingName": "WHERE_CLAUSE",
+              "settingType": "String",
+              "settingValue": "naman_test",
+              "settingHelpText": "Enter a string value",
+              "updatedDateTime": "2021-10-14T06:42:54.021441Z"
+            },
+            {
+              "pipelineName": "scheduleOpenShift",
+              "settingName": "BCK_DAYS",
+              "settingType": "INT",
+              "settingValue": 1400,
+              "settingHelpText": "Enter a non-negative numeric value",
+              "updatedDateTime": "2021-10-14T06:42:54.009442Z"
+            },
+            {
+              "pipelineName": "schedulePost",
+              "settingName": "schedule_posting_job_filter",
+              "settingType": "JSON",
+              "settingValue": [],
+              "settingHelpText": "Enter a valid json format",
+              "updatedDateTime": "2021-10-14T06:42:53.984440Z"
+            },
+            {
+              "pipelineName": "schedulePost",
+              "settingName": "schedule_week_start_day",
+              "settingType": "String",
+              "settingValue": "Monday",
+              "settingHelpText": "Enter a weekday as text from the list Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday",
+              "updatedDateTime": "2021-10-14T06:42:53.965440Z"
+            },
+            {
+              "pipelineName": "Global",
+              "settingName": "HISTORICALSTARTDATE",
+              "settingType": "Date",
+              "settingValue": "2021-12-11",
+              "settingHelpText": "Enter a date in the format YYYY-MM-DD",
+              "updatedDateTime": "2021-10-14T06:42:53.868932Z"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "PipelineSettingsTests.dhssUpdateAnyPipelineSettingForValidTenantId": [
+    {
+      "input": {
+        "description": "Validate the list of pipeline settings present inside system for a valid tenant.",
+        "URL": "/v1/dhss/tenant/pipelinesettings",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "tenantName": "ets_nonprd_05",
+          "pipelineName": "schedulePost",
+          "settingName": "schedule_posting_job_filter",
+          "settingType": "JSON",
+          "settingValue": []
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "204",
+        "response": ""
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the list of pipeline settings present inside system for a valid tenant.",
+        "URL": "/v1/dhss/tenant/pipelinesettings",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "tenantName": "ets_nonprd_05",
+          "pipelineName": "scheduleOpenShift",
+          "settingName": "BCK_DAYS",
+          "settingType": "INT",
+          "settingValue": 1200
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "204",
+        "response": ""
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the list of pipeline settings present inside system for a valid tenant.",
+        "URL": "/v1/dhss/tenant/pipelinesettings",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "tenantName": "ets_nonprd_05",
+          "pipelineName": "schedulePost",
+          "settingName": "schedule_week_start_day",
+          "settingType": "String",
+          "settingValue": "Monday"
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "204",
+        "response": ""
+      }
+    }
+  ]
+}

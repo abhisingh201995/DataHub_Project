@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PayCodeMappingDHSSDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">PayCodeMappingDHSSDTO.java</span></div><h1>PayCodeMappingDHSSDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+/**
+ * @author amit.chauhan
+ *
+ */
+<span class="nc" id="L12">@Getter @Setter</span>
+<span class="nc" id="L13">public final class PayCodeMappingDHSSDTO {</span>
+<span class="nc" id="L14">	public Integer edapTenantId;</span>
+	//public String tenantName;
+<span class="nc" id="L16">	public String shortName;</span>
+<span class="nc" id="L17">	public String tenantId;</span>
+<span class="nc" id="L18">	public List&lt;String&gt; payCategoryList = null;</span>
+<span class="nc" id="L19">	public List&lt;String&gt; absenceCategoryList = null;</span>
+<span class="nc" id="L20">	public List&lt;PaycodeMapping&gt; paycodeMappings = null;</span>
+<span class="nc" id="L21">	public AuditInformation auditInformation;</span>
+
+<span class="nc" id="L23">	@Getter @Setter</span>
+<span class="nc" id="L24">	public static class PaycodeMapping {</span>
+
+<span class="nc" id="L26">	public Integer payCodeId;</span>
+<span class="nc" id="L27">	public String payCodeName;</span>
+<span class="nc" id="L28">	public Object payCategory;</span>
+<span class="nc" id="L29">	public Object absenceCategory;</span>
+<span class="nc" id="L30">	public Object isMealPenalty;</span>
+<span class="nc" id="L31">	public Object isHoliday;</span>
+<span class="nc" id="L32">	public Object isCoreSwt;</span>
+<span class="nc" id="L33">	public Object isProductiveSwt;</span>
+<span class="nc" id="L34">	public Object isPaidSwt;</span>
+<span class="nc" id="L35">	public Object isOTNetDownSwt;</span>
+<span class="nc" id="L36">	public Object isTrainingSwt;</span>
+<span class="nc" id="L37">	public Object isOnCall;</span>
+<span class="nc" id="L38">	public Object isCallBack;</span>
+<span class="nc" id="L39">	public Object userDefined1;</span>
+
+	}
+	}
+	
+
+	
+	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

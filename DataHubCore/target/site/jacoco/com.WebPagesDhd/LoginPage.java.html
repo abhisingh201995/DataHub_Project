@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">LoginPage.java</span></div><h1>LoginPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.DataPool;
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class LoginPage {
+
+    private MasterPage masterPage;
+
+    private WebDriver driver;
+
+<span class="nc" id="L14">    SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+    // 1. By Locators: OR
+<span class="nc" id="L17">    private By username = By.name(&quot;username&quot;);</span>
+<span class="nc" id="L18">    private By password = By.name(&quot;password&quot;);</span>
+<span class="nc" id="L19">    private By logInButton = By.xpath(&quot;//input[@value='Log in']&quot;);</span>
+
+
+    // 2. Constructor of the page class:
+<span class="nc" id="L23">    public LoginPage(WebDriver driver) {</span>
+<span class="nc" id="L24">        this.driver = driver;</span>
+<span class="nc" id="L25">        masterPage=new MasterPage(driver);</span>
+<span class="nc" id="L26">    }</span>
+
+    public MasterPage getMasterPage() {
+<span class="nc" id="L29">        return masterPage;</span>
+    }
+
+    public void setMasterPage(MasterPage masterPage) {
+<span class="nc" id="L33">        this.masterPage = masterPage;</span>
+<span class="nc" id="L34">    }</span>
+
+    // 3. page actions: features(behavior) of the page the form of methods:
+
+    public String getLoginPageTitle() {
+<span class="nc" id="L39">        return driver.getTitle();</span>
+    }
+
+    public HomePage doLoginUser(String usr, String pwd) {
+<span class="nc" id="L43">        driver.get(DataPool.getDhdWebBaseUrl(DataPool.getDataPool().getEnvironment()));</span>
+<span class="nc" id="L44">        seleniumHelper.enterTextElement(driver,username,usr);</span>
+<span class="nc" id="L45">        seleniumHelper.enterTextElement(driver,password,pwd);</span>
+<span class="nc" id="L46">        seleniumHelper.clickElement(driver,logInButton);</span>
+<span class="nc" id="L47">        return new HomePage(driver);</span>
+    }
+
+    public HomePage doLoginUser() {
+<span class="nc" id="L51">        driver.get(DataPool.getDataPool().getDhdWebBaseUrl(DataPool.getDataPool().getEnvironment()));</span>
+<span class="nc" id="L52">        seleniumHelper.enterTextElement(driver,username,DataPool.getDataPool().getDhdUsername());</span>
+<span class="nc" id="L53">        seleniumHelper.enterTextElement(driver,password,DataPool.getDataPool().getDhdPassword());</span>
+<span class="nc" id="L54">        seleniumHelper.clickElement(driver,logInButton);</span>
+<span class="nc" id="L55">        return new HomePage(driver);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

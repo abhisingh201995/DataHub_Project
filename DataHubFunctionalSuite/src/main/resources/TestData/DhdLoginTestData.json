@@ -1,0 +1,18 @@
+{
+  "DataHubLoginApiServicesTest.adminAuthTest": [
+    {
+      "input": {
+        "URL": "api-token-auth/",
+        "method": "POST",
+        "payload": "{\"username\": \"{username}\",\"password\": \"{password}\"}",
+        "parameter": {
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ]
+}

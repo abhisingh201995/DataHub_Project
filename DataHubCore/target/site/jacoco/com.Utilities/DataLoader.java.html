@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">DataLoader.java</span></div><h1>DataLoader.java</h1><pre class="source lang-java linenums">package com.Utilities;
+
+import org.json.simple.JSONObject;
+
+import java.util.HashMap;
+
+public class DataLoader {
+
+    private String url;
+    private String method;
+    private String payload;
+    private String description;
+    private HashMap&lt;String,Object&gt; testParameter;
+    private String testCaseId;
+    private String outputStatusCode;
+    private String expectedResponse;
+    private HashMap&lt;String,String&gt; outputData;
+
+    private JSONObject desiredJsonResponse;
+    private JSONObject desiredJsonPayload;
+    private JSONObject dbExpectedResultInJsonForm;
+
+
+	public JSONObject getDbExpectedResultInJsonForm() {
+<span class="nc" id="L25">		return dbExpectedResultInJsonForm;</span>
+	}
+
+	public void setDbExpectedResultInJsonForm(JSONObject dbExpectedResultInJsonForm) {
+<span class="nc" id="L29">		this.dbExpectedResultInJsonForm = dbExpectedResultInJsonForm;</span>
+<span class="nc" id="L30">	}</span>
+
+
+    
+    public JSONObject getDesiredJsonPayload() {
+<span class="nc" id="L35">    	return desiredJsonPayload;</span>
+    }
+    
+    public void setDesiredJsonPayload(JSONObject desiredJsonPayload) {
+<span class="nc" id="L39">    	this.desiredJsonPayload = desiredJsonPayload;</span>
+<span class="nc" id="L40">    }</span>
+    
+    public Object getDesiredJsonResponse() {
+<span class="nc" id="L43">    	return desiredJsonResponse;</span>
+    }
+    
+    public void setDesiredJsonResponse(JSONObject object) {
+<span class="nc" id="L47">    	this.desiredJsonResponse = object;</span>
+<span class="nc" id="L48">    }</span>
+
+    public String getDescription() {
+<span class="nc" id="L51">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="nc" id="L55">        this.description = description;</span>
+<span class="nc" id="L56">    }</span>
+
+    public String getTestCaseId() {
+<span class="nc" id="L59">        return testCaseId;</span>
+    }
+
+    public void setTestCaseId(String testCaseId) {
+<span class="nc" id="L63">        this.testCaseId = testCaseId;</span>
+<span class="nc" id="L64">    }</span>
+
+    public HashMap&lt;String, String&gt; getOutputData() {
+<span class="nc" id="L67">        return outputData;</span>
+    }
+
+    public void setOutputData(HashMap&lt;String, String&gt; outputData) {
+<span class="nc" id="L71">        this.outputData = outputData;</span>
+<span class="nc" id="L72">    }</span>
+
+    public String getUrl() {
+<span class="nc" id="L75">        return url;</span>
+    }
+
+    public void setUrl(String url) {
+<span class="nc" id="L79">        this.url = url;</span>
+<span class="nc" id="L80">    }</span>
+
+    public String getMethod() {
+<span class="nc" id="L83">        return method;</span>
+    }
+
+    public void setMethod(String method) {
+<span class="nc" id="L87">        this.method = method;</span>
+<span class="nc" id="L88">    }</span>
+
+    public String getPayload() {
+<span class="nc" id="L91">        return payload;</span>
+    }
+
+    public void setPayload(String payload) {
+<span class="nc" id="L95">        this.payload = payload;</span>
+<span class="nc" id="L96">    }</span>
+
+    public HashMap&lt;String, String&gt; getTestParameter() {
+
+<span class="nc" id="L100">	    HashMap&lt;String,String&gt; data = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L102">	    testParameter.forEach((k,v)-&gt;{</span>
+<span class="nc" id="L103">           data.put(k,String.valueOf(v));</span>
+<span class="nc" id="L104">        });</span>
+<span class="nc" id="L105">       return data;</span>
+    }
+
+    public HashMap&lt;String, Object&gt; getTestParameterAsObject() {
+<span class="nc" id="L109">        return testParameter;</span>
+    }
+
+    public void setTestParameter(HashMap&lt;String, Object&gt; testParameter) {
+<span class="nc" id="L113">        this.testParameter = testParameter;</span>
+<span class="nc" id="L114">    }</span>
+
+    public String getOutputStatusCode() {
+<span class="nc" id="L117">        return outputStatusCode;</span>
+    }
+
+    
+    
+    public void setOutputStatusCode(String outputStatusCode) {
+<span class="nc" id="L123">        this.outputStatusCode = outputStatusCode;</span>
+<span class="nc" id="L124">    }</span>
+
+    public String getExpectedResponse() {
+<span class="nc" id="L127">        return expectedResponse;</span>
+    }
+
+    public void setExpectedResponse(String expectedResponse) {
+<span class="nc" id="L131">        this.expectedResponse = expectedResponse;</span>
+<span class="nc" id="L132">    }</span>
+
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L136">	public DataLoader(JSONObject data){</span>
+        try {
+
+<span class="nc" id="L139">            HashMap&lt;String, Object&gt; inputData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L140">            HashMap&lt;String, Object&gt; outputData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L141">            inputData = (HashMap&lt;String, Object&gt;) data.get(&quot;input&quot;);</span>
+<span class="nc" id="L142">            outputData = (HashMap&lt;String, Object&gt;) data.get(&quot;output&quot;);</span>
+
+            //InputFields
+<span class="nc" id="L145">            setPayload((String) inputData.get(&quot;payload&quot;));</span>
+<span class="nc" id="L146">            setMethod((String) inputData.get(&quot;method&quot;));</span>
+<span class="nc" id="L147">            setUrl((String) inputData.get(&quot;URL&quot;));</span>
+<span class="nc" id="L148">            setDescription((String) inputData.get(&quot;description&quot;));</span>
+<span class="nc" id="L149">            setTestParameter((HashMap&lt;String, Object&gt;) inputData.get(&quot;parameter&quot;));</span>
+<span class="nc" id="L150">            setTestCaseId((String) inputData.get(&quot;testcaseId&quot;));</span>
+            //OutputFields
+<span class="nc" id="L152">            setExpectedResponse((String) outputData.get(&quot;response&quot;));</span>
+<span class="nc" id="L153">            setOutputStatusCode((String) outputData.get(&quot;statusCode&quot;));</span>
+<span class="nc" id="L154">            setOutputData((HashMap&lt;String, String&gt;) outputData.get(&quot;outputParameter&quot;));</span>
+            
+<span class="nc" id="L156">            setDesiredJsonResponse((JSONObject)outputData.get(&quot;desiredJsonResponse&quot;));</span>
+<span class="nc" id="L157">            setDesiredJsonPayload((JSONObject)inputData.get(&quot;desiredJsonPayLoad&quot;));</span>
+<span class="nc" id="L158">            setDbExpectedResultInJsonForm((JSONObject)inputData.get(&quot;dbExpectedResultInJsonForm&quot;));</span>
+
+<span class="nc" id="L160">        }catch (Exception e){</span>
+<span class="nc" id="L161">            System.out.println(e);</span>
+<span class="nc" id="L162">        }</span>
+
+<span class="nc" id="L164">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

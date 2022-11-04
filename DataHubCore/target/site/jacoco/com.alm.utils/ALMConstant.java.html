@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ALMConstant.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.alm.utils</a> &gt; <span class="el_source">ALMConstant.java</span></div><h1>ALMConstant.java</h1><pre class="source lang-java linenums">package com.alm.utils;
+
+import java.util.Arrays;
+import java.util.List;
+
+<span class="nc" id="L6">public class ALMConstant {</span>
+
+	public final static String USERNAME = &quot;anupam.sinha&quot;;
+	public final static String PASSWORD = &quot;Attherate@1229#&quot;;
+	public final static String TEST_PLAN_BASE_FOLDER = &quot;Subject/Falcon Project/Platform&quot;;
+
+<span class="nc" id="L12">public enum getUIJobLinks {</span>
+		
+<span class="nc" id="L14">		WORKFLOW(&quot;Platform_Services_Regression&quot;,&quot;Workflow&quot;),</span>
+<span class="nc" id="L15">		KPI_FRAMEWORK(&quot;HCA_And_KPI_Regression&quot;,&quot;KPI Framework&quot;),</span>
+<span class="nc" id="L16">		HCA(&quot;HCA_And_KPI_Regression&quot;,&quot;Targets and Thresholds Standard&quot;),</span>
+<span class="nc" id="L17">        HCA_WFM_CONFIG(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-WFM Config&quot;),</span>
+<span class="nc" id="L18">        HCA_COMPUTE(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Compute&quot;),</span>
+<span class="nc" id="L19">        HCA_REPORTS(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Reports&quot;),</span>
+<span class="nc" id="L20">        HCA_INTEGRATION(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Integration&quot;),</span>
+<span class="nc" id="L21">        HCA_TP_lICENSING(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-TP and Licensing&quot;),</span>
+<span class="nc" id="L22">        HCA_SUPPORTABILITY(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Supportabilty&quot;),</span>
+<span class="nc" id="L23">		TENANT_MANAGEMENT(&quot;Platform_Services_Regression&quot;,&quot;Tenant Management System&quot;),</span>
+<span class="nc" id="L24">		AUTHENTICATION_USER_MANAGEMENT(&quot;Platform_Services_Regression&quot;,&quot;Authentication and User Management&quot;),</span>
+<span class="nc" id="L25">		LICENSING_PLATFORM(&quot;Platform_Services_Regression&quot;,&quot;Licensing Platform&quot;),</span>
+<span class="nc" id="L26">		MULTI_TENANCY(&quot;Platform_Services_Regression&quot;,&quot;Multi-Tenancy&quot;),</span>
+<span class="nc" id="L27">		CONTROL_CENTER(&quot;Platform_Services_Regression&quot;,&quot;Control Center&quot;),</span>
+<span class="nc" id="L28">		DISPLAY_PROFILE(&quot;Platform_Services_Regression&quot;,&quot;Display Profile&quot;),</span>
+<span class="nc" id="L29">		HYPERFINDS(&quot;Platform_Services_Regression&quot;,&quot;HyperFinds&quot;),</span>
+<span class="nc" id="L30">		INTEGRATION_HUB(&quot;HCM_And_Integration_Regression&quot;,&quot;Integration Hub&quot;),</span>
+<span class="nc" id="L31">		PEOPLE_EDITOR(&quot;Platform_Services_Regression&quot;,&quot;People Editor&quot;),</span>
+		//SETUP_APPS(&quot;Platform_Services_Regression&quot;,&quot;Setup Apps&quot;),
+<span class="nc" id="L33">		IA_REPORTS(&quot;Platform_Services_Regression&quot;,&quot;IA Reports&quot;),</span>
+<span class="nc" id="L34">		CONFIGURATION_APP(&quot;Platform_Services_Regression&quot;,&quot;Configuration App/SDM&quot;),</span>
+<span class="nc" id="L35">		LOGGING_MONITORING(&quot;Platform_Services_Regression&quot;,&quot;Logging Monitoring and Auditing&quot;),</span>
+<span class="nc" id="L36">		PLATFORM_MODERNIZATION(&quot;Platform_Services_Regression&quot;,&quot;Platform Modernization&quot;),</span>
+<span class="nc" id="L37">		INFORMATION_ACCESS(&quot;Platform_Services_Regression&quot;,&quot;Information Access&quot;),</span>
+<span class="nc" id="L38">		ROLLING_UPGRADE(&quot;Platform_Services_Regression&quot;,&quot;Rolling Upgrade&quot;),</span>
+<span class="nc" id="L39">		TELESTAFF_INTEGRATION(&quot;HCM_And_Integration_Regression&quot;,&quot;TeleStaff Integrations&quot;),</span>
+<span class="nc" id="L40">		PLANNER_INTEGRATION(&quot;HCM_And_Integration_Regression&quot;,&quot;Planner Integrations&quot;),</span>
+<span class="nc" id="L41">		MULTICURRENCY(&quot;Platform_Services_Regression&quot;,&quot;Multi Currency&quot;),</span>
+<span class="nc" id="L42">		HCM_INTEGRATION(&quot;HCM_And_Integration_Regression&quot;,&quot;HCM Integration - R2&quot;),</span>
+<span class="nc" id="L43">		APIMANAGEMENT(&quot;Platform_Services_Regression&quot;,&quot;API Management&quot;);</span>
+	
+		
+		
+		private String reportName;
+		private String headline;
+<span class="nc" id="L49">		private getUIJobLinks(String reportName,String headline) {</span>
+<span class="nc" id="L50">			this.reportName = reportName;</span>
+<span class="nc" id="L51">			this.headline = headline;</span>
+<span class="nc" id="L52">		}</span>
+		
+		public String getheadline() {
+<span class="nc" id="L55">			return this.headline;</span>
+		}
+		
+		public String getReportName() {
+<span class="nc" id="L59">			return this.reportName;</span>
+		}
+		
+		public static getUIJobLinks getReportKeyByHeadline(String headline) {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">			for(getUIJobLinks uijobLink : getUIJobLinks.values()){</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">				if(uijobLink.getheadline().equalsIgnoreCase(headline)){</span>
+<span class="nc" id="L65">					return uijobLink;</span>
+				}
+			}
+<span class="nc" id="L68">			return null;</span>
+		}
+	}
+	
+
+<span class="nc" id="L73">public enum getAPIJobLinks {</span>
+<span class="nc" id="L74">		APIMANAGEMENT(&quot;Platform_Services_Regression&quot;,&quot;API Management&quot;),</span>
+<span class="nc" id="L75">		WORKFLOW(&quot;Platform_Services_Regression&quot;,&quot;Workflow&quot;),</span>
+<span class="nc" id="L76">		KPI_FRAMEWORK(&quot;HCA_And_KPI_Regression&quot;,&quot;KPI Framework&quot;),</span>
+<span class="nc" id="L77">		HCA(&quot;HCA_And_KPI_Regression&quot;,&quot;Targets and Thresholds Standard&quot;),</span>
+<span class="nc" id="L78">        HCA_WFM_CONFIG(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-WFM Config&quot;),</span>
+<span class="nc" id="L79">        HCA_COMPUTE(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Compute&quot;),</span>
+<span class="nc" id="L80">        HCA_REPORTS(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Reports&quot;),</span>
+<span class="nc" id="L81">        HCA_INTEGRATION(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Integration&quot;),</span>
+<span class="nc" id="L82">        HCA_TP_lICENSING(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-TP and Licensing&quot;),</span>
+<span class="nc" id="L83">        HCA_SUPPORTABILITY(&quot;HCA_And_KPI_Regression&quot;,&quot;HCA-Supportabilty&quot;),</span>
+<span class="nc" id="L84">		TENANT_MANAGEMENT(&quot;Platform_Services_Regression&quot;,&quot;Tenant Management System&quot;),</span>
+<span class="nc" id="L85">		AUTHENTICATION_USER_MANAGEMENT(&quot;Platform_Services_Regression&quot;,&quot;Authentication and User Management&quot;),</span>
+<span class="nc" id="L86">		LICENSING_PLATFORM(&quot;Platform_Services_Regression&quot;,&quot;Licensing Platform&quot;),</span>
+<span class="nc" id="L87">		MULTI_TENANCY(&quot;Platform_Services_Regression&quot;,&quot;Multi-Tenancy&quot;),</span>
+<span class="nc" id="L88">		CONTROL_CENTER(&quot;Platform_Services_Regression&quot;,&quot;Control Center&quot;),</span>
+<span class="nc" id="L89">		DISPLAY_PROFILE(&quot;Platform_Services_Regression&quot;,&quot;Display Profile&quot;),</span>
+<span class="nc" id="L90">		HYPERFINDS(&quot;Platform_Services_Regression&quot;,&quot;HyperFinds&quot;),</span>
+<span class="nc" id="L91">		INTEGRATION_HUB(&quot;HCM_And_Integration_Regression&quot;,&quot;Integration Hub&quot;),</span>
+<span class="nc" id="L92">		PEOPLE_EDITOR(&quot;Platform_Services_Regression&quot;,&quot;People Editor&quot;),</span>
+		//SETUP_APPS(&quot;Platform_Services_Regression&quot;,&quot;Setup Apps&quot;),
+<span class="nc" id="L94">		IA_REPORTS(&quot;Platform_Services_Regression&quot;,&quot;IA Reports&quot;),</span>
+<span class="nc" id="L95">		CONFIGURATION_APP(&quot;Platform_Services_Regression&quot;,&quot;Configuration App/SDM&quot;),</span>
+<span class="nc" id="L96">		LOGGING_MONITORING(&quot;Platform_Services_Regression&quot;,&quot;Logging Monitoring and Auditing&quot;),</span>
+<span class="nc" id="L97">		PLATFORM_MODERNIZATION(&quot;Platform_Services_Regression&quot;,&quot;Platform Modernization&quot;),</span>
+<span class="nc" id="L98">		INFORMATION_ACCESS(&quot;Platform_Services_Regression&quot;,&quot;Information Access&quot;),</span>
+<span class="nc" id="L99">		ROLLING_UPGRADE(&quot;Platform_Services_Regression&quot;,&quot;Rolling Upgrade&quot;),</span>
+<span class="nc" id="L100">		TELESTAFF_INTEGRATION(&quot;HCM_And_Integration_Regression&quot;,&quot;TeleStaff Integrations&quot;),</span>
+<span class="nc" id="L101">		PLANNER_INTEGRATION(&quot;HCM_And_Integration_Regression&quot;,&quot;Planner Integrations&quot;),</span>
+<span class="nc" id="L102">		MULTICURRENCY(&quot;Platform_Services_Regression&quot;,&quot;Multi Currency&quot;),</span>
+<span class="nc" id="L103">		HCM_INTEGRATION(&quot;HCM_And_Integration_Regression&quot;,&quot;HCM Integration - R2&quot;),</span>
+<span class="nc" id="L104">		ARCHITECTURAL_HEADLINE(&quot;Platform_Services_Regression&quot;,&quot;ArchitecturalHeadline&quot;);</span>
+	
+		
+		
+		private String reportName;
+		private String headline;
+<span class="nc" id="L110">		private getAPIJobLinks(String reportName,String headline) {</span>
+<span class="nc" id="L111">			this.reportName = reportName;</span>
+<span class="nc" id="L112">			this.headline = headline;</span>
+<span class="nc" id="L113">		}</span>
+		
+		public String getheadline() {
+<span class="nc" id="L116">			return this.headline;</span>
+		}
+		
+		public String getReportName() {
+<span class="nc" id="L120">			return this.reportName;</span>
+		}
+		
+		public static getAPIJobLinks getReportKeyByHeadline(String headline) {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			for(getAPIJobLinks apijobLink : getAPIJobLinks.values()){</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">				if(apijobLink.getheadline().equalsIgnoreCase(headline)){</span>
+<span class="nc" id="L126">					return apijobLink;</span>
+				}
+			}
+<span class="nc" id="L129">			return null;</span>
+		}
+	}
+	
+<span class="nc" id="L133">	public enum HeadlineDomainMapping {</span>
+<span class="nc" id="L134">		HCMandIntegration(&quot;HCM &amp; Integration&quot;,Arrays.asList(&quot;Integration Hub&quot;,&quot;TeleStaff Integrations&quot;,&quot;Planner Integrations&quot;,&quot;HCM Integration - R2&quot;)),</span>
+<span class="nc" id="L135">        HCAandKPI(&quot;HCA &amp; KPI&quot;,Arrays.asList(&quot;KPI Framework&quot;,&quot;Targets and Thresholds Standard&quot;,&quot;HCA-WFM Config&quot;,&quot;HCA-Compute&quot;,&quot;HCA-Reports&quot;,&quot;HCA-Integration&quot;,&quot;HCA-TP and Licensing&quot;,&quot;HCA-Supportabilty&quot;)),</span>
+<span class="nc" id="L136">        PlatformServices(&quot;Platform Services&quot;,Arrays.asList(&quot;ArchitecturalHeadline&quot;,&quot;Configuration App/SDM&quot;,&quot;API Management&quot;,&quot;Control Center&quot;,&quot;Display Profile&quot;,&quot;Workflow&quot;,&quot;Licensing Platform&quot;,&quot;Rolling Upgrade&quot;,&quot;Multi-Tenancy&quot;,&quot;Tenant Management System&quot;,&quot;HyperFinds&quot;,&quot;People Editor&quot;,&quot;Setup Apps&quot;,&quot;IA Reports&quot;,&quot;Logging Monitoring and Auditing&quot;,&quot;Platform Modernization&quot;,&quot;Multi Currency&quot;,&quot;Authentication and User Management&quot;,&quot;Information Access&quot;));</span>
+		//PlatformSupportability(&quot;Platform Supportability&quot;,Arrays.asList(&quot;Authentication and User Management&quot;)),
+		//INFORMATIONACCESS(&quot;Information Access&quot;,Arrays.asList(&quot;Information Access&quot;));
+		
+		private List&lt;String&gt; headline;
+		private String domain;
+		
+<span class="nc" id="L143">		private HeadlineDomainMapping(String domain,List&lt;String&gt; headline) {</span>
+<span class="nc" id="L144">			this.headline = headline;</span>
+<span class="nc" id="L145">			this.domain = domain;</span>
+<span class="nc" id="L146">		}</span>
+		
+		public List&lt;String&gt; getHeadline(){
+<span class="nc" id="L149">			return headline;</span>
+		}
+		
+		public String getDomain(){
+<span class="nc" id="L153">			return domain;</span>
+		}
+		
+		public static List&lt;String&gt; getHeadlineForDomain(String domain) {
+<span class="nc bnc" id="L157" title="All 2 branches missed.">			for(HeadlineDomainMapping headlineDomainMapping: HeadlineDomainMapping.values()){</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">				if (headlineDomainMapping.getDomain().equals(domain)) {</span>
+<span class="nc" id="L159">					return headlineDomainMapping.getHeadline();</span>
+				}				
+			}
+<span class="nc" id="L162">			return null;</span>
+			
+		}
+	}
+	
+<span class="nc" id="L167">	public enum CookiesParameter {</span>
+
+<span class="nc" id="L169">		ALM_USER(&quot;ALM_USER&quot;),</span>
+<span class="nc" id="L170">		LWSSO_COOKIE_KEY(&quot;LWSSO_COOKIE_KEY&quot;),</span>
+<span class="nc" id="L171">		QCSESSION(&quot;QCSession&quot;),</span>
+<span class="nc" id="L172">		XSRF_TOKEN(&quot;XSRF-TOKEN&quot;);</span>
+		
+		private String value;
+<span class="nc" id="L175">		private CookiesParameter(String value) {</span>
+<span class="nc" id="L176">			this.value = value;</span>
+<span class="nc" id="L177">		}</span>
+		
+		public String getCookieValue() {
+<span class="nc" id="L180">			return this.value;</span>
+		}
+	}
+	
+<span class="nc" id="L184">	public enum TestSetFolder{</span>
+<span class="nc" id="L185">		HCM_INTEGRATION(&quot;HCM &amp; Integration&quot;),</span>
+<span class="nc" id="L186">		HCA_KPI(&quot;HCA &amp; KPI&quot;),</span>
+<span class="nc" id="L187">		PLATFORM_SERVICES(&quot;Platform Services&quot;);</span>
+		private String testSetFolder;
+		
+<span class="nc" id="L190">		private TestSetFolder(String testSetFolder) {</span>
+<span class="nc" id="L191">			this.testSetFolder = testSetFolder;</span>
+<span class="nc" id="L192">		}</span>
+		
+		public String getTestSetFolder() {
+<span class="nc" id="L195">			return this.testSetFolder;</span>
+		}
+		
+	}
+	
+<span class="nc" id="L200">	public enum TestType{</span>
+<span class="nc" id="L201">		API(&quot;API&quot;),</span>
+<span class="nc" id="L202">		UI(&quot;UI&quot;),</span>
+<span class="nc" id="L203">		USER_INTERFACE(&quot;User Interface&quot;),</span>
+<span class="nc" id="L204">		OTHER(&quot;Other&quot;);</span>
+		private String value;
+		
+<span class="nc" id="L207">		private TestType(String value) {</span>
+<span class="nc" id="L208">			this.value = value;</span>
+<span class="nc" id="L209">		}</span>
+		
+		public String getValue() {
+<span class="nc" id="L212">			return this.value;</span>
+		}
+		
+		
+	}
+	
+<span class="nc" id="L218">	public enum headline{</span>
+		
+<span class="nc" id="L220">		CONFIGURATION_APP_SDM(&quot;Configuration App/SDM&quot;),</span>
+<span class="nc" id="L221">		IA_REPORTS(&quot;IA Reports&quot;),</span>
+<span class="nc" id="L222">		LOGGING_MONITORING_AUDITING(&quot;Logging Monitoring and Auditing&quot;),</span>
+<span class="nc" id="L223">		PLATFORM_MODERNIZATION(&quot;Platform Modernization&quot;),</span>
+<span class="nc" id="L224">		API_MANAGEMENT(&quot;API Management&quot;),</span>
+<span class="nc" id="L225">		CONTROL_CENTER(&quot;Control Center&quot;),</span>
+<span class="nc" id="L226">		DISPLAY_PROFILE(&quot;Display Profile&quot;),</span>
+<span class="nc" id="L227">		HYPERFINDS(&quot;HyperFinds&quot;),</span>
+<span class="nc" id="L228">		INTEGRATION_HUB(&quot;Integration Hub&quot;),</span>
+<span class="nc" id="L229">		PEOPLE_EDITOR(&quot;People Editor&quot;),</span>
+<span class="nc" id="L230">		AUTHENTICATION_USER_MANAGEMENT(&quot;Authentication and User Management&quot;),</span>
+<span class="nc" id="L231">		KPI_FRAMEWORK(&quot;KPI Framework&quot;),</span>
+<span class="nc" id="L232">		LICENSING_PLATFORM(&quot;Licensing Platform&quot;),</span>
+<span class="nc" id="L233">		MULTI_TENANCY(&quot;Multi-Tenancy&quot;),</span>
+<span class="nc" id="L234">		TENANT_MANAGEMENT_SYSTEM(&quot;Tenant Management System&quot;),</span>
+<span class="nc" id="L235">		WORKFLOW(&quot;Workflow&quot;),</span>
+<span class="nc" id="L236">		INFORMATION_ACCESS(&quot;Information Access&quot;),</span>
+<span class="nc" id="L237">		ROLLING_UPGRADE(&quot;Rolling Upgrade&quot;),</span>
+<span class="nc" id="L238">		AUTHENTICATION_TP(&quot;Authentication - TP&quot;),</span>
+<span class="nc" id="L239">		TELESTAFF_INTEGRATION(&quot;TeleStaff Integrations&quot;),</span>
+<span class="nc" id="L240">		PLANNER_INTEGRATION(&quot;Planner Integrations&quot;),</span>
+<span class="nc" id="L241">		MULTICURRENCY(&quot;Multi Currency&quot;),</span>
+<span class="nc" id="L242">		HCM_INTEGRATION(&quot;HCM Integration - R2&quot;),</span>
+<span class="nc" id="L243">		HCA(&quot;Targets and Thresholds Standard&quot;),</span>
+<span class="nc" id="L244">		ARCHITECTURAL_HEADLINE(&quot;ArchitecturalHeadline&quot;),</span>
+<span class="nc" id="L245">        HCA_WFM_CONFIG(&quot;HCA-WFM Config&quot;),</span>
+<span class="nc" id="L246">        HCA_COMPUTE(&quot;HCA-Compute&quot;),</span>
+<span class="nc" id="L247">        HCA_REPORTS(&quot;HCA-Reports&quot;),</span>
+<span class="nc" id="L248">        HCA_INTEGRATION(&quot;HCA-Integration&quot;),</span>
+<span class="nc" id="L249">        HCA_TP_lICENSING(&quot;HCA-TP and Licensing&quot;);</span>
+		
+		private String value;
+		
+<span class="nc" id="L253">		private headline(String value) {</span>
+<span class="nc" id="L254">			this.value = value;</span>
+<span class="nc" id="L255">		}</span>
+		
+		public String getValue() {
+<span class="nc" id="L258">			return this.value;</span>
+		}
+		
+	}
+	
+<span class="nc" id="L263">	public enum TestPlanFolder{</span>
+<span class="nc" id="L264">		API_MANAGEMENT(&quot;API Management&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L265">		CONFIGURATION_APP_SDM(&quot;Configuration App/SDM&quot;,&quot;Reports &amp; Supp&quot;),</span>
+<span class="nc" id="L266">		AUTHENTICATION_AND_USER_MANAGEMENT(&quot;Authentication and User Management&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L267">		AUTHORIZATION(&quot;Authorization&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L268">		COMMON_APP(&quot;Common App&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L269">		CONTROL_CENTER(&quot;Control Center&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L270">		DISPLAY_PROFILE(&quot;Display Profile&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L271">		IA_REPORTS(&quot;IA Reports&quot;,&quot;Reports &amp; Supp&quot;),</span>
+<span class="nc" id="L272">		INTEGRATION_HUB(&quot;Integration Hub&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L273">		KPI_FRAMEWORK(&quot;KPI Framework&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L274">		LICENSING_PLATFORM(&quot;Licensing Platform&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L275">		LOGGING_MONITORING_AND_AUDITING(&quot;Logging Monitoring and Auditing&quot;,&quot;Reports &amp; Supp&quot;),</span>
+<span class="nc" id="L276">		MULTI_TENANCY(&quot;Multi-Tenancy&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L277">		PEOPLE_EDITOR(&quot;People Editor&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L278">		PLATFORM_MODERNIZATION(&quot;Platform Modernization&quot;,&quot;Reports &amp; Supp&quot;),</span>
+<span class="nc" id="L279">		TENANT_MANAGEMENT_SYSTEM(&quot;Tenant Management System&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L280">		WORKFLOW(&quot;Workflow&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L281">		HYPERFINDS(&quot;HyperFinds&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L282">		HCM_INTEGRATION_R2(&quot;HCM Integration - R2&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L283">		TELESTAFF_INTEGRATION_R3(&quot;Telestaff Integration&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L284">		INFORMATION_ACCESS(&quot;Information Access&quot;,&quot;IA&quot;),</span>
+<span class="nc" id="L285">		HEALTHCARE_ANALYTICS(&quot;Healthcare Analytics&quot;,&quot;Core&quot;);</span>
+		
+		private String testPlanFolder;
+		private String domain;
+		
+<span class="nc" id="L290">		private TestPlanFolder(String testPlanFolder,String domain) {</span>
+<span class="nc" id="L291">			this.testPlanFolder = testPlanFolder;</span>
+<span class="nc" id="L292">			this.domain = domain;</span>
+<span class="nc" id="L293">		}</span>
+		
+		public String getTestPlanFolder() {
+<span class="nc" id="L296">			return this.testPlanFolder;</span>
+		}
+		
+		public String getDomain(){
+<span class="nc" id="L300">			return this.domain;</span>
+		}
+		
+		public static String getDomainForKey(String key) {
+<span class="nc bnc" id="L304" title="All 2 branches missed.">			for(TestPlanFolder testPlanFolder: TestPlanFolder.values()){</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">				if (testPlanFolder.getTestPlanFolder().equals(key)) {</span>
+<span class="nc" id="L306">					return testPlanFolder.getDomain();</span>
+				}				
+			}
+<span class="nc" id="L309">			return null;</span>
+			
+		}
+		
+	}
+	
+<span class="nc" id="L315">	public enum TestPlanFolderRegression{</span>
+<span class="nc" id="L316">		KPI_FRAMEWORK(&quot;KPI Framework&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L317">		HCM_INTEGRATION_R2(&quot;HCM Integration - R2&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L318">		HCM_DATA_DELIVERY(&quot;HCM Integration - R2:Data Delivery&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L319">		HCM_Download_AND_Upload_File(&quot;HCM Integration - R2:Download &amp; Upload File&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L320">		HCM_DATA_INTEGRATION(&quot;HCM Integration - R2:HCM Data Integration&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L321">		HCM_ALERTS_NOTIFICATION(&quot;HCM Integration - R2:Alerts &amp; Notifications&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L322">		HCM_DIDP(&quot;HCM Integration - R2:DIDP&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L323">		HCM_TAB(&quot;HCM Integration - R2:HCM Tab&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L324">		HCM_E2E_TESTING(&quot;HCM Integration - R2:E2E Testing&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L325">		HCM_REPORTS(&quot;HCM Integration - R2:HCM Reports&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L326">		HCM_INTEGRATION_DROPDOWN(&quot;HCM Integration - R2:Integration dropdown Parameter - Setup&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L327">		HCM_MENU_INTEGRATION(&quot;HCM Integration - R2:Menu Integration&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L328">		HCM_MOBILE(&quot;HCM Integration - R2:Mobile Requirements&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L329">		HCM_NEAR_REAL_TIME_PERSON_IMPORT(&quot;HCM Integration - R2:Near Real Time People Import&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L330">		HCM_NRT(&quot;HCM Integration - R2:NRT(minutely)&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L331">		HCM_SESSION_MANAGEMENT(&quot;HCM Integration - R2:Session Management&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L332">		HCM_TILES_INTEGRATION(&quot;HCM Integration - R2:Tiles Integration&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L333">		TELESTAFF_INTEGRATION_R3(&quot;TeleStaff and Planner Integrations&quot;,&quot;UI&amp; Integ&quot;),</span>
+<span class="nc" id="L334">		HEALTHCARE_ANALYTICS(&quot;Healthcare Analytics&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L335">		HEALTHCARE_ANALYTICS_BS(&quot;Healthcare Analytics:Business Structure&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L336">		HEALTHCARE_ANALYTICS_STP(&quot;Healthcare Analytics:Symbolic Time Periods&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L337">		HEALTHCARE_ANALYTICS_HCASERVICE(&quot;Healthcare Analytics:Productization &amp; Integration&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L338">		HEALTHCARE_ANALYTICS_TARGETS(&quot;Healthcare Analytics:Targets and Thresholds&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L339">		HEALTHCARE_ANALYTICS_TK(&quot;Healthcare Analytics:TK Changes&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L340">		HEALTHCARE_ANALYTICS_VOLUME(&quot;Healthcare Analytics:Volume&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L341">		HEALTHCARE_ANALYTICS_PAYROLL(&quot;Healthcare Analytics:Payroll&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L342">		HEALTHCARE_ANALYTICS_KPI(&quot;Healthcare Analytics:KPI Framework&quot;,&quot;Core&quot;),</span>
+<span class="nc" id="L343">		IHUB(&quot;Integration Hub&quot;,&quot;UI&amp; Integ&quot;);</span>
+		
+		private String testPlanFolder;
+		private String domain;
+		
+<span class="nc" id="L348">		private TestPlanFolderRegression(String testPlanFolder,String domain) {</span>
+<span class="nc" id="L349">			this.testPlanFolder = testPlanFolder;</span>
+<span class="nc" id="L350">			this.domain = domain;</span>
+<span class="nc" id="L351">		}</span>
+		
+		public String getTestPlanFolderRegression() {
+<span class="nc" id="L354">			return this.testPlanFolder;</span>
+		}
+		
+		public String getDomain(){
+<span class="nc" id="L358">			return this.domain;</span>
+		}
+		
+		public static String getDomainForKey(String key) {
+<span class="nc bnc" id="L362" title="All 2 branches missed.">			for(TestPlanFolderRegression testPlanFolder: TestPlanFolderRegression.values()){</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">				if (testPlanFolder.getTestPlanFolderRegression().equals(key)) {</span>
+<span class="nc" id="L364">					return testPlanFolder.getDomain();</span>
+				}				
+			}
+<span class="nc" id="L367">			return null;</span>
+			
+		}
+		
+	}
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

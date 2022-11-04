@@ -1,0 +1,102 @@
+{
+  "TenantRegistrationTest.addAndInstallTenantTest": [
+    {
+      "input": {
+        "description": "Validate the registration of tenant UI test",
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientID": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja",
+          "solution": "1234",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantSeedUser": "SeanIvan",
+          "federated": "false",
+          "dimensionFederatedUrl": "",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "226968"
+      },
+      "output": {
+        "outputParameter": {
+          "message": "Resource Successfully Created!"
+        }
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the registration of tenant with federated url UI test",
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientID": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja",
+          "solution": "1234",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantSeedUser": "SeanIvan",
+          "federated": "true",
+          "dimensionFederatedUrl": "https://test.com",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "226968"
+      },
+      "output": {
+        "outputParameter": {
+          "message": "Resource Successfully Created!"
+        }
+      }
+    }
+  ],
+  "TenantRegistrationTest.editAndInstallTenantTest": [
+    {
+      "input": {
+        "parameter": {
+          "tenantName": "AT",
+          "tenantShortName": "AT",
+          "ClientID": "0qW0jMLRq3w6jcHgod0HaN8hp54w2xCz",
+          "ClientSecret": "rFMGaQll9YYQC3AH",
+          "tenantVanityURL": "https://",
+          "OpenAMURL": "https://oam40.dev.mykronos.com/authn/oauth2",
+          "WFDURL": "https://ja",
+          "solution": "12345678",
+          "isUkgProCustomer": "",
+          "isLicensedCustomer": "",
+          "isGcpUkgOwned": "",
+          "isScrubbed": "",
+          "performanceTier": "",
+          "timeZone": "",
+          "gcpProjectId": "",
+          "local_policy": "en_US",
+          "tenantSeedUser": "SeanIvan",
+          "tenantRetrievalSqlQuery": "SELECT * FROM public.tenantmgr_tenant"
+        },
+        "testcaseId": "227006"
+      },
+      "output": {
+        "outputParameter": {
+          "message": "Resource Successfully Updated!"
+        }
+      }
+    }
+  ]
+}

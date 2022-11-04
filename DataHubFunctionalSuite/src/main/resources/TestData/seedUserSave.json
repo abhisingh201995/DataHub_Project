@@ -1,0 +1,128 @@
+{
+  "DHSSSeedUserSaveApiServicesTest.dhssSeedUserAuthTest": [
+    {
+      "input": {
+        "description": "Validate the API response for valid into seed user",
+        "URL": "tenant/seeduser/login",
+        "method": "POST",
+        "payload": "{\"userId\": \"{username}\",\"password\": \"{password}\"}",
+        "parameter": {
+          "username": "SeanIvan",
+          "password": "Kr0n0s@Cloud"
+        },
+        "testcaseId": "226366"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ],
+  "DHSSSeedUserSaveApiServicesTest.dhssSeedUserNegativeAuthTest": [
+    {
+      "input": {
+        "description": "Validate the API response for invalid login into seed user",
+        "URL": "tenant/seeduser/login",
+        "method": "POST",
+        "payload": "{\"username\": \"{username}\",\"password\": \"{password}\"}",
+        "parameter": {
+          "username": "incorrect",
+          "password": "incorrects@Cloud"
+        },
+        "testcaseId": "226370"
+      },
+      "output": {
+        "statusCode": "400",
+        "response": ""
+      }
+    }
+  ],
+  "DHSSSeedUserSaveApiServicesTest.AdminLoginNegativeSaveSeedUserTest": [
+    {
+      "input": {
+        "description": "Validate the Failed API response save seed user with admin auth token.",
+        "URL": "tenant/seeduser",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "appkey": "{appkey}",
+          "username": "{username}",
+          "password": "{password}",
+          "createdBy": "{createdBy}",
+          "seedUserDetailsQuery": "select * from public.tenantmgr_tenant;"
+        },
+        "testcaseId": "226368"
+      },
+      "output": {
+        "statusCode": "400",
+        "response": ""
+      }
+    }
+  ],
+  "DHSSSeedUserSaveApiServicesTest.saveSeedUserTest": [
+    {
+      "input": {
+        "description": "Validate the API response of save seed user API",
+        "URL": "tenant/seeduser",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "appkey": "test1234",
+          "username": "SeanIvan",
+          "password": "Kr0n0s@Cloud",
+          "createdBy": "SeanIvan",
+          "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+        },
+        "testcaseId": "226407"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"status\": \"Success\"\n}",
+        "Content-Type": "application/json"
+      }
+    }
+    ,
+    {
+      "input": {
+      "description": "Validate the API response with blank created by for save seed user API",
+      "URL": "tenant/seeduser",
+      "method": "PUT",
+      "payload": "",
+      "parameter": {
+        "appkey": "test1234",
+        "username": "SeanIvan",
+        "password": "Kr0n0s@Cloud",
+        "createdBy": "",
+        "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+      },
+      "testcaseId": "226408"
+    },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"status\": \"Success\"\n}"
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the API response of save seed user with 200< character",
+        "URL": "tenant/seeduser",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "appkey": "PJMkyiwy2JSb4u1bsvidsT6yBR4N6FekhgEIcoaVh56tOs0WfyvAMKL5PfrVoAhwdj1EKmwbVZu51Nxx5VNKLJlILDlrtfJhSaZh0rCp98Xa2dKIQ10k3VfAhmgKDnYBMTSZ97uK97wYKXxiF1Lx13T6yVXm2tUJCaWV557AXGdO5y7c7XhVTRM7WWmdNrvoC43FXlxGRiHle",
+          "username": "SeanIvan",
+          "password": "Kr0n0s@Cloud",
+          "createdBy": "SeanIvan",
+          "seedUserDetailsQuery": "select * from public.tenantmgr_tenant"
+        },
+        "testcaseId": "227859"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"status\": \"Success\"\n}",
+        "Content-Type": "application/json"
+      }
+    }
+  ]
+
+}

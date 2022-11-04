@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="DATAHUB performance suit Incremental">
+
+    <listeners>
+        <listener class-name="com.ukg.datahub.perf.listeners.ExecutionListener"/>
+        <listener class-name="com.ukg.datahub.perf.listeners.PerfTestReporterListener"/>
+    </listeners>
+
+
+    <test name="DHD Scalability test for Performance Tier 7000-14000" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="8,16"/>
+        <parameter name="performanceTier" value="PerfTest_21000-28000-OnDemand"></parameter>
+        <parameter name="runType" value="Historical"/>
+        <parameter name="pipeline" value="timecardMetrics"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithHistoricDRTest"/>
+        </classes>
+    </test>
+
+</suite>

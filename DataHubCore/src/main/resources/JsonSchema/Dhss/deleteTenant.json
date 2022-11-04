@@ -1,0 +1,27 @@
+{
+  "tenantProvision": {
+    "component": {
+      "id": 1,
+      "name": "EDAP",
+      "provisionType": "{TransactionType}",
+      "source_request": "EDAP_Admin"
+    },
+    "callback": {
+      "dataSet": []
+    },
+    "tenant": {
+      "dataSet": [
+        {
+          "name": "shortName",
+          "value": "{TenantShortName}"
+        },
+        {
+          "name": "updatedBy",
+          "value": "admin"
+        }
+      ],
+      "provisionInfo": {},
+      "systemAccounts": []
+    }
+  }
+}

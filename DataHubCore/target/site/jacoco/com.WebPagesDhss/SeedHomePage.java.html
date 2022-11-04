@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SeedHomePage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhss</a> &gt; <span class="el_source">SeedHomePage.java</span></div><h1>SeedHomePage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhss;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+
+
+public class SeedHomePage {
+
+	private WebDriver driver;
+<span class="nc" id="L12">	private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+<span class="nc" id="L13">	private By SEEDSSOTENNAT_NOTREGISTERED_ERRORMESSAGE = By.id(&quot;errorMessageBodyContainer&quot;);</span>
+<span class="nc" id="L14">	private By SEEDTENNAT_NOTREGISTERED_ERRORMESSAGE = By.xpath(&quot;//span[@class='login-message']&quot;);</span>
+<span class="nc" id="L15">	private By TEXTFILED_APPKEY = By.id(&quot;appkey&quot;);</span>
+<span class="nc" id="L16">	private By TEXTFIELD_USERNAME = By.id(&quot;username&quot;);</span>
+<span class="nc" id="L17">	private By TEXTFIELD_PASSWORD = By.id(&quot;password&quot;);</span>
+<span class="nc" id="L18">	private By TEXTFIELD_CONFIRMPASSWORD = By.id(&quot;confirmpassword&quot;);</span>
+<span class="nc" id="L19">	private By BUTTON_UPDATE = By.id(&quot;btnRegister&quot;);</span>
+<span class="nc" id="L20">	private By BUTTON_ADDPROPERTY = By.id(&quot;btnEnternalNavgation&quot;);</span>
+<span class="nc" id="L21">	private By MSGWRAPPER = By.xpath(&quot;//div[contains(@class, 'edap-alert')]//span[contains(@class, 'msg-text')]&quot;);</span>
+<span class="nc" id="L22">	private By BUTTON_MSGWRAPPERCLOSE = By.xpath(&quot;//div[contains(@class, 'edap-alert')]//button[contains(@class, 'btn close')]&quot;);</span>
+<span class="nc" id="L23">	private By BUTTON_HamburgerMenu = By.xpath(&quot;//button[@automation-id='openCloseMenuHeaderButton']//span[@class='icon-k-menu']&quot;);</span>
+<span class="nc" id="L24">	private By lblSEED_TITLE = By.id(&quot;seed-configure-title&quot;);</span>
+<span class="nc" id="L25">	private By lblREQUIRED_INFO = By.xpath(&quot;//span[@id='seed-configure-title-required-info']/following-sibling::span&quot;);</span>
+<span class="nc" id="L26">	private By lblSEED_TENANT_ID = By.xpath(&quot;//label[@id='seed-configure-tenantId-label']//span&quot;);</span>
+<span class="nc" id="L27">	private By lblSEED_APPKEY = By.xpath(&quot;//label[@id='seed-configure-app-key-label']//span&quot;);</span>
+<span class="nc" id="L28">	private By lblSEED_WORKFORCE_DIMENSIONS_USERNAME = By.xpath(&quot;//label[@id='seed-configure-username-label']//span&quot;);</span>
+<span class="nc" id="L29">	private By lblSEED_WORKFORCE_DIMENSIONS_PASSWORD = By.xpath(&quot;//label[@id='seed-configure-password-label']//span&quot;);</span>
+<span class="nc" id="L30">	private By lblSEED_WORKFORCE_DIMENSIONS_CONFIRM_PASSWORD = By.xpath(&quot;//label[@id='seed-configure-confirmpassword-label']//span&quot;);</span>
+<span class="nc" id="L31">	private By lblSEED_APPKEY_REQUIRED_MESSAGE = By.id(&quot;seed-configure-app-key-required-message-label&quot;);</span>
+<span class="nc" id="L32">	private By lblSEED_WORKFORCE_DIMENSIONS_USERNAME_REQUIRED_MESSAGE = By.id(&quot;seed-configure-username-required-message-label&quot;);</span>
+<span class="nc" id="L33">	private By lblSEED_WORKFORCE_DIMENSIONS_PASSWORD_REQUIRED_MESSAGE = By.id(&quot;seed-configure-password-required-message-label&quot;);</span>
+<span class="nc" id="L34">	private By lblSEED_WORKFORCE_DIMENSIONS_CONFIRM_PASSWORD_REQUIRED_MESSAGE = By.id(&quot;seed-configure-confirmpassword-required-message-label&quot;);</span>
+<span class="nc" id="L35">	private By lblSEED_WORKFORCE_DIMENSIONS_CONFIRM_PASSWORD_MISMATCH_MESSAGE = By.id(&quot;seed-configure-confirm-password-mismatch-message-label&quot;);</span>
+<span class="nc" id="L36">	private By lblSEED_APPKEY_CONFIGURED_MESSAGE = By.xpath(&quot;//div[@class='multiple-lines-wrap']&quot;);</span>
+<span class="nc" id="L37">	private By SIGNOUT_MESSAGE = By.id(&quot;errorMessageBodyContainer&quot;);</span>
+<span class="nc" id="L38">	private By SESSION_INVALID_ERROR_MESSAGE = By.id(&quot;errorMessageBodyContainer&quot;);</span>
+<span class="nc" id="L39">	private By SAVE_SUCCESS_MESSAGE_LBL = By.xpath(&quot;//span[@class='msg-text']&quot;);</span>
+
+<span class="nc" id="L41">	private By btnMainMenu = By.xpath(&quot;//button[@automation-id='openCloseMenuHeaderButton']&quot;);</span>
+<span class="nc" id="L42">	private By lnkSignOut = By.xpath(&quot;//edap-nav-bar//button[@class='btn btn-signout']&quot;);</span>
+<span class="nc" id="L43">	private By txtSearchText = By.xpath(&quot;//input[@id=\&quot;search_box\&quot;]&quot;);</span>
+<span class="nc" id="L44">	private By lnkHome = By.xpath(&quot;//span[@id=\&quot;home123_text\&quot;]&quot;);</span>
+<span class="nc" id="L45">	private By txtnoMatchFoundText = By.xpath(&quot;//edap-nav-bar//div[@class='no-search-results']&quot;);</span>
+
+	//TODO -- &gt; Correct the locator
+<span class="nc" id="L48">	private By BUTTON_ADDITIONALPROPERTIES= By.id(&quot;btnEnternalNavgation&quot;);</span>
+
+<span class="nc" id="L50">	public SeedHomePage(WebDriver driver) {</span>
+<span class="nc" id="L51">		this.driver = driver;</span>
+<span class="nc" id="L52">	}</span>
+
+	public Boolean validatePageTitle() {
+<span class="nc" id="L55">		Boolean pageTitle = seleniumHelper.validateElementPresent(driver, lblSEED_TITLE);</span>
+<span class="nc" id="L56">		Assert.assertTrue(pageTitle);</span>
+<span class="nc" id="L57">		return pageTitle;</span>
+	}
+
+	public void saveConfigurationDetails(String TEXTFILED_APPKEY, String TEXTFIELD_USERNAME,
+										String TEXTFIELD_PASSWORD, String TEXTFIELD_CONFIRMPASSWORD) {
+
+<span class="nc" id="L63">		seleniumHelper.enterTextElement(driver, this.TEXTFILED_APPKEY, TEXTFILED_APPKEY);</span>
+<span class="nc" id="L64">		seleniumHelper.enterTextElement(driver, this.TEXTFIELD_USERNAME, TEXTFIELD_USERNAME);</span>
+<span class="nc" id="L65">		seleniumHelper.enterTextElement(driver, this.TEXTFIELD_PASSWORD, TEXTFIELD_PASSWORD);</span>
+<span class="nc" id="L66">		seleniumHelper.enterTextElement(driver, this.TEXTFIELD_CONFIRMPASSWORD, TEXTFIELD_CONFIRMPASSWORD);</span>
+
+<span class="nc" id="L68">	}</span>
+
+	public AdditionalPropertiesPage clickAdditionalPropertiesBtn() {
+<span class="nc" id="L71">		seleniumHelper.clickElement(driver, BUTTON_ADDITIONALPROPERTIES);</span>
+<span class="nc" id="L72">		return new AdditionalPropertiesPage(driver);</span>
+	}
+
+	public void clickUpdateBtn() {
+<span class="nc" id="L76">		seleniumHelper.clickElement(driver, BUTTON_UPDATE);</span>
+<span class="nc" id="L77">	}</span>
+
+	public String saveSuccessLbl() {
+<span class="nc" id="L80">		return seleniumHelper.getElementText(driver, SAVE_SUCCESS_MESSAGE_LBL);</span>
+	}
+
+	public String validateAppKeyReqMsg() {
+<span class="nc" id="L84">		return seleniumHelper.getElementText(driver, lblSEED_APPKEY_REQUIRED_MESSAGE);</span>
+	}
+
+	public String validateUsrnmReqMsg() {
+<span class="nc" id="L88">		return seleniumHelper.getElementText(driver, lblSEED_WORKFORCE_DIMENSIONS_USERNAME_REQUIRED_MESSAGE);</span>
+	}
+
+	public String validatePwdReqMsg() {
+<span class="nc" id="L92">		return seleniumHelper.getElementText(driver, lblSEED_WORKFORCE_DIMENSIONS_PASSWORD_REQUIRED_MESSAGE);</span>
+	}
+
+	public String validateConfPwdReqMsg() {
+<span class="nc" id="L96">		return seleniumHelper.getElementText(driver, lblSEED_WORKFORCE_DIMENSIONS_CONFIRM_PASSWORD_REQUIRED_MESSAGE);</span>
+	}
+
+	public String validatePwdMismatchMsg() {
+<span class="nc" id="L100">		return seleniumHelper.getElementText(driver, lblSEED_WORKFORCE_DIMENSIONS_CONFIRM_PASSWORD_MISMATCH_MESSAGE);</span>
+	}
+
+	public DhssLoginPage signOutSeedUser(){
+<span class="nc" id="L104">		seleniumHelper.clickElement(driver,lnkSignOut);</span>
+<span class="nc" id="L105">		return new DhssLoginPage(driver);</span>
+	}
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

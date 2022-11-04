@@ -1,0 +1,37 @@
+INSERT INTO
+ `${projectId}.${datasetName}.BQHistory`
+  (creation_time,
+    project_id,
+    execution_id,
+    job_type,
+    job_id,
+    start_time,
+    end_time,
+    run_time_in_milli,
+    query,
+    total_bytes_processed,
+    total_slot_ms,
+    num_slot,
+    percent_95,
+    dataset_id,
+    table_id,
+    total_bytes_billed )
+SELECT
+  creation_time,
+  project_id,
+  execution_id,
+  job_type,
+  job_id,
+  start_time,
+  end_time,
+  run_time_in_milli,
+  query,
+  total_bytes_processed,
+  total_slot_ms,
+  num_slot,
+  percent_95,
+  dataset_id,
+  table_id,
+  total_bytes_billed
+FROM
+  `${projectId2}.${datasetName}.bq_stage_${stageTableNameSuffix}`

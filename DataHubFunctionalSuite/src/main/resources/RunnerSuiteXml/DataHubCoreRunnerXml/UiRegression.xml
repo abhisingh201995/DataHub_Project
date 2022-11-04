@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="3" parallel="classes" name="DataHub Test Suite">
+    <listeners>
+        <listener class-name="com.Utilities.ExecutionListener"></listener>
+    </listeners>
+    <test thread-count="5" parallel="classes" preserve-order="true" name="UiTest">
+        <groups>
+            <dependencies>
+
+            </dependencies>
+        </groups>
+        <classes>
+            <class name="com.Tests.DataHubTests.DataHubUiTests.HealthCheckTest">
+                <methods>
+                   <!-- <include name="validateSchemaFilesQuery"/>-->
+                    <include name="validateVulnerabilityScan"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubTests.DataHubUiTests.LoginPageTest">
+                <methods>
+                    <include name="loginTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubTests.DataHubUiTests.HomePageTest">
+                <methods>
+                    <include name="validateAllLinks"/>
+                </methods>
+            </class>
+           <!-- <class name="com.Tests.DataHubTests.DataHubUiTests.TenantSetupTest">
+                <methods>
+                    <include name="addAndInstallTenantTest"/>
+                    <include name="validateAddedTenantPayCodeMapping"/>
+                    <include name="validateAddedTenantLocationTypeMapping"/>
+                </methods>
+            </class>-->
+            <class name="com.Tests.DataHubTests.DataHubUiTests.UpdateEnvironmentTest">
+                <methods>
+                    <include name="validateUpgradeEnvironment"/>
+                    <include name="validateTenantUpgrade"/>
+                </methods>
+            </class>
+
+            <class name="com.Tests.DataHubTests.DeploymentTests.GcpTest">
+                <methods>
+                   <!-- <include name="validateStageBucketLifeCycle"/>-->
+                    <!--<include name="validateBigQueryTableExpiration"/>-->
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+</suite>

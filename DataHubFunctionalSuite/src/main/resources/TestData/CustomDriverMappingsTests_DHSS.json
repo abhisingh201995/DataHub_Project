@@ -1,0 +1,97 @@
+{
+"CustomDriverMappingsTests_DHSS.getValidTenantTest": [
+		{
+			"input": {
+				"description": "Get Valid Tenant Custom Driver Mapping.",
+				"URL": " /v1/dhss/tenant/customdrivermappings/{tenantId}",
+				"method": "GET",
+				"payload": "",
+				"parameter": {
+				},
+				"testcaseId": "----"
+			},
+			"output": {
+				"statusCode": "2100",
+				"desiredJsonResponse": {
+					"edapTenantId": 2,
+					"tenantName": "c79_nonprd_05",
+					"shortName": "c79_nonprd_05",
+					"customDriverMappingsAssignmentList": {
+						"minimum": "0",
+						"maximum": "25"
+					},
+					"customDriverMappings": [
+						{
+							"customDriverId": 2,
+							"customDriverName": "Training Hours",
+							"customDriverCurrency": "false",
+							"customDriverDecimalPos": "0",
+							"customDriverMappingAssignment": "21"
+						},
+						{
+							"customDriverId": 3,
+							"customDriverName": "Stocktake",
+							"customDriverCurrency": "false",
+							"customDriverDecimalPos": "0",
+							"customDriverMappingAssignment": "20"
+						}
+					]
+				}
+			}
+		}
+	],
+"CustomDriverMappingsTests_DHSS.updateCustomDriverMapping_ValidTenant": [
+		{
+			"input": {
+				"description": "Get Valid Tenant Custom Driver Mapping.",
+				"URL": " /v1/dhss/tenant/customdrivermappings/{tenantId}",
+				"method": "GET",
+				"payload":"",
+				"desiredJsonPayLoad": {
+					"tenantId": "c79_nonprd_05",
+					"customDriverMappings": [
+						{
+							"customDriverId": 3,
+							"customDriverMappingAssignment": "21"
+						},
+						{
+							"customDriverId": 4,
+							"customDriverMappingAssignment": "20"
+						}
+					]
+				},
+				"parameter": {
+				},
+				"testcaseId": "----"
+			},
+			"output": {
+				"statusCode": "332100",
+				"desiredJsonResponse": {
+					"edapTenantId": 2,
+					"tenantName": "amitc",
+					"shortName": "amitc",
+					"customDriverMappingsAssignmentList": {
+						"minimum": "0",
+						"maximum": "25"
+					},
+					"customDriverMappings": [
+						{
+							"customDriverId": 2,
+							"customDriverName": "Training Hours",
+							"customDriverCurrency": "false",
+							"customDriverDecimalPos": "0",
+							"customDriverMappingAssignment": "21"
+						},
+						{
+							"customDriverId": 3,
+							"customDriverName": "Stocktake",
+							"customDriverCurrency": "false",
+							"customDriverDecimalPos": "0",
+							"customDriverMappingAssignment": "20"
+						}
+					]
+				}
+			}
+		}
+	]
+}

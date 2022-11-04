@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExcelUtility.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.alm.utils</a> &gt; <span class="el_source">ExcelUtility.java</span></div><h1>ExcelUtility.java</h1><pre class="source lang-java linenums">package com.alm.utils;
+
+import com.alm.utils.ALMConstant.HeadlineDomainMapping;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.*;
+import java.text.DecimalFormat;
+import java.util.*;
+
+<span class="nc" id="L12">public class ExcelUtility {</span>
+
+	private static Workbook workbook;
+	private static Sheet sheet;
+<span class="nc" id="L16">	private static int rowCounter = 5;</span>
+<span class="nc" id="L17">	private static int TOTAL_FAILED_COUNT = 0;</span>
+<span class="nc" id="L18">	private static int TOTAL_PASS_COUNT = 0;</span>
+<span class="nc" id="L19">	private static int TOTAL_SKIP_COUNT = 0;</span>
+<span class="nc" id="L20">	static Properties uiProp = new Properties();</span>
+<span class="nc" id="L21">	static Map&lt;String,String&gt; reportLinkKey = new HashMap&lt;String,String&gt;();</span>
+
+	public static void generateResultReport(String testCaseType, String folderPath,
+			Map&lt;String, Integer&gt; failedTestCases, Map&lt;String, Integer&gt; passedTestCases,
+			Map&lt;String, Integer&gt; skippedTestCases, Map&lt;String, Integer&gt; totalALMTestCaseCount)throws Exception {
+<span class="nc" id="L26">		workbook = new XSSFWorkbook();</span>
+<span class="nc" id="L27">		sheet = workbook.createSheet(testCaseType);</span>
+<span class="nc" id="L28">		createHeadLine(testCaseType);</span>
+<span class="nc" id="L29">		CellStyle headerCellStyle = getHeaderCellStyle();</span>
+<span class="nc" id="L30">		createHeaderRow(headerCellStyle,testCaseType);</span>
+<span class="nc" id="L31">		iterateOverTestCaseCount(failedTestCases, passedTestCases, skippedTestCases,totalALMTestCaseCount,testCaseType);</span>
+<span class="nc" id="L32">		updateTotalCountRow();</span>
+<span class="nc" id="L33">		writeExcel(folderPath,testCaseType);</span>
+		
+<span class="nc" id="L35">	}</span>
+
+	private static void createHeadLine(String testCaseType) {
+<span class="nc" id="L38">		Row row = sheet.createRow(0);</span>
+<span class="nc" id="L39">		Cell cell = row.createCell(0);</span>
+<span class="nc" id="L40">		CellStyle cellStyle = workbook.createCellStyle();</span>
+<span class="nc" id="L41">		Font dataFont = workbook.createFont();</span>
+<span class="nc" id="L42">		dataFont.setBoldweight((short) 3);</span>
+<span class="nc" id="L43">		dataFont.setBoldweight(Font.BOLDWEIGHT_BOLD);</span>
+<span class="nc" id="L44">		dataFont.setFontHeightInPoints((short) 14);</span>
+<span class="nc" id="L45">		cellStyle = updateCellStyleWithBorder(cellStyle);</span>
+<span class="nc" id="L46">		cellStyle.setAlignment(CellStyle.ALIGN_LEFT);</span>
+<span class="nc" id="L47">		cellStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);</span>
+<span class="nc" id="L48">		cellStyle.setFont(dataFont);</span>
+<span class="nc" id="L49">		cell.setCellValue(testCaseType +&quot; Execution Report&quot;);</span>
+<span class="nc" id="L50">		cell.setCellStyle(cellStyle);</span>
+
+<span class="nc" id="L52">	}</span>
+
+	private static void updateTotalCountRow() {
+<span class="nc" id="L55">		Row row = sheet.createRow(1);</span>
+<span class="nc" id="L56">		Cell cell = row.createCell(0);</span>
+<span class="nc" id="L57">		CellStyle headerStyle = getHeaderCellStyle();</span>
+<span class="nc" id="L58">		cell.setCellValue(&quot;TOTAL&quot;);</span>
+<span class="nc" id="L59">		cell.setCellStyle(headerStyle);</span>
+<span class="nc" id="L60">		cell = row.createCell(1);</span>
+<span class="nc" id="L61">		cell.setCellValue(&quot;Passed&quot;);</span>
+<span class="nc" id="L62">		cell.setCellStyle(headerStyle);</span>
+<span class="nc" id="L63">		cell = row.createCell(2);</span>
+<span class="nc" id="L64">		cell.setCellValue(&quot;Failed&quot;);</span>
+<span class="nc" id="L65">		cell.setCellStyle(headerStyle);</span>
+<span class="nc" id="L66">		cell = row.createCell(3);</span>
+<span class="nc" id="L67">		cell.setCellValue(&quot;Skipped&quot;);</span>
+<span class="nc" id="L68">		cell.setCellStyle(headerStyle);</span>
+<span class="nc" id="L69">		cell = row.createCell(4);</span>
+<span class="nc" id="L70">		cell.setCellValue(&quot;Pass Percentage&quot;);</span>
+<span class="nc" id="L71">		cell.setCellStyle(headerStyle);</span>
+
+<span class="nc" id="L73">		row = sheet.createRow(2);</span>
+<span class="nc" id="L74">		CellStyle cellStyle = getDataCellStyle();</span>
+<span class="nc" id="L75">		cell = row.createCell(0);</span>
+<span class="nc" id="L76">		int total = TOTAL_FAILED_COUNT + TOTAL_PASS_COUNT + TOTAL_SKIP_COUNT;</span>
+<span class="nc" id="L77">		cell.setCellValue(total);</span>
+<span class="nc" id="L78">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L79">		cell = row.createCell(1);</span>
+<span class="nc" id="L80">		cell.setCellValue(TOTAL_PASS_COUNT);</span>
+<span class="nc" id="L81">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L82">		cell = row.createCell(2);</span>
+<span class="nc" id="L83">		cell.setCellValue(TOTAL_FAILED_COUNT);</span>
+<span class="nc" id="L84">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L85">		cell = row.createCell(3);</span>
+<span class="nc" id="L86">		cell.setCellValue(TOTAL_SKIP_COUNT);</span>
+<span class="nc" id="L87">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L88">		cell = row.createCell(4);</span>
+<span class="nc" id="L89">		double percentage = 0;</span>
+<span class="nc" id="L90">		String percentage1 = &quot;&quot;;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		if(TOTAL_PASS_COUNT !=0) {</span>
+<span class="nc" id="L92">			percentage =  (TOTAL_PASS_COUNT*100.00)/total ;</span>
+		}else {
+<span class="nc" id="L94">			percentage = 0;</span>
+		}
+<span class="nc" id="L96">		DecimalFormat df = new DecimalFormat(&quot;###.##&quot;);</span>
+		
+<span class="nc" id="L98">		percentage1 = df.format(percentage) + &quot;%&quot;;</span>
+<span class="nc" id="L99">		cell.setCellValue(percentage1);</span>
+<span class="nc" id="L100">		cell.setCellStyle(cellStyle);</span>
+
+<span class="nc" id="L102">	}</span>
+
+	private static void iterateOverTestCaseCount(Map&lt;String, Integer&gt; failedTestCases,
+			Map&lt;String, Integer&gt; passedTestCases, Map&lt;String, Integer&gt; skippedTestCases, Map&lt;String, Integer&gt; totalALMTestCaseCount, String testCaseType) throws FileNotFoundException, IOException {
+<span class="nc" id="L106">		Set&lt;String&gt; headlines = failedTestCases.keySet();</span>
+<span class="nc" id="L107">		List&lt;String&gt; headlineList = Utils.getHeadlineList();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		if (testCaseType.equals(&quot;UI&quot;)) {</span>
+<span class="nc" id="L109">			InputStream inputStream = new FileInputStream(</span>
+<span class="nc" id="L110">					new File(System.getProperty(&quot;user.dir&quot;) + &quot;\\Platform_UI_Jobs_Link.properties&quot;));</span>
+<span class="nc" id="L111">			uiProp.load(inputStream);</span>
+<span class="nc" id="L112">		} else {</span>
+<span class="nc" id="L113">			InputStream inputStream = new FileInputStream(</span>
+<span class="nc" id="L114">					new File(System.getProperty(&quot;user.dir&quot;) + &quot;\\Platform_API_Jobs_Link.properties&quot;));</span>
+<span class="nc" id="L115">			uiProp.load(inputStream);</span>
+		}
+<span class="nc" id="L117">		loadReportLinkMapping();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">		for(HeadlineDomainMapping headlinedomainHeadline : HeadlineDomainMapping.values()){</span>
+<span class="nc" id="L119">			String domain = headlinedomainHeadline.getDomain();</span>
+<span class="nc" id="L120">			int domainFailCount = 0;</span>
+<span class="nc" id="L121">			int domainPassCount = 0;</span>
+<span class="nc" id="L122">			int domainSkipCount = 0;</span>
+<span class="nc" id="L123">			int initialMergedRow = rowCounter;</span>
+<span class="nc" id="L124">			List&lt;String&gt; headlineDomainList = headlinedomainHeadline.getHeadlineForDomain(domain);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			for(String headlineDomain : headlineDomainList) {	</span>
+<span class="nc bnc" id="L126" title="All 4 branches missed.">				if(headlines.contains(headlineDomain) &amp;&amp; headlineList.contains(headlineDomain)) {</span>
+<span class="nc" id="L127">					int failedCount = failedTestCases.get(headlineDomain);</span>
+<span class="nc" id="L128">					TOTAL_FAILED_COUNT = TOTAL_FAILED_COUNT + failedCount;</span>
+<span class="nc" id="L129">					domainFailCount = domainFailCount + failedCount;</span>
+<span class="nc" id="L130">					int passCount = passedTestCases.get(headlineDomain);</span>
+<span class="nc" id="L131">					TOTAL_PASS_COUNT = TOTAL_PASS_COUNT + passCount;</span>
+<span class="nc" id="L132">					domainPassCount = domainPassCount + passCount;</span>
+<span class="nc" id="L133">					int skipCount = skippedTestCases.get(headlineDomain);</span>
+<span class="nc" id="L134">					TOTAL_SKIP_COUNT = TOTAL_SKIP_COUNT + skipCount;</span>
+<span class="nc" id="L135">					domainSkipCount = domainSkipCount + skipCount;</span>
+<span class="nc" id="L136">					updateExcelSheet(headlineDomain, failedCount, passCount, skipCount,totalALMTestCaseCount,testCaseType);	</span>
+				}
+
+<span class="nc" id="L139">			}</span>
+<span class="nc" id="L140">			updateDomainTotalAndMerge(initialMergedRow,domain,domainFailCount,domainPassCount,domainSkipCount);</span>
+		}
+<span class="nc" id="L142">		uiProp.clear();</span>
+<span class="nc" id="L143">	}</span>
+
+	private static void updateDomainTotalAndMerge(int initialMergedRow, String domain, int domainFailCount,
+			int domainPassCount, int domainSkipCount) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L148">		CellStyle cellStyle = getDataCellStyle();</span>
+<span class="nc" id="L149">		Row row = sheet.getRow(initialMergedRow);</span>
+<span class="nc" id="L150">		Row row1 = sheet.createRow(rowCounter);</span>
+<span class="nc" id="L151">		Cell cell = row.createCell(0);</span>
+<span class="nc" id="L152">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L153">		cell.setCellValue(domain);</span>
+		
+		
+<span class="nc" id="L156">		cell = row1.createCell(1);</span>
+<span class="nc" id="L157">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L158">		cell.setCellValue(&quot;Total for &quot;+domain);</span>
+		
+<span class="nc" id="L160">		int total = domainFailCount + domainPassCount + domainSkipCount;</span>
+		
+<span class="nc" id="L162">		cell = row1.createCell(2);</span>
+<span class="nc" id="L163">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L164">		cell.setCellValue(total);</span>
+		
+<span class="nc" id="L166">		cell = row1.createCell(3);</span>
+<span class="nc" id="L167">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L168">		cell.setCellValue(domainPassCount);</span>
+		
+<span class="nc" id="L170">		cell = row1.createCell(4);</span>
+<span class="nc" id="L171">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L172">		cell.setCellValue(domainFailCount);</span>
+		
+<span class="nc" id="L174">		cell = row1.createCell(5);</span>
+<span class="nc" id="L175">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L176">		cell.setCellValue(domainSkipCount);</span>
+		
+<span class="nc" id="L178">		cell = row1.createCell(6);</span>
+<span class="nc" id="L179">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L180">		double percentage = 0;</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">		if (domainPassCount != 0) {</span>
+<span class="nc" id="L182">			percentage = (domainPassCount * 100.00) / total;</span>
+		}else {
+<span class="nc" id="L184">			percentage = 0;</span>
+		}
+<span class="nc" id="L186">		DecimalFormat df = new DecimalFormat(&quot;###.##&quot;);</span>
+		
+<span class="nc" id="L188">		String percentage1 = df.format(percentage) + &quot;%&quot;;</span>
+<span class="nc" id="L189">		cell.setCellValue(percentage1);</span>
+<span class="nc" id="L190">		sheet.addMergedRegion(new CellRangeAddress(initialMergedRow, rowCounter, 0, 0));</span>
+<span class="nc" id="L191">		rowCounter++;</span>
+<span class="nc" id="L192">	}</span>
+
+	private static void loadReportLinkMapping() {
+<span class="nc" id="L195">		Iterator&lt;Object&gt; iterator = uiProp.keySet().iterator();</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		while(iterator.hasNext()) {</span>
+<span class="nc" id="L197">			String key = (String) iterator.next();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">			if(key.contains(&quot;Platform_Services_Regression&quot;)) {</span>
+<span class="nc" id="L199">				reportLinkKey.put(&quot;Platform_Services_Regression&quot;, key);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">			}else if(key.contains(&quot;HCA_And_KPI_Regression&quot;)) {</span>
+<span class="nc" id="L201">				reportLinkKey.put(&quot;HCA_And_KPI_Regression&quot;, key);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">			}else if(key.contains(&quot;HCM_And_Integration_Regression&quot;)) {</span>
+<span class="nc" id="L203">				reportLinkKey.put(&quot;HCM_And_Integration_Regression&quot;, key);</span>
+			}
+			
+<span class="nc" id="L206">		}</span>
+		
+		
+<span class="nc" id="L209">	}</span>
+
+	private static void updateExcelSheet(String headlineName, int failedCount, int passCount, int skipCount, Map&lt;String, Integer&gt; totalALMTestCaseCount, String testCaseType) {
+		
+<span class="nc" id="L213">		Row row = sheet.createRow(rowCounter);</span>
+<span class="nc" id="L214">		CellStyle cellStyle = getDataCellStyle();</span>
+<span class="nc" id="L215">		int dataCellCounter = 1;</span>
+<span class="nc" id="L216">		Cell cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L217">		cell.setCellValue(headlineName);</span>
+<span class="nc" id="L218">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L219">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L220">		int total = passCount + failedCount + skipCount;</span>
+<span class="nc" id="L221">		cell.setCellValue(total);</span>
+<span class="nc" id="L222">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L223">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L224">		cell.setCellValue(passCount);</span>
+<span class="nc" id="L225">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L226">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L227">		cell.setCellValue(failedCount);</span>
+<span class="nc" id="L228">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L229">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L230">		cell.setCellValue(skipCount);</span>
+<span class="nc" id="L231">		cell.setCellStyle(cellStyle);</span>
+<span class="nc" id="L232">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L233">		double percentage = 0;</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">		if (passCount != 0) {</span>
+<span class="nc" id="L235">			percentage = (passCount * 100.00) / total;</span>
+		}else {
+<span class="nc" id="L237">			percentage = 0;</span>
+		}
+<span class="nc" id="L239">		DecimalFormat df = new DecimalFormat(&quot;###.##&quot;);</span>
+		
+<span class="nc" id="L241">		String percentage1 = df.format(percentage) + &quot;%&quot;;</span>
+		
+<span class="nc" id="L243">		cell.setCellValue(percentage1);</span>
+<span class="nc" id="L244">		cell.setCellStyle(cellStyle);</span>
+
+<span class="nc" id="L246">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L247">		cell.setCellStyle(getHyperLinkStyle());</span>
+		
+<span class="nc bnc" id="L249" title="All 2 branches missed.">		if (testCaseType.equals(&quot;UI&quot;)) {</span>
+<span class="nc" id="L250">			String reportKey = ALMConstant.getUIJobLinks.getReportKeyByHeadline(headlineName).getReportName();</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">			if (reportKey != null) {</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">				if (reportLinkKey.get(reportKey) != null) {</span>
+<span class="nc" id="L253">					String link = uiProp.getProperty(reportLinkKey.get(reportKey));</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">					if (link != null) {</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">						if (!link.trim().isEmpty()) {</span>
+<span class="nc" id="L256">							cell.setCellValue(link.trim());</span>
+						}
+					}
+				}
+			}
+
+<span class="nc" id="L262">		} else {</span>
+			
+<span class="nc" id="L264">			String reportKey = ALMConstant.getAPIJobLinks.getReportKeyByHeadline(headlineName).getReportName();</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">			if (reportKey != null) {</span>
+<span class="nc bnc" id="L266" title="All 2 branches missed.">				if (reportLinkKey.get(reportKey) != null) {</span>
+<span class="nc" id="L267">					String link = uiProp.getProperty(reportLinkKey.get(reportKey));</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">					if (link != null) {</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">						if (!link.trim().isEmpty()) {</span>
+<span class="nc" id="L270">							cell.setCellValue(link.trim());</span>
+						}
+					}
+				}
+			}
+		}
+		
+<span class="nc" id="L277">		int testPlanCount = totalALMTestCaseCount.get(headlineName);</span>
+<span class="nc" id="L278">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L279">		cell.setCellValue(testPlanCount);</span>
+<span class="nc" id="L280">		cell.setCellStyle(cellStyle);</span>
+		
+<span class="nc" id="L282">		cell = row.createCell(dataCellCounter++);</span>
+<span class="nc" id="L283">		cell.setCellValue(testPlanCount - total);</span>
+<span class="nc" id="L284">		cell.setCellStyle(cellStyle);</span>
+		
+<span class="nc" id="L286">		rowCounter++;</span>
+
+<span class="nc" id="L288">	}</span>
+
+	private static CellStyle getDataCellStyle() {
+<span class="nc" id="L291">		Font dataFont = workbook.createFont();</span>
+<span class="nc" id="L292">		dataFont.setBoldweight((short) 1);</span>
+<span class="nc" id="L293">		dataFont.setFontHeightInPoints((short) 10);</span>
+<span class="nc" id="L294">		CellStyle cellStyle = workbook.createCellStyle();</span>
+<span class="nc" id="L295">		cellStyle = updateCellStyleWithBorder(cellStyle);</span>
+<span class="nc" id="L296">		cellStyle.setAlignment(CellStyle.ALIGN_LEFT);</span>
+<span class="nc" id="L297">		cellStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);</span>
+<span class="nc" id="L298">		cellStyle.setFont(dataFont);</span>
+<span class="nc" id="L299">		return cellStyle;</span>
+	}
+
+	private static CellStyle getHyperLinkStyle() {
+<span class="nc" id="L303">		CellStyle hlinkstyle = workbook.createCellStyle();</span>
+<span class="nc" id="L304">		Font hlinkfont = workbook.createFont();</span>
+<span class="nc" id="L305">		hlinkfont.setUnderline(Font.U_SINGLE);</span>
+		//hlinkfont.setColor(IndexedColors.BLUE.index);
+<span class="nc" id="L307">		hlinkfont.setFontHeightInPoints((short) 9);</span>
+<span class="nc" id="L308">		hlinkstyle = updateCellStyleWithBorder(hlinkstyle);</span>
+<span class="nc" id="L309">		hlinkstyle.setAlignment(CellStyle.ALIGN_LEFT);</span>
+<span class="nc" id="L310">		hlinkstyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);</span>
+<span class="nc" id="L311">		hlinkstyle.setWrapText(true);</span>
+<span class="nc" id="L312">		hlinkstyle.setFont(hlinkfont);</span>
+<span class="nc" id="L313">		return hlinkstyle;</span>
+	}
+
+	private static CellStyle getHeaderCellStyle() {
+<span class="nc" id="L317">		Font headerFont = workbook.createFont();</span>
+<span class="nc" id="L318">		headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);</span>
+<span class="nc" id="L319">		headerFont.setFontHeightInPoints((short) 12);</span>
+
+<span class="nc" id="L321">		CellStyle headerCellStyle = workbook.createCellStyle();</span>
+<span class="nc" id="L322">		headerCellStyle = updateCellStyleWithBorder(headerCellStyle);</span>
+<span class="nc" id="L323">		headerCellStyle.setFont(headerFont);</span>
+<span class="nc" id="L324">		headerCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());</span>
+<span class="nc" id="L325">		headerCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);</span>
+
+<span class="nc" id="L327">		return headerCellStyle;</span>
+	}
+
+	private static CellStyle updateCellStyleWithBorder(CellStyle cellStyle) {
+<span class="nc" id="L331">		cellStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);</span>
+<span class="nc" id="L332">		cellStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);</span>
+<span class="nc" id="L333">		cellStyle.setBorderRight(CellStyle.BORDER_MEDIUM);</span>
+<span class="nc" id="L334">		cellStyle.setBorderTop(CellStyle.BORDER_MEDIUM);</span>
+<span class="nc" id="L335">		return cellStyle;</span>
+	}
+
+	private static void createHeaderRow(CellStyle headerCellStyle, String testCaseType) {
+<span class="nc" id="L339">		Row headerRow = sheet.createRow(4);</span>
+<span class="nc" id="L340">		int headerRowCounter = 0;</span>
+<span class="nc" id="L341">		Cell cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L342">		cell.setCellValue(&quot;Domain&quot;);</span>
+<span class="nc" id="L343">		cell.setCellStyle(headerCellStyle);</span>
+		
+<span class="nc" id="L345">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L346">		cell.setCellValue(&quot;Headline&quot;);</span>
+<span class="nc" id="L347">		cell.setCellStyle(headerCellStyle);</span>
+
+<span class="nc" id="L349">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L350">		cell.setCellValue(&quot;Total Count&quot;);</span>
+<span class="nc" id="L351">		cell.setCellStyle(headerCellStyle);</span>
+
+<span class="nc" id="L353">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L354">		cell.setCellValue(&quot;Passed&quot;);</span>
+<span class="nc" id="L355">		cell.setCellStyle(headerCellStyle);</span>
+
+<span class="nc" id="L357">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L358">		cell.setCellValue(&quot;Failed&quot;);</span>
+<span class="nc" id="L359">		cell.setCellStyle(headerCellStyle);</span>
+
+<span class="nc" id="L361">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L362">		cell.setCellValue(&quot;Skipped&quot;);</span>
+<span class="nc" id="L363">		cell.setCellStyle(headerCellStyle);</span>
+
+<span class="nc" id="L365">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L366">		cell.setCellValue(&quot;Pass Percentage&quot;);</span>
+<span class="nc" id="L367">		cell.setCellStyle(headerCellStyle);</span>
+
+<span class="nc" id="L369">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L370">		cell.setCellValue(&quot;Report Link&quot;);</span>
+<span class="nc" id="L371">		cell.setCellStyle(headerCellStyle);	</span>
+		
+		
+<span class="nc" id="L374">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L375">		cell.setCellValue(&quot;From Test Plan&quot;);</span>
+<span class="nc" id="L376">		cell.setCellStyle(headerCellStyle);</span>
+		
+<span class="nc" id="L378">		cell = headerRow.createCell(headerRowCounter++);</span>
+<span class="nc" id="L379">		cell.setCellValue(&quot;Gap in Execution&quot;);</span>
+<span class="nc" id="L380">		cell.setCellStyle(headerCellStyle);</span>
+<span class="nc" id="L381">	}</span>
+
+	private static void writeExcel(String folderPath, String testCaseType) throws  Exception {
+<span class="nc" id="L384">		sheet.setDisplayGridlines(false);</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">		for (int i = 0; i &lt; 7; i++) {</span>
+<span class="nc" id="L386">			sheet.autoSizeColumn(i);</span>
+		}
+<span class="nc" id="L388">		sheet.setColumnWidth(6, 100*100);</span>
+<span class="nc" id="L389">		sheet.setColumnWidth(7, 100*100);</span>
+<span class="nc" id="L390">		File file = new File(folderPath);</span>
+<span class="nc" id="L391">		file.mkdirs();</span>
+<span class="nc" id="L392">		String reportFileName = &quot;&quot;;</span>
+
+<span class="nc bnc" id="L394" title="All 2 branches missed.">		if(folderPath.contains(&quot;\\&quot;)) {</span>
+<span class="nc bnc" id="L395" title="All 2 branches missed.">			if (folderPath.endsWith(&quot;\\&quot;)) {</span>
+<span class="nc" id="L396">				reportFileName = folderPath + &quot;ALMReport.xlsx&quot;;</span>
+			} else {
+<span class="nc" id="L398">				reportFileName = folderPath + &quot;\\ALMReport.xlsx&quot;;</span>
+			}
+		}else {
+<span class="nc bnc" id="L401" title="All 2 branches missed.">			if (folderPath.endsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L402">				reportFileName = folderPath + &quot;ALMReport.xlsx&quot;;</span>
+			} else {
+<span class="nc" id="L404">				reportFileName = folderPath + &quot;/ALMReport.xlsx&quot;;</span>
+			}	
+		}
+		
+<span class="nc" id="L408">		FileOutputStream fileOut = new FileOutputStream(reportFileName);</span>
+<span class="nc" id="L409">		workbook.write(fileOut);</span>
+<span class="nc" id="L410">		fileOut.close();</span>
+<span class="nc" id="L411">		rowCounter = 1;</span>
+<span class="nc" id="L412">		TOTAL_FAILED_COUNT = 0;</span>
+<span class="nc" id="L413">		TOTAL_PASS_COUNT = 0;</span>
+<span class="nc" id="L414">		TOTAL_SKIP_COUNT = 0;</span>
+<span class="nc" id="L415">	}</span>
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

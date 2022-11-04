@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="DataHub Test Suite">
+    <listeners>
+        <listener class-name="com.Utilities.ExecutionListener"/>
+    </listeners>
+    <test preserve-order="true" name="Release 7.1.2 functional test">
+        <groups>
+            <dependencies>
+               <!-- <group name="TenantSetupTest" depends-on="WrapperTest"></group>
+                <group name="PipelineAssignmentTest" depends-on="TenantSetupTest"/>
+                <group name="CleanUpTests" depends-on="TenantSetupTest"/>-->
+            </dependencies>
+        </groups>
+        <classes>
+             <class name="com.Tests.DataHubTests.DataHubUiTests.TenantSetupTest">
+               <methods>
+                   <include name="addAndInstallTenantTest"/>
+                   <include name="validateAddedTenantPayCodeMapping"/>
+                   <include name="validateAddedTenantLocationTypeMapping"/>
+               </methods>
+           </class>
+
+            <class name="com.Tests.DataHubTests.DataHubUiTests.WrapperTest">
+                <methods>
+                    <include name="validateWrapperWithGlobalTenant"/>
+                    <include name="validateGlobalTenantNonSuperUser"/>
+                    <include name="validateNonSuperUserUnableToDeleteWrapper"/>
+                </methods>
+            </class>
+
+            <class name="com.Tests.DataHubTests.DataHubUiTests.PipelineAssignmentTest">
+                <methods>
+                    <include name="validatePipelineAssignmentCreatedSuccessfully"/>
+                    <include name="validateGlobalTenantNotAvailableForNonSuperUser"/>
+                </methods>
+            </class>
+
+            <class name="com.Tests.DataHubTests.CleanUpTests.TenantCleanUpTest">
+                <methods>
+                    <include name="validateDeleteWrapper"/>
+                    <include name="addAndInstallTenantTest"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test>
+</suite>

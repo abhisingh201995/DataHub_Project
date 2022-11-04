@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="DataHub Test Suite">
+    <listeners>
+        <listener class-name="com.Utilities.ExecutionListener"/>
+    </listeners>
+    <test preserve-order="true" name="DataHub Self Service Ui Tests">
+        <groups>
+            <dependencies>
+
+            </dependencies>
+        </groups>
+        <classes>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.DhssLoginTest">
+                <methods>
+                    <include name="validateAdminUserLoginTest"/>
+                    <include name="validateSeedUserLoginTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.TenantRegistrationTest">
+                <methods>
+                    <include name="addAndInstallTenantTest"/>
+                    <include name="editAndInstallTenantTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.SeedConfigurationDetailsSaveUpdateTest">
+                <methods>
+                    <include name="validateSaveSeedConfigurationTest"/>
+                    <include name="validateEditSeedConfigurationTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.ServiceKeyFileServicesTest">
+                <methods>
+                    <include name="generateServiceKeyFileTest"/>
+                    <include name="verifyExpectedFileName"/>
+                    <include name="verifyExpectedFileNameFormat"/>
+                    <include name="deleteServiceKeyFileTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.TMSAdminAdditionalPropertiesUITest">
+                <methods>
+                    <include name="validateSaveAdditionalPropertiesViewpointYes"/>
+                    <include name="validateUpdateAdditionalPropertiesViewPointYes"/>
+                    <include name="validateSaveAdditionalPropertiesViewpointNoJointCustYes"/>
+                    <include name="validateUpdateAdditionalPropertiesViewPointNoJointCustYes"/>
+                    <include name="validateSaveAdditionalPropertiesViewpointNoJointCustYesDhNo"/>
+                    <include name="validateSaveAdditionalPropertiesViewpointNoJointCustYesDhYes"/>
+                    <include name="validateSaveAdditionalPropertiesViewpointNoUkgProNoGcpOwnedNo"/>
+                    <include name="validateUpdateAdditionalPropertiesViewPointNoUkgProNo"/>
+                    <include name="validateSaveAdditionalPropertiesViewpointNoUkgProNoGcpOwnedYes"/>
+                    <include name="validateUpdateAdditionalPropertiesViewpointNoUkgProNoGcpOwnedYes"/>
+                    <include name="validateCancelAdditionalProperties"/>
+                    <include name="validateErrorWithInvalidProjectName"/>
+                </methods>
+            </class>
+            
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.CustomerOwnedGcpSeedAdditionalPropertiesUITest">
+                <methods>
+                    <include name="validateErrorOnFields_noUpdateButtonPress"/>
+                    <include name="validateUpdate_With_InvalidKey_noUpdateButtonPress"/>
+                    <include name="validateUpdate_withAllValidVals"/>
+                </methods>
+            </class>
+
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceUiTests.SeedAdminSSOAuthTest">
+                <methods>
+                    <include name="validateSeedAdminSSOLoginTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

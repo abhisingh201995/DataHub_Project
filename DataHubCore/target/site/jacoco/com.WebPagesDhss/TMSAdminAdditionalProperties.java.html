@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TMSAdminAdditionalProperties.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhss</a> &gt; <span class="el_source">TMSAdminAdditionalProperties.java</span></div><h1>TMSAdminAdditionalProperties.java</h1><pre class="source lang-java linenums">package com.WebPagesDhss;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+
+public class TMSAdminAdditionalProperties {
+
+	private WebDriver driver;
+<span class="nc" id="L11">	private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+<span class="nc" id="L12">	private By VIEWPOINT_DD = By.xpath(&quot;//edap-smartcombo[@id='viewPointTenant']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L13">	private By UKG_PRO_CUSTOMER_DD = By.xpath(&quot;//edap-smartcombo[@id='ukgProCustomer']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L14">	private By DH_LICENSE_DD = By.xpath(&quot;//edap-smartcombo[@id='licensedCustomer']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L15">	private By GCP_PROJECT_UKG_OWNED_DD = By.xpath(&quot;//edap-smartcombo[@id='gcpUkgOwned']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L16">	private By SCRUBBED_DD = By.xpath(&quot;//edap-smartcombo[@id='scrubbed']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L17">	private By PERF_TIER_DD = By.xpath(&quot;//edap-smartcombo[@id='performanceTier']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L18">	private By TIMEZONE_DD = By.xpath(&quot;//edap-smartcombo[@id='timeZone']//input[@tabindex='-1']&quot;);</span>
+<span class="nc" id="L19">	private By SAVE_BTN = By.xpath(&quot;//button[normalize-space()='Save']&quot;);</span>
+<span class="nc" id="L20">	private By PROJECTID_DISABLED_TB = By.xpath(&quot;//input[@id='projectId' and @disabled]&quot;);</span>
+<span class="nc" id="L21">	private By GCP_PROJECTDESC_TEXTBOX = By.xpath(&quot;//input[@id='gcpProjectDesc']&quot;);</span>
+<span class="nc" id="L22">	private By PROV_STATUS_DISABLEDTB = By.xpath(&quot;//input[@id='provisioningStatus' and @disabled]&quot;);</span>
+<span class="nc" id="L23">	private By PROVISIONING_BTN = By.xpath(&quot;//button[normalize-space()='Provision GCP']&quot;);</span>
+<span class="nc" id="L24">	private By ADDPROPPAGE_TITLE = By.id(&quot;//span[@class='heading' and contains(text(), 'Additional Tenant Properties')]&quot;);</span>
+<span class="nc" id="L25">	private By CANCEL_BTN = By.xpath(&quot;//button[normalize-space()='Cancel']&quot;);</span>
+<span class="nc" id="L26">	private By UPDATE_BTN = By.xpath(&quot;//button[normalize-space()='Update']&quot;);</span>
+<span class="nc" id="L27">	private By SAVEBTN_DISABLED = By.xpath(&quot;//button[@id='btnSave' and @disabled]&quot;);</span>
+<span class="nc" id="L28">	private By PROVBTN_DISABLED = By.xpath(&quot;//button[@id=' btnGcpProvision' and @disabled]&quot;);</span>
+
+<span class="nc" id="L30">	public TMSAdminAdditionalProperties(WebDriver driver) {</span>
+<span class="nc" id="L31">		this.driver = driver;</span>
+<span class="nc" id="L32">	}</span>
+
+	public Boolean validatePageTitle() {
+<span class="nc" id="L35">		return seleniumHelper.validateElementPresent(driver, this.ADDPROPPAGE_TITLE);</span>
+	}
+
+	public void selectViewPointValue(int value){
+<span class="nc" id="L39">		seleniumHelper.clickElement(driver, this.VIEWPOINT_DD);</span>
+<span class="nc" id="L40">		seleniumHelper.clickElement(driver, By.xpath(&quot;//edap-smartcombo[@id='viewPointTenant']//li[&quot;+value+&quot;]&quot;));</span>
+<span class="nc" id="L41">	}</span>
+
+	public void selectUkgProValue(int value){
+<span class="nc" id="L44">		seleniumHelper.clickElement(driver, this.UKG_PRO_CUSTOMER_DD);</span>
+<span class="nc" id="L45">		seleniumHelper.clickElement(driver, By.xpath(&quot;//edap-smartcombo[@id='ukgProCustomer']//li[&quot;+value+&quot;]&quot;));</span>
+<span class="nc" id="L46">	}</span>
+
+	public void selectGcpOwnedValue(int value){
+<span class="nc" id="L49">		seleniumHelper.clickElement(driver, this.GCP_PROJECT_UKG_OWNED_DD);</span>
+<span class="nc" id="L50">		seleniumHelper.clickElement(driver, By.xpath(&quot;//edap-smartcombo[@id='gcpUkgOwned']//li[&quot;+value+&quot;]&quot;));</span>
+<span class="nc" id="L51">	}</span>
+
+	public void selectScrubbedValue(int value) {
+<span class="nc" id="L54">		seleniumHelper.clickElement(driver, this.SCRUBBED_DD);</span>
+<span class="nc" id="L55">		seleniumHelper.clickElement(driver, By.xpath(&quot;//edap-smartcombo[@id='scrubbed']//li[&quot;+value+&quot;]&quot;));</span>
+<span class="nc" id="L56">	}</span>
+
+	public void selectPerfTierValue(int value) {
+<span class="nc" id="L59">		seleniumHelper.clickElement(driver, this.PERF_TIER_DD);</span>
+<span class="nc" id="L60">		seleniumHelper.clickElement(driver, By.xpath(&quot;//edap-smartcombo[@id='performanceTier']//li[&quot;+value+&quot;]&quot;));</span>
+<span class="nc" id="L61">	}</span>
+
+	public void selectTimezoneValue(int value) {
+<span class="nc" id="L64">		seleniumHelper.clickElement(driver, this.TIMEZONE_DD);</span>
+<span class="nc" id="L65">		seleniumHelper.clickElement(driver, By.xpath(&quot;//edap-smartcombo[@id='timeZone']//li[&quot;+value+&quot;]&quot;));</span>
+<span class="nc" id="L66">	}</span>
+
+	public boolean isDisabledDatahubLicense(String value) {
+<span class="nc" id="L69">		return seleniumHelper.validateElementPresent(driver, By.xpath(&quot;//edap-smartcombo[@id='licensedCustomer']//input[@title='&quot;+value+&quot;' and @disabled]&quot;));</span>
+	}
+
+	public boolean isDisabledViewpoint(String value) {
+<span class="nc" id="L73">		return seleniumHelper.validateElementPresent(driver, By.xpath(&quot;//edap-smartcombo[@id='viewPointTenant']//input[@title='&quot;+value+&quot;' and @disabled]&quot;));</span>
+	}
+
+	public boolean isDisabledUkgPro(String value) {
+<span class="nc" id="L77">		return seleniumHelper.validateElementPresent(driver, By.xpath(&quot;//edap-smartcombo[@id='ukgProCustomer']//input[@title='&quot;+value+&quot;' and @disabled]&quot;));</span>
+	}
+
+	public boolean isDisabledGcpOwned(String value) {
+<span class="nc" id="L81">		return seleniumHelper.validateElementPresent(driver, By.xpath(&quot;//edap-smartcombo[@id='gcpUkgOwned']//input[@title='&quot;+value+&quot;' and @disabled]&quot;));</span>
+	}
+
+	public boolean isDisabledProjectId() {
+<span class="nc" id="L85">		return seleniumHelper.validateElementPresent(driver, this.PROJECTID_DISABLED_TB);</span>
+	}
+
+	public boolean isDisabledProvStatus() {
+<span class="nc" id="L89">		return seleniumHelper.validateElementPresent(driver, this.PROV_STATUS_DISABLEDTB);</span>
+	}
+
+	public void enterGcpProjectDesc(String projectDesc) {
+<span class="nc" id="L93">		seleniumHelper.enterTextElement(driver, this.GCP_PROJECTDESC_TEXTBOX, projectDesc);</span>
+
+<span class="nc" id="L95">	}</span>
+
+	public void clickSaveBtn() {
+<span class="nc" id="L98">		seleniumHelper.clickElement(driver, this.SAVE_BTN);</span>
+<span class="nc" id="L99">	}</span>
+
+	public void clickUpdateBtn() {
+<span class="nc" id="L102">		seleniumHelper.clickElement(driver, this.UPDATE_BTN);</span>
+<span class="nc" id="L103">	}</span>
+
+	public void clickProvisionGcpBtn() {
+<span class="nc" id="L106">		seleniumHelper.clickElement(driver, this.PROVISIONING_BTN);</span>
+<span class="nc" id="L107">	}</span>
+
+	public void clickCancelBtn() {
+<span class="nc" id="L110">		seleniumHelper.clickElement(driver, this.CANCEL_BTN);</span>
+<span class="nc" id="L111">	}</span>
+
+	public boolean isDisabledProvisionBtn() {
+<span class="nc" id="L114">		return seleniumHelper.validateElementPresent(driver, this.PROVBTN_DISABLED);</span>
+	}
+
+	public boolean isDisabledSaveBtn() {
+<span class="nc" id="L118">		return seleniumHelper.validateElementPresent(driver, this.SAVEBTN_DISABLED);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

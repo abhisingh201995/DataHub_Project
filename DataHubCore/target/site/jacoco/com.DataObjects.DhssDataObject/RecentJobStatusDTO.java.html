@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecentJobStatusDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">RecentJobStatusDTO.java</span></div><h1>RecentJobStatusDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+
+@Getter
+<span class="nc" id="L18">@Setter</span>
+<span class="nc" id="L19">public class RecentJobStatusDTO {</span>
+<span class="nc" id="L20">	public int edapTenantId;</span>
+<span class="nc" id="L21">	public String tenantId;</span>
+<span class="nc" id="L22">	public String shortName;</span>
+<span class="nc" id="L23">	public String timezoneDisplayName;</span>
+<span class="nc" id="L24">	public List&lt;RecentJobStatus&gt; recentJobStatus;</span>
+
+	@Getter
+<span class="nc" id="L27">	@Setter</span>
+<span class="nc" id="L28">	public static class RecentJobStatus {</span>
+		
+<span class="nc" id="L30">		public String wrapper;</span>
+<span class="nc" id="L31">		public String cumulativeDuration;</span>
+<span class="nc" id="L32">		public String overrideProfile;</span>
+<span class="nc" id="L33">		public String status;</span>
+		@JsonDeserialize(using=RJDateDeserializer.class)
+<span class="nc" id="L35">		public Instant startdtm;</span>
+		@JsonDeserialize(using=RJDateDeserializer.class)
+<span class="nc" id="L37">		public Instant enddtm;</span>
+		@JsonDeserialize(using=RJDateDeserializer.class)
+<span class="nc" id="L39">		public Instant updatedtm;</span>
+
+	}
+	
+	public static class RJDateDeserializer extends StdDeserializer&lt;Instant&gt;{
+		protected RJDateDeserializer(Class&lt;?&gt; vc) {
+<span class="nc" id="L45">			super(vc);</span>
+<span class="nc" id="L46">		}</span>
+		protected RJDateDeserializer() {
+<span class="nc" id="L48">			this(null);</span>
+<span class="nc" id="L49">		}</span>
+
+		@Override
+		public Instant deserialize(JsonParser p, DeserializationContext ctxt)
+				throws IOException, JsonProcessingException {
+			
+<span class="nc" id="L55">			String dateString = p.getText();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">			if(!(dateString.contains(&quot;Z&quot;)))</span>
+			{
+<span class="nc" id="L58">				return LocalDateTime.parse(dateString).toInstant(ZoneOffset.UTC);</span>
+			}
+			
+<span class="nc" id="L61">			return Instant.parse(dateString);</span>
+			
+		}
+}
+	}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

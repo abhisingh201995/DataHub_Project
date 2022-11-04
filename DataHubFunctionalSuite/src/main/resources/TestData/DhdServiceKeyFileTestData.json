@@ -1,0 +1,193 @@
+{
+  "DhdServiceKeyFileApiServicesTest.generateDhdServiceKeyFileTest": [
+    {
+      "input": {
+        "description": "Validate the generate service key API response for UKG owned GCP with seed user for Json type in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "serviceAccountKeyType": "json"
+        },
+        "testcaseId": "228405"
+      },
+      "output": {
+        "statusCode": "200",
+        "response":""
+      }
+    }
+  ],"DhdServiceKeyFileApiServicesTest.generateDhdServiceKeyFileInvalidTenantTest": [
+  {
+    "input": {
+      "description": "Validate the generate service key API response for UKG owned GCP with seed user for Invalid tenant name in DHD.",
+      "URL": "dhd/admin/tenant/gcpServicekeys/",
+      "method": "POST",
+      "payload": "",
+      "parameter": {
+        "tenantName": "InvalidTenantName_c79_nonprd_05",
+        "serviceAccountKeyType": "json"
+      },
+      "testcaseId": "228405"
+    },
+    "output": {
+      "statusCode": "400",
+      "response":""
+    }
+  },
+  {
+    "input": {
+      "description": "Validate the generate service key API response for UKG owned GCP with seed user for Invalid tenant and service type in DHD.",
+      "URL": "dhd/admin/tenant/gcpServicekeys/",
+      "method": "POST",
+      "payload": "",
+      "parameter": {
+        "tenantName": "InvalidTenantName_c79_nonprd_05",
+        "serviceAccountKeyType": "InvalidTypejson"
+      },
+      "testcaseId": ""
+    },
+    "output": {
+      "statusCode": "400",
+      "response":""
+    }
+  }
+  ],"DhdServiceKeyFileApiServicesTest.generateDhdServiceKeyFileInvalidServiceTypeTest": [
+  {
+    "input": {
+      "description": "Validate the generate service key API response for UKG owned GCP with seed user for Invalid service type in DHD.",
+      "URL": "dhd/admin/tenant/gcpServicekeys/",
+      "method": "POST",
+      "payload": "",
+      "parameter": {
+        "serviceAccountKeyType": "InvalidJson"
+      },
+      "testcaseId": ""
+    },
+    "output": {
+      "statusCode": "200",
+      "response":""
+    }
+  }
+  ],
+  "DhdServiceKeyFileApiServicesTest.getDhdServiceKeyFileTest": [
+    {
+      "input": {
+        "description": "Validate the get service key API response for UKG owned GCP with seed user in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          "tenantName": "c79_nonprd_05"
+        },
+        "testcaseId": "228406"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n\"edapTenantId\": 2,\"tenantName\":\"c79_nonprd_05\", \"shortName\": \"c79_nonprd_05\",\n\"serviceAccountKeys\": [\n\n{ \"type\": \"json\", \"status\": \"Active\", \"key\": \"0124feryuhkjjhkjhvffvfv\", \"keyCreationDate\": \"\", \"keyExpirationDate\": \"\" }\n,\n\n{ \"type\": \"P12\", \"status\": \"Active\", \"key\": \"0124feryuhkjjhkjhvffvfv\", \"keyCreationDate\": \"\", \"keyExpirationDate\": \"\" }\n]\n}"
+      }
+    }
+  ],
+  "DhdServiceKeyFileApiServicesTest.getDhdServiceKeyFileInvalidTenantTest": [
+    {
+      "input": {
+        "description": "Validate the get service key API response for UKG owned GCP with seed user for Invalid Tenant in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          "tenantName": "InvalidTenantName__c79_nonprd_05"
+        },
+        "testcaseId": "228406"
+      },
+      "output": {
+        "statusCode": "400"
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the get service key API response for UKG owned GCP with seed user for long Invalid Tenant in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          "tenantName": "77777777777777777777777777777777777777777777777777777777777777777777777777"
+        },
+        "testcaseId": "228406"
+      },
+      "output": {
+        "statusCode": "400"
+      }
+    }
+  ],
+  "DhdServiceKeyFileApiServicesTest.deleteDhdServiceKeyFileTest": [
+    {
+      "input": {
+        "description": "Validate the delete service key API response for UKG owned GCP with seed user in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "DELETE",
+        "payload": "",
+        "parameter": {
+
+        },
+        "testcaseId": "228407"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "{\n    \"tenantName\": \"ets_nonprd_07\",\n    \"message\": \"Resource Successfully Deleted!\"\n}"
+      }
+    }],
+  "DhdServiceKeyFileApiServicesTest.deleteDhdServiceKeyFileInvalidTenantTest": [
+    {
+      "input": {
+        "description": "Validate the delete of invalid tenant service key API response for UKG owned GCP with seed user in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "DELETE",
+        "payload": "",
+        "parameter": {
+          "tenantName": "InvalidTenantName_c79_nonprd_05"
+        },
+        "testcaseId": "228408"
+      },
+      "output": {
+        "statusCode": "400",
+        "response": "{\"status\":\"Failure\",\"message\":\"Invalid tenant information\"}"
+      }
+    }],
+  "DhdServiceKeyFileApiServicesTest.deleteDhdServiceKeyFileInvalidTenantAndServiceKeyTest": [
+    {
+      "input": {
+        "description": "Validate the delete of invalid tenant & service key API response for UKG owned GCP with seed user in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "DELETE",
+        "payload": "",
+        "parameter": {
+          "tenantId": "InvalidTenantName_c79_nonprd_05",
+          "serviceAccountKeyId": "Invalid0124feryuhkjjhkjhvffvfv"
+        },
+        "testcaseId": "228409"
+      },
+      "output": {
+        "statusCode": "400",
+        "response": "{\"status\":\"Failure\",\"message\":\"Invalid tenant information\"}"
+      }
+    }
+  ],
+  "DhdServiceKeyFileApiServicesTest.deleteDhdServiceKeyFileInvalidServiceKeyTest": [
+    {
+      "input": {
+        "description": "Validate the delete of invalid service key API response for UKG owned GCP with seed user in DHD.",
+        "URL": "dhd/admin/tenant/gcpServicekeys/?tenantName=",
+        "method": "DELETE",
+        "payload": "",
+        "parameter": {
+          "serviceAccountKeyId": "Invalid0124feryuhkjjhkjhvffvfv"
+        },
+        "testcaseId": "228409"
+      },
+      "output": {
+        "statusCode": "400",
+        "response": "{\"status\":\"Failure\",\"message\":\"Invalid service key information\"}"
+      }
+    }
+  ]
+ }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MasterPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">MasterPage.java</span></div><h1>MasterPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class MasterPage {
+
+<span class="nc" id="L9">    SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+    WebDriver driverUi;
+
+<span class="nc" id="L12">    public MasterPage(WebDriver driverUi) {</span>
+<span class="nc" id="L13">        this.driverUi = driverUi;</span>
+<span class="nc" id="L14">    }</span>
+
+<span class="nc" id="L16">    private By homePageLink = By.xpath(&quot;//a[normalize-space()='Home']&quot;);</span>
+
+<span class="nc" id="L18">    private By logOut = By.xpath(&quot;//a[normalize-space()='Log out']&quot;);</span>
+<span class="nc" id="L19">    private By logInAgain = By.xpath(&quot;//a[normalize-space()='Log in again']&quot;);</span>
+
+
+    public HomePage clickHomePage(){
+<span class="nc" id="L23">        seleniumHelper.clickElement(driverUi,this.homePageLink);</span>
+<span class="nc" id="L24">        return new HomePage(driverUi);</span>
+    }
+
+    public LoginPage clickLogOut(){
+<span class="nc" id="L28">        seleniumHelper.clickElement(driverUi,logOut);</span>
+<span class="nc" id="L29">        seleniumHelper.clickElement(driverUi,logInAgain);</span>
+<span class="nc" id="L30">        return new LoginPage(driverUi);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

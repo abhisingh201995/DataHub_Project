@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlertEmailSubscriptionDHSSDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">AlertEmailSubscriptionDHSSDTO.java</span></div><h1>AlertEmailSubscriptionDHSSDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import java.util.List;
+
+<span class="nc" id="L5">public class AlertEmailSubscriptionDHSSDTO {</span>
+
+	public int edapTenantId;
+    public String tenantId;
+    public String shortName;
+	public List&lt;String&gt; scheduleList;
+	public List&lt;AlertCatSubCatListDTO&gt; alertCategorySubCategoryList;
+	public List&lt;AlertSubDTO&gt; alerts;
+
+	public List&lt;AlertSubDTO&gt; getAlertsSub() {
+<span class="nc" id="L15">		return alerts;</span>
+	}
+	public void setAlertsSub(List&lt;AlertSubDTO&gt; alerts) {
+<span class="nc" id="L18">		this.alerts = alerts;</span>
+<span class="nc" id="L19">	}</span>
+	public List&lt;AlertCatSubCatListDTO&gt; getAlertCategorySubCategoryList() {
+<span class="nc" id="L21">		return alertCategorySubCategoryList;</span>
+	}
+	public void setAlertCategorySubCategoryList(List&lt;AlertCatSubCatListDTO&gt; alertCategorySubCategoryList) {
+<span class="nc" id="L24">		this.alertCategorySubCategoryList = alertCategorySubCategoryList;</span>
+<span class="nc" id="L25">	}</span>
+<span class="nc" id="L26">	public List&lt;String&gt; getScheduleList() {return scheduleList;}</span>
+<span class="nc" id="L27">	public void setScheduleList(List&lt;String&gt; scheduleList) {this.scheduleList = scheduleList;}</span>
+	public int getEdapTenantId() {
+<span class="nc" id="L29">		return edapTenantId;</span>
+	}
+	public void setEdapTenantId(int edapTenantId) {
+<span class="nc" id="L32">		this.edapTenantId = edapTenantId;</span>
+<span class="nc" id="L33">	}</span>
+	public String getTenantId() {
+<span class="nc" id="L35">		return tenantId;</span>
+	}
+	public void setTenantId(String tenantId) {
+<span class="nc" id="L38">		this.tenantId = tenantId;</span>
+<span class="nc" id="L39">	}</span>
+	public String getShortName() {
+<span class="nc" id="L41">		return shortName;</span>
+	}
+	public void setShortName(String shortName) {
+<span class="nc" id="L44">		this.shortName = shortName;</span>
+<span class="nc" id="L45">	}</span>
+
+    
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

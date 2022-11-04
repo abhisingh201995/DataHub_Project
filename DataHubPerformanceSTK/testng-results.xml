@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="2" passed="2">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default Suite" duration-ms="15189" started-at="2021-08-09T14:40:02 IST" finished-at="2021-08-09T14:40:17 IST">
+    <groups>
+    </groups>
+    <test name="DataHubPerformanceSTK" duration-ms="15189" started-at="2021-08-09T14:40:02 IST" finished-at="2021-08-09T14:40:17 IST">
+      <class name="com.ukg.datahub.perf.loadgenarator.test.DataInsertionTest">
+        <test-method status="PASS" signature="testInsertionInTimeCardTable()[pri:0, instance:com.ukg.datahub.perf.loadgenarator.test.DataInsertionTest@3c153a1]" name="testInsertionInTimeCardTable" duration-ms="108" started-at="2021-08-09T14:40:02 IST" finished-at="2021-08-09T14:40:02 IST">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInsertionInTimeCardTable -->
+      </class> <!-- com.ukg.datahub.perf.loadgenarator.test.DataInsertionTest -->
+      <class name="com.ukg.datahub.perf.loadgenarator.test.JMeterLoadGenerationServiceTest">
+        <test-method status="PASS" signature="init()[pri:0, instance:com.ukg.datahub.perf.loadgenarator.test.JMeterLoadGenerationServiceTest@b62fe6d]" name="init" is-config="true" duration-ms="304" started-at="2021-08-09T14:40:02 IST" finished-at="2021-08-09T14:40:02 IST">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- init -->
+        <test-method status="PASS" signature="testWithDefinedRPSAndCounterConfig_WithPerformanceReportOnEmail_HappyPath()[pri:0, instance:com.ukg.datahub.perf.loadgenarator.test.JMeterLoadGenerationServiceTest@b62fe6d]" name="testWithDefinedRPSAndCounterConfig_WithPerformanceReportOnEmail_HappyPath" duration-ms="14749" started-at="2021-08-09T14:40:02 IST" finished-at="2021-08-09T14:40:17 IST">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testWithDefinedRPSAndCounterConfig_WithPerformanceReportOnEmail_HappyPath -->
+      </class> <!-- com.ukg.datahub.perf.loadgenarator.test.JMeterLoadGenerationServiceTest -->
+    </test> <!-- DataHubPerformanceSTK -->
+  </suite> <!-- Default Suite -->
+</testng-results>

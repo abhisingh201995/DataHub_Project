@@ -1,0 +1,38 @@
+{
+  "DhssLoginTest.validateAdminUserLoginTest": [
+    {
+      "input": {
+        "URL": "admin/tenantadmin/adminbasiclogin",
+        "method": "",
+        "payload": "",
+        "parameter": {
+          "username": "admin",
+          "password": "Kr0n0s@Cloud"
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ],
+  "DhssLoginTest.validateSeedUserLoginTest": [
+    {
+      "input": {
+        "URL": "seedadmin/seed/seedlogin",
+        "method": "",
+        "payload": "",
+        "parameter": {
+          "username": "SeanIvan",
+          "password": "Kr0n0s@Cloud"
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ]
+}

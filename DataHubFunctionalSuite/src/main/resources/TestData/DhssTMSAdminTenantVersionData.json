@@ -1,0 +1,16 @@
+{
+  "DHSSTMSAdminAdditionalPropertiesTenantVersionApiServicesTest.getTenantVersionTMSAdminAdditionalProperties": [
+    {
+      "input": {
+        "description": "Validate the get tenant version for TMS admin additional properties API in DHSS.",
+        "URL": "admin/dhss/tenant/versionDetails/",
+        "method": "GET",
+        "testcaseId": "230196"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ]
+}

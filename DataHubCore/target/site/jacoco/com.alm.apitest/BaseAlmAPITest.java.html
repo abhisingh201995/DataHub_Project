@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseAlmAPITest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.alm.apitest</a> &gt; <span class="el_source">BaseAlmAPITest.java</span></div><h1>BaseAlmAPITest.java</h1><pre class="source lang-java linenums">package com.alm.apitest;
+
+import com.alm.apiobject.ALMException;
+import com.alm.apiobject.AlmAPIObject;
+import com.alm.utils.ALMConstant;
+import com.alm.utils.ALMConstant.headline;
+import com.alm.utils.CommonParameters;
+import com.alm.utils.Utils;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.Response;
+import org.apache.commons.lang3.StringUtils;
+import org.testng.ITestContext;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static com.jayway.restassured.RestAssured.expect;
+
+public class BaseAlmAPITest extends CommonParameters{
+
+	private static String ALM_LOGIN_URI;
+<span class="nc" id="L28">	private static String ALM_LOGOUT_URI = BASE_URL + &quot;/api/authentication/sign-out&quot;;</span>
+	public static Map&lt;String,Integer&gt; failedTestCaseCount;
+	public static Map&lt;String,Integer&gt; passTestCaseCount;
+	public static Map&lt;String,Integer&gt; skippedTestCaseCount;
+	public static Map&lt;String,Integer&gt; totalALMTestCaseCount;
+	public static Map&lt;String,List&lt;Integer&gt;&gt; headlinesTestCaseCount;
+
+	@BeforeSuite(alwaysRun = true)
+	public void loadXmlParameters(ITestContext context) throws ALMException {
+<span class="nc" id="L37">		PROJECT_NAME = &quot;Falcon&quot;;</span>
+<span class="nc" id="L38">		DOMAIN_NAME = &quot;DEFAULT&quot;;</span>
+<span class="nc" id="L39">		BASE_URL = &quot;http://kap-us-alm2.int.kronos.com:8080/qcbin&quot;;</span>
+<span class="nc" id="L40">		PAGE_SIZE = 1000;</span>
+<span class="nc" id="L41">		EXCEL_REPORT_PATH = &quot;REPORT_PATH&quot;;</span>
+<span class="nc" id="L42">		ALM_FOLDER_PATH = &quot;Falcon Project/ETS/Data Hub/Regression/DataHubAdmin/E2E&quot;;</span>
+<span class="nc" id="L43">		ALM_TESTPLAN_FOLDER_PATH = &quot;Falcon Project/ETS/Data Hub/Regression/DataHubAdmin/E2E&quot;;</span>
+<span class="nc" id="L44">		ALM_LOGIN_URI = BASE_URL + &quot;/api/authentication/sign-in&quot;;</span>
+<span class="nc" id="L45">		EXECUTION_DATE = LocalDateTime.now().toString();</span>
+<span class="nc" id="L46">		RELEASE_BUILD = &quot;8.0.0&quot;;</span>
+		
+				
+<span class="nc" id="L49">		String childFolderName = &quot;Smoke Suite&quot;;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if(childFolderName == null) {</span>
+<span class="nc" id="L51">			CHILD_FOLDER_NAME = new ArrayList&lt;String&gt;();</span>
+		}else {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">			if(childFolderName.trim().isEmpty()) {</span>
+<span class="nc" id="L54">				CHILD_FOLDER_NAME = new ArrayList&lt;String&gt;();	</span>
+			}else {
+<span class="nc" id="L56">				CHILD_FOLDER_NAME = Arrays.asList(childFolderName);</span>
+			}
+		}
+
+<span class="nc" id="L60">		fetchChildFolderList();</span>
+<span class="nc" id="L61">	}</span>
+
+	@BeforeClass(alwaysRun = true)
+	public void loginToALM() {
+<span class="nc" id="L65">		authenticate();</span>
+<span class="nc" id="L66">	}</span>
+
+	private static void authenticate() {
+<span class="nc" id="L69">		cookies = expect().given().auth()</span>
+<span class="nc" id="L70">				.basic(ALMConstant.USERNAME, ALMConstant.PASSWORD).accept(ContentType.JSON)</span>
+<span class="nc" id="L71">				.when().post(ALM_LOGIN_URI).thenReturn().cookies();</span>
+<span class="nc" id="L72">	}</span>
+
+	public static void logout(){
+<span class="nc" id="L75">		expect().given().when().post(ALM_LOGOUT_URI).thenReturn().body();</span>
+<span class="nc" id="L76">		cookies = null;</span>
+<span class="nc" id="L77">	}</span>
+
+<span class="nc" id="L79">	public BaseAlmAPITest() {</span>
+<span class="nc" id="L80">		PROJECT_NAME = &quot;Falcon&quot;;</span>
+<span class="nc" id="L81">		DOMAIN_NAME = &quot;DEFAULT&quot;;</span>
+<span class="nc" id="L82">		BASE_URL = &quot;http://kap-us-alm2.int.kronos.com:8080/qcbin&quot;;</span>
+<span class="nc" id="L83">		PAGE_SIZE = 1000;</span>
+<span class="nc" id="L84">		EXCEL_REPORT_PATH = &quot;REPORT_PATH&quot;;</span>
+<span class="nc" id="L85">		ALM_FOLDER_PATH = &quot;Falcon Project/ETS/Data Hub/Regression/DataHubAdmin/E2E&quot;;</span>
+<span class="nc" id="L86">		ALM_TESTPLAN_FOLDER_PATH = &quot;Falcon Project/ETS/Data Hub/Regression/DataHubAdmin/E2E&quot;;</span>
+<span class="nc" id="L87">		ALM_LOGIN_URI = BASE_URL + &quot;/api/authentication/sign-in&quot;;</span>
+<span class="nc" id="L88">		EXECUTION_DATE = LocalDateTime.now().toString();</span>
+<span class="nc" id="L89">		RELEASE_BUILD = &quot;8.0.0&quot;;</span>
+
+<span class="nc" id="L91">	}</span>
+
+	private void fetchChildFolderList(){
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		if(CHILD_FOLDER_NAME.size()==0) {</span>
+<span class="nc" id="L95">			CHILD_FOLDER_NAME = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L96">			CHILD_FOLDER_NAME.add(ALMConstant.TestSetFolder.HCM_INTEGRATION.getTestSetFolder());</span>
+<span class="nc" id="L97">			CHILD_FOLDER_NAME.add(ALMConstant.TestSetFolder.HCA_KPI.getTestSetFolder());</span>
+<span class="nc" id="L98">			CHILD_FOLDER_NAME.add(ALMConstant.TestSetFolder.PLATFORM_SERVICES.getTestSetFolder());</span>
+		}
+<span class="nc" id="L100">	}</span>
+
+	protected List&lt;String&gt; fetchListOfChildFolderId(Response response){
+<span class="nc" id="L103">		String responseString = response.asString();</span>
+<span class="nc" id="L104">		List&lt;String&gt; folderId = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L105">		List&lt;String&gt; entitiesList = JsonPath.with(responseString).getList(&quot;entities.Fields&quot;);</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		for(int i = 0 ; i &lt; entitiesList.size() ; i++) {</span>
+<span class="nc" id="L108">			folderId.add(JsonPath.with(responseString).get(&quot;entities[&quot;+i+&quot;].Fields.find{node -&gt; node.Name == 'id'}.values[0].value&quot;).toString());</span>
+		}
+
+<span class="nc" id="L111">		return folderId;</span>
+	}
+
+	protected void updateTestCaseExecutionResultCount(Response response,String folderName) {
+<span class="nc" id="L115">		String responseString = response.asString();</span>
+<span class="nc" id="L116">		failedTestCaseCount.put(folderName, StringUtils.countMatches(responseString, &quot;Failed&quot;));</span>
+<span class="nc" id="L117">		skippedTestCaseCount.put(folderName, StringUtils.countMatches(responseString, &quot;No Run&quot;));</span>
+<span class="nc" id="L118">		passTestCaseCount.put(folderName, StringUtils.countMatches(responseString, &quot;Passed&quot;));</span>
+<span class="nc" id="L119">	}</span>
+
+	protected void checkReleaseBuildOrNot() {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		if(RELEASE_BUILD.equalsIgnoreCase(&quot;no&quot;)) {</span>
+<span class="nc" id="L123">			failedTestCaseCount.remove(headline.ROLLING_UPGRADE.getValue());</span>
+<span class="nc" id="L124">			failedTestCaseCount.remove(headline.TENANT_MANAGEMENT_SYSTEM.getValue());</span>
+			
+<span class="nc" id="L126">			skippedTestCaseCount.remove(headline.ROLLING_UPGRADE.getValue());</span>
+<span class="nc" id="L127">			skippedTestCaseCount.remove(headline.TENANT_MANAGEMENT_SYSTEM.getValue());</span>
+			
+<span class="nc" id="L129">			passTestCaseCount.remove(headline.ROLLING_UPGRADE.getValue());</span>
+<span class="nc" id="L130">			passTestCaseCount.remove(headline.TENANT_MANAGEMENT_SYSTEM.getValue());</span>
+		}
+<span class="nc" id="L132">	}</span>
+	protected List&lt;String&gt; fetchListOfChildFolderName(Response response) {
+<span class="nc" id="L134">		String responseString = response.asString();</span>
+<span class="nc" id="L135">		List&lt;String&gt; folderNames = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L136">		List&lt;String&gt; entitiesList = JsonPath.with(responseString).getList(&quot;entities.Fields&quot;);</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		for(int i = 0 ; i &lt; entitiesList.size() ; i++) {</span>
+<span class="nc" id="L139">			folderNames.add(JsonPath.with(responseString).get(&quot;entities[&quot;+i+&quot;].Fields.find{node -&gt; node.Name == 'name'}.values[0].value&quot;).toString());</span>
+		}
+
+<span class="nc" id="L142">		return folderNames;</span>
+	}
+	
+	protected void updateTestPlanTestCaseCount(AlmAPIObject almApiObject, String testcaseType) {
+<span class="nc" id="L146">		String subjectFolderId = almApiObject.getTestPlanFolderId(&quot;Subject&quot;,&quot;&quot;);</span>
+<span class="nc" id="L147">		String falconProjectId = almApiObject.getTestPlanFolderId(&quot;Falcon Project&quot;,subjectFolderId);</span>
+<span class="nc" id="L148">		String platformId = almApiObject.getTestPlanFolderId(&quot;Platform&quot;,falconProjectId);</span>
+		String hierarchicalPath ;
+<span class="nc" id="L150">		List&lt;String&gt; headlineList = Utils.getHeadlineList();</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		for(String headline:headlineList) {</span>
+<span class="nc bnc" id="L152" title="All 4 branches missed.">			if(headline.equals(ALMConstant.headline.CONFIGURATION_APP_SDM.getValue()) || headline.equals(ALMConstant.headline.INFORMATION_ACCESS.getValue())){</span>
+<span class="nc" id="L153">				hierarchicalPath = almApiObject.getTestPlanFolderHierarchicalPath(falconProjectId, headline);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">			}else if(headline.equals(ALMConstant.headline.PLANNER_INTEGRATION.getValue())){</span>
+<span class="nc" id="L155">				String telestaffId = almApiObject.getTestPlanFolderId(ALMConstant.headline.TELESTAFF_INTEGRATION.getValue(),platformId);</span>
+<span class="nc" id="L156">				hierarchicalPath = almApiObject.getTestPlanFolderHierarchicalPath(telestaffId, headline);</span>
+<span class="nc bnc" id="L157" title="All 14 branches missed.">            }else if(headline.equals(&quot;Targets and Thresholds Standard&quot;)||headline.equals(&quot;HCA-WFM Config&quot;)||headline.equals(&quot;HCA-Compute&quot;)||headline.equals(&quot;HCA-Reports&quot;)||headline.equals(&quot;HCA-Integration&quot;)||headline.equals(&quot;HCA-TP and Licensing&quot;)||headline.equals(&quot;HCA-Supportabilty&quot;)) {				String hcaID = almApiObject.getTestPlanFolderId(&quot;Healthcare Analytics&quot;,platformId);</span>
+<span class="nc" id="L158">            	hierarchicalPath = almApiObject.getTestPlanFolderHierarchicalPath(hcaID, headline);			</span>
+<span class="nc" id="L159">            }</span>
+			else {
+<span class="nc" id="L161">				hierarchicalPath = almApiObject.getTestPlanFolderHierarchicalPath(platformId, headline);</span>
+			}
+			
+<span class="nc" id="L164">			Response response = almApiObject.getTestCaseForGivenTestPlanFolder(hierarchicalPath, testcaseType);</span>
+<span class="nc" id="L165">			this.countTestPlanTestCases(response,headline);</span>
+<span class="nc" id="L166">		}</span>
+<span class="nc" id="L167">	}</span>
+
+	private void countTestPlanTestCases(Response response,String headline) {
+<span class="nc" id="L170">		int count = Integer.parseInt(JsonPath.with(response.asString()).get(&quot;TotalResults&quot;).toString());</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">		if(RELEASE_BUILD.equalsIgnoreCase(&quot;yes&quot;) &amp;&amp; headline.equals(ALMConstant.headline.AUTHENTICATION_TP.getValue())) {</span>
+<span class="nc" id="L172">			int authnCount = totalALMTestCaseCount.get(ALMConstant.headline.AUTHENTICATION_USER_MANAGEMENT.getValue());</span>
+<span class="nc" id="L173">			count = count + authnCount;</span>
+<span class="nc" id="L174">			totalALMTestCaseCount.put(ALMConstant.headline.AUTHENTICATION_USER_MANAGEMENT.getValue(), count);</span>
+			
+<span class="nc bnc" id="L176" title="All 4 branches missed.">		}else if(RELEASE_BUILD.equalsIgnoreCase(&quot;no&quot;) &amp;&amp; headline.equals(ALMConstant.headline.AUTHENTICATION_TP.getValue())){</span>
+			
+		}else {
+			
+<span class="nc" id="L180">			totalALMTestCaseCount.put(headline, count);</span>
+		}
+		
+<span class="nc" id="L183">	}</span>
+}	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

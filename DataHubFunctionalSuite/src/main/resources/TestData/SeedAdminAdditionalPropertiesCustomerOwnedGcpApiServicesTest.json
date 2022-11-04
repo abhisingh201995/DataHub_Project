@@ -1,0 +1,142 @@
+{
+  "SeedAdminAdditionalPropertiesCustomerOwnedGcpApiServicesTest.provisionSeedUserCustomerOwnedGCP": [
+    {
+      "input": {
+        "description": "Validate the provision seed user customer owned Gcp project API in DHSS.",
+        "URL": "seeduser/tenant/provisioning/provisionGcp/provision",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "gcpProjectId": "dschaub_nonprd_09_00123",
+          "gcpProjectDesc": "dschaubgcpproject",
+          "serviceAccountKey": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"dschaub_nonprd_09_00123\",\n  \"private_key_id\": \"55faf3e25614e511d67dfec377907c29bc5280a9\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCuztQSI67SQGHt\\nSgG2xjH2XX148TRWxm8zqBgitUya2cex2RsLMl7Jy7fVbtv977n6EUtaUOoWGWm5\\nkYxJQq+VzzaFlqNcwcbdXyDED+4kspYX/N5BEFEFnlPkwlptizmWILQ/HXlWK4kZ\\nigYJD15NzZt/AgI1qnQ58q5j1L+4O3LXd9m3zK9J/WOjwhwBc5NVk3K+RKNvpTdb\\nR3M4nFFHOm4Ybh/SN3thWOWJla45ArbDsT0E2kmdSEEZhbwG1bMsNLBYvV6jiIYc\\nJLMnPnmGTCFxec1/+lx/cHlxTi1+ODskusYQlV4NzA9bCza2IlWrY7JXycT2l89b\\nLPVmk4epAgMBAAECggEACoVSMtaeR/MuBveu9g7O+lKSzFD1Yx+a7mijLeZBel8P\\nFhTIpuTc2uz9icVGokLnq4rs675Lnbw2e7+sdMr5rFzbSDD9G1u3mffcDftzdsFK\\nJ/QadZ9YxlYgGyLYtG0ZBdW+uL8PtXBLVmkohypl9O13UAPmmXpCd9ZeSTiIYrsU\\n4D+o/eA5pCbrINHzHw5sqSIYP/FqfktDxca43BkFZYdTbTtuM4/HdMlew1jCgC7E\\nQftqlAHfNEb3lprvbEx8a4ANJk+Bnk/QVOZjewyjc6krNdD8iqLSM7UeE4BsUDVF\\nxWx8+SeE/d7uVcAeT77Yux5ZS91bGM77a3iAaDMFvQKBgQDxP3vgp+GcGJvulIVK\\nbUgo8Dek5EEfZPCzriWsiqQMXRRF5TAnzzqaFG3e0se1wua4ERutj1jlHIB79/8U\\n8oDtX1EZU1hPBhqma3j0XDvgSONCR7h7aBdPM528xeqdmTZqz0eVUrSopnggBOwu\\nGDtDATxCVjr9VHQTf6Rm/jvJxwKBgQC5f0lHWA4RSUWjjBWvkbCB2s5a59EJOG8x\\ngZJG6x3LYU7KE21XdpTs8kJv1RoiMqhUlLTk2BuGKBFxpl7deYr2ptjGGH+ngBYl\\n02mKeWW8+218/LMVaWHA6f5Hizq6c6Xj+dVBSylpkkFsk7pt+5zWAQhdfqukgpHh\\npSZM+5+jDwKBgQDPosol45hkVzHuN9o44rHWulnKC8KZGLGqlFpMlM747SvDtKyr\\ntspDTw35WAUXRXZ6Og9OZDAokU1sZVggWU/p/b25RGifKyvIzHtAJhpKwbEHnN8F\\nJ+PYAR7kGJwDpJiXeWus85AWD6EYPeRhD+4Bj5Cjr7/5xbRaC+Qd2PbwhQKBgBVw\\nv/COHfojhPgVXgBQD53Cw61ANCojqr6HIngt/uCeG7RBsJa2bxpAGivA7udbAZfd\\nJFd7HxtPkEyZlUd2H/jIai/jbwXWSTkQCZfm1jqUuSAEOVLVPmZE5Y4xapVYfqku\\nHFcSr/Oy4vsAzECgH42gyu27kW1PZjs1koq9XsNDAoGAZfN4uUuJixLdWnKzgAPb\\n/1V0SgfeyEnJo7T7oCZ3xJJjhGgYYyI90CnkEQTlLMYVCIJvldEhNjVW0y01zBBH\\npHMJo80oI4JgrU3xgEgdmu/MROlNiYNWnBVoiYuM72mYnZSQfZGK5/rAW6DJU1AK\\nXFWaCIgvVsQFu1yp6hOzPis=\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"svc-cust-data-hub-rw@u-u-acad07300226-u-u-acad.iam.gserviceaccount.com\",\n  \"client_id\": \"112530653185620687627\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/svc-cust-data-hub-rw%40dschaub_nonprd_09.iam.gserviceaccount.com\"\n}\n",
+          "version": "7.3.0",
+          "provisionGcpSqlQuery": "select * from public.tenantmgr_tenantversioncontrol;"
+        },
+        "testcaseId": "230078"
+      },
+      "output": {
+        "statusCode": "200",
+        "response":"Resource Successfully Created"
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the provision seed user customer owned Gcp project API in DHSS.",
+        "URL": "seeduser/tenant/provisioning/provisionGcp/provision",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "gcpProjectId": "dschaub_nonprd_09_00123",
+          "gcpProjectDesc": "dschaubgcpproject",
+          "serviceAccountKey": "invalidstring"
+        },
+        "testcaseId": "230079"
+      },
+      "output": {
+        "statusCode": "500",
+        "response":"{\n    \"errorMessage\": \"An error occurred while updating GCP Project properties. : DHSS-0015\",\n    \"errorCode\": \"DHSS-0015\"\n}"
+      }
+    }
+  ],
+  "SeedAdminAdditionalPropertiesCustomerOwnedGcpApiServicesTest.updateProvisionedSeedUserCustomerOwnedGCP": [
+    {
+      "input": {
+        "description": "Validate the update provisioned seed user customer owned Gcp project API in DHSS.",
+        "URL": "v1/dhss/seeduser/tenant/provisioning/provisionGcp/update",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "gcpProjectDesc": "dschaubgcpprojectnew",
+          "serviceAccountKey": "**********",
+          "version": "7.3.0",
+          "provisionGcpSqlQuery": "select * from public.tenantmgr_tenantversioncontrol;"
+        },
+        "testcaseId": "230081"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "Resource Successfully Updated."
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the update provisioned seed user customer owned Gcp project API with invalid service account key in DHSS.",
+        "URL": "v1/dhss/seeduser/tenant/provisioning/provisionGcp/update",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "gcpProjectDesc": "dschaubgcpprojectnew",
+          "serviceAccountKey": "invalidkey"
+        },
+        "testcaseId": "230082"
+      },
+      "output": {
+        "statusCode": "500",
+        "response": "{\n    \"errorMessage\": \"An error occurred while updating GCP Project properties. : DHSS-0015\",\n    \"errorCode\": \"DHSS-0015\"\n}"
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the update provisioned seed user customer owned Gcp project API with valid service account key in DHSS.",
+        "URL": "v1/dhss/seeduser/tenant/provisioning/provisionGcp/update",
+        "method": "PUT",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "gcpProjectDesc": "dschaubgcpprojectnew",
+          "serviceAccountKey": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"u-u-acad07300226-u-u-acad\",\n  \"private_key_id\": \"3617b23fe212714c2080482cd621d22a16556cd1\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDHeUZ2dS4nanA9\\n+izd2RvXIr4i34gQPw8BKLBQNY1HhmQp+0HCtexqJ2oE/BFi5wR+3VqUzTDafIdt\\nc4kupGvZXr3WKhnJEadhj/9zaAU/rvnIPHB0N1dv/bMMYT1bDwL1D/nvE+vIOCtd\\n4JE9Ae54vPg6YSrBQaeUzWxQe3LgcTiTh1EP5wyWKfUP86xsIyaixZVliLBARYhi\\nKp5ZHDU/ReeP4Ja//fuyW84PvgYJ+nfRQLIlTMkdpCoZgZTx0p3bSlacqg5j+swL\\nNoHsl6i8UgitYJ6fsgJj5c04DejnkKrrqxzx2dRWp9ntkrqHg7/K9uhYDlueaVeO\\niDXlAuQxAgMBAAECggEAGHLITJ+LIyCcFjSSCDTigSlMdZjBJACela1HguU1ZjVW\\nFIErq7JBgjdHesnsVZtsBSKbRg6qNLU7ohIdl75mS5Odn+C0HV1RDxennxz6O7Z1\\n/fFOdSgNSvgk2FkYvI7n9WJaZ0+hP/6GbjCmjHwuntTGdd1P8LTb1dShuHGRAGoY\\nsusylelHk7RbRxlmKSUH5aRYDSxc0tA0UOFzrkemHKnFx8Bc/HklFm2PsrymrW+d\\n6C0QSl/C2sq0dh8aMiWJW2m4JqCOKBq68EVtB8QU/Uyffmne22HoDixwDlkrVVBU\\nV5UTRAuLROaG5F3dPqVazspi14jj0I3D2RFLbPBPewKBgQDohblxZzA0P5EnpP4N\\nrd3hcCYrszs14WoHsjxEgrFFgb19WnlnrHqXBHByI4/XDQPg+jzKaIeJN9LuvVKm\\noqmwssHUcex6dVz3pSvcvk+9cx2eRJAb0W0z4hRRxuJh1REmNhhTIyWO12h3aikT\\n3Cxa50URBaawqrweqZwMCFX7ywKBgQDbnU32D4BAUP1i6G2WoXxC9hfIHMTVTrbQ\\nyoS65FGWQQCh3qWcVWbBc8A79n7NgmVP+330WBsV6BgaljevZ6EHxZa4fsK3RXu1\\n/nuNiuzLCWmM6Hno/ZJ6JK1JMGbliXtGT0F1pkQ8jyQ83JgdXummQFH4Z/EpesoJ\\nTQn6ht9YcwKBgHRLfaZ0X62iJW1YniAlV5YLS2wL5o9aQHe881uoqhUDgMyTVak+\\noMmrVLohgy2hutDpF0J86Vz96KezVQU20fwoS71/hTDyRh8uIzPyk1tDmgqwbAsd\\nwapzZopIGK2prTwZTi02pPA+WGdxVz4xnpWQmgCbfPVbT19eoUd7W9XlAoGAWaLJ\\n2D2ZbibgVQdi+1EsA7SoHkBHwnxfN7cBF7rq5fXgCTFzzOw6hYj2FENWnBC1w0B1\\nt05it71EYU2gqtIUMrTeAK2UUfNlO/IDgdELNw+/agjVAVjF+V6Q78d2qAdGLntY\\nz2kufr054DF1UL+VhArKqiXak8CPR96OzRdRf6sCgYBNnAbv2Pwl9P2jIzcH189i\\ntHoLdUbfg9bc3Rv/c/UNylkM0KgI24bUXPDvZFpoKgIu3PNUZ7vBssUadZmvL82Q\\nQ2BACX9gMuKlm+Upp7AsK/Tadt6hWD05z5V4uAVdUaSf0oo0xWXBGITHbM77Du9l\\nlTHXpmP3mt6PVOkihQ7Cpg==\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"svc-cust-data-hub-read@u-u-acad07300226-u-u-acad.iam.gserviceaccount.com\",\n  \"client_id\": \"106243181339509562217\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/svc-cust-data-hub-read%40u-u-acad07300226-u-u-acad.iam.gserviceaccount.com\"\n}"
+        },
+        "testcaseId": "230082"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": "Resource Successfully Updated."
+      }
+    }
+  ],
+  "SeedAdminAdditionalPropertiesCustomerOwnedGcpApiServicesTest.getSeedUserCustomerOwnedGcpProperties": [
+    {
+      "input": {
+        "description": "Validate the get seed user additional properties for customer owned Gcp project API in DHSS.",
+        "URL": "v1/dhss/seeduser/tenant/gcpProperties/",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "gcpProjectId": "dschaub_nonprd_09_00123",
+          "gcpProjectDesc": "dschaubgcpproject"
+        },
+        "testcaseId": "230076"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ],
+  "SeedAdminAdditionalPropertiesCustomerOwnedGcpApiServicesTest.getTenantVersionCustomerOwnedGcpProperties": [
+    {
+      "input": {
+        "description": "Validate the get tenant version for customer owned Gcp project API in DHSS.",
+        "URL": "v1/dhss/seeduser/tenant/versionDetails/",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          "tenantId": "dschaub_nonprd_09",
+          "tenantVersion": "8.0.0",
+          "upgradeStatus": "Completed"
+        },
+        "testcaseId": "230084"
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ]
+}

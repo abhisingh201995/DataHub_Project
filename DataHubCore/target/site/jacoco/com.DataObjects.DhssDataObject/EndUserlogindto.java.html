@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EndUserlogindto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">EndUserlogindto.java</span></div><h1>EndUserlogindto.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import io.restassured.http.Cookies;
+
+<span class="nc" id="L5">public class EndUserlogindto {</span>
+	
+	private String access_token;
+	private String tenantid;
+	private String tenantName;
+	private String XSRF_Token;
+	private String edap_authn_ssid;
+	private Cookies cookies;
+
+	public String getAccess_token() {
+<span class="nc" id="L15">		return access_token;</span>
+	}
+	
+	public void setAccess_token(String access_token) {
+<span class="nc" id="L19">		this.access_token = access_token;</span>
+<span class="nc" id="L20">	}</span>
+	
+	public String getTenantid() {
+<span class="nc" id="L23">		return tenantid;</span>
+	}
+	
+	public void setTenantid(String tenantid) {
+<span class="nc" id="L27">		this.tenantid = tenantid;</span>
+<span class="nc" id="L28">	}</span>
+	public String getXSRF_Token() {
+<span class="nc" id="L30">		return XSRF_Token;</span>
+	}
+
+	public void setXSRF_Token(String xSRF_Token) {
+<span class="nc" id="L34">		this.XSRF_Token = xSRF_Token;</span>
+<span class="nc" id="L35">	}</span>
+
+	public String getTenantName() {
+<span class="nc" id="L38">		return tenantName;</span>
+	}
+
+	public void setTenantName(String tenantName) {
+<span class="nc" id="L42">		this.tenantName = tenantName;</span>
+<span class="nc" id="L43">	}</span>
+
+	public String getEdap_authn_ssid() {
+<span class="nc" id="L46">		return edap_authn_ssid;</span>
+	}
+
+	public void setEdap_authn_ssid(String edap_authn_ssid) {
+<span class="nc" id="L50">		this.edap_authn_ssid = edap_authn_ssid;</span>
+<span class="nc" id="L51">	}</span>
+
+	public Cookies getCookies() {
+<span class="nc" id="L54">		return cookies;</span>
+	}
+
+	public void setCookies(Cookies cookies) {
+<span class="nc" id="L58">		this.cookies = cookies;</span>
+<span class="nc" id="L59">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

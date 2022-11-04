@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DhssPaycodeMappingsDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">DhssPaycodeMappingsDTO.java</span></div><h1>DhssPaycodeMappingsDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import java.io.Serializable;
+
+<span class="nc" id="L5">public class DhssPaycodeMappingsDTO implements Serializable {</span>
+
+	private static final long serialVersionUID = 1L;
+	
+	private Integer payCodeId;
+	private String payCodeName;
+	private String payCategory;
+	private String absenceCategory;
+	private Boolean isMealPenalty;
+	private Boolean isHoliday;
+	private Boolean isCoreSwt;
+	private Boolean isProductiveSwt;
+	private Boolean isPaidSwt;
+	private Boolean isOTNetDownSwt;
+	private Boolean isTrainingSwt;
+	private Boolean isOnCall;
+	private Boolean isCallBack;
+	private String userDefined1;
+	
+	public Integer getPayCodeId() {
+<span class="nc" id="L25">		return payCodeId;</span>
+	}
+	public void setPayCodeId(Integer payCodeId) {
+<span class="nc" id="L28">		this.payCodeId = payCodeId;</span>
+<span class="nc" id="L29">	}</span>
+	public String getPayCodeName() {
+<span class="nc" id="L31">		return payCodeName;</span>
+	}
+	public void setPayCodeName(String payCodeName) {
+<span class="nc" id="L34">		this.payCodeName = payCodeName;</span>
+<span class="nc" id="L35">	}</span>
+	public String getPayCategory() {
+<span class="nc" id="L37">		return payCategory;</span>
+	}
+	public void setPayCategory(String payCategory) {
+<span class="nc" id="L40">		this.payCategory = payCategory;</span>
+<span class="nc" id="L41">	}</span>
+	public String getAbsenceCategory() {
+<span class="nc" id="L43">		return absenceCategory;</span>
+	}
+	public void setAbsenceCategory(String absenceCategory) {
+<span class="nc" id="L46">		this.absenceCategory = absenceCategory;</span>
+<span class="nc" id="L47">	}</span>
+	public Boolean getIsMealPenalty() {
+<span class="nc" id="L49">		return isMealPenalty;</span>
+	}
+	public void setIsMealPenalty(Boolean isMealPenalty) {
+<span class="nc" id="L52">		this.isMealPenalty = isMealPenalty;</span>
+<span class="nc" id="L53">	}</span>
+	public Boolean getIsHoliday() {
+<span class="nc" id="L55">		return isHoliday;</span>
+	}
+	public void setIsHoliday(Boolean isHoliday) {
+<span class="nc" id="L58">		this.isHoliday = isHoliday;</span>
+<span class="nc" id="L59">	}</span>
+	public Boolean getIsCoreSwt() {
+<span class="nc" id="L61">		return isCoreSwt;</span>
+	}
+	public void setIsCoreSwt(Boolean isCoreSwt) {
+<span class="nc" id="L64">		this.isCoreSwt = isCoreSwt;</span>
+<span class="nc" id="L65">	}</span>
+	public Boolean getIsProductiveSwt() {
+<span class="nc" id="L67">		return isProductiveSwt;</span>
+	}
+	public void setIsProductiveSwt(Boolean isProductiveSwt) {
+<span class="nc" id="L70">		this.isProductiveSwt = isProductiveSwt;</span>
+<span class="nc" id="L71">	}</span>
+	public Boolean getIsPaidSwt() {
+<span class="nc" id="L73">		return isPaidSwt;</span>
+	}
+	public void setIsPaidSwt(Boolean isPaidSwt) {
+<span class="nc" id="L76">		this.isPaidSwt = isPaidSwt;</span>
+<span class="nc" id="L77">	}</span>
+	public Boolean getIsOTNetDownSwt() {
+<span class="nc" id="L79">		return isOTNetDownSwt;</span>
+	}
+	public void setIsOTNetDownSwt(Boolean isOTNetDownSwt) {
+<span class="nc" id="L82">		this.isOTNetDownSwt = isOTNetDownSwt;</span>
+<span class="nc" id="L83">	}</span>
+	public Boolean getIsTrainingSwt() {
+<span class="nc" id="L85">		return isTrainingSwt;</span>
+	}
+	public void setIsTrainingSwt(Boolean isTrainingSwt) {
+<span class="nc" id="L88">		this.isTrainingSwt = isTrainingSwt;</span>
+<span class="nc" id="L89">	}</span>
+	public Boolean getIsOnCall() {
+<span class="nc" id="L91">		return isOnCall;</span>
+	}
+	public void setIsOnCall(Boolean isOnCall) {
+<span class="nc" id="L94">		this.isOnCall = isOnCall;</span>
+<span class="nc" id="L95">	}</span>
+	public Boolean getIsCallBack() {
+<span class="nc" id="L97">		return isCallBack;</span>
+	}
+	public void setIsCallBack(Boolean isCallBack) {
+<span class="nc" id="L100">		this.isCallBack = isCallBack;</span>
+<span class="nc" id="L101">	}</span>
+	public String userDefined1() {
+<span class="nc" id="L103">		return userDefined1;</span>
+	}
+
+	public void setUserDefined1(String userDefined1) {
+<span class="nc" id="L107">		this.userDefined1 = userDefined1;</span>
+<span class="nc" id="L108">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

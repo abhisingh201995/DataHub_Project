@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlmAPIObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.alm.apiobject</a> &gt; <span class="el_source">AlmAPIObject.java</span></div><h1>AlmAPIObject.java</h1><pre class="source lang-java linenums">package com.alm.apiobject;
+
+import com.alm.utils.ALMConstant;
+import com.alm.utils.Utils;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.Response;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.jayway.restassured.RestAssured.expect;
+
+<span class="nc" id="L16">public class AlmAPIObject extends BaseAlmApiObject {</span>
+
+<span class="nc" id="L18">	private static String GET_TESTSET_FOLDER_URI = BASE_URL + &quot;/rest/domains/%s/projects/%s/test-set-folders&quot;;</span>
+<span class="nc" id="L19">	private static String GET_TESTSET_URI = BASE_URL + &quot;/rest/domains/%s/projects/%s/test-sets&quot;;</span>
+<span class="nc" id="L20">	private static String GET_TESTSET_TESTCASES_URI = BASE_URL + &quot;/rest/domains/%s/projects/%s/test-instances&quot;;</span>
+<span class="nc" id="L21">	private static String GET_TESTPLAN_TESTCASES_URI = BASE_URL + &quot;/rest/domains/%s/projects/%s/tests&quot;;</span>
+<span class="nc" id="L22">	private static String GET_TESTPLAN_FOLDER_URI = BASE_URL + &quot;/rest/domains/%s/projects/%s/test-folders&quot;;</span>
+
+	public String getParentFolderId() throws ALMException {
+		Response response;
+<span class="nc" id="L26">		String parentId = &quot;0&quot;;</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		if (!ALM_FOLDER_PATH.contains(&quot;\\&quot;)) {</span>
+<span class="nc" id="L28">			List&lt;String&gt; folderHierarchy = Arrays.asList(ALM_FOLDER_PATH.split(&quot;/&quot;));</span>
+
+<span class="nc bnc" id="L30" title="All 2 branches missed.">			for (String folderName : folderHierarchy) {</span>
+<span class="nc" id="L31">				response = expect().given().queryParams(&quot;query&quot;, &quot;{parent-id[&quot; + parentId + &quot;];name['&quot;+folderName+&quot;']}&quot;)</span>
+<span class="nc" id="L32">						.queryParam(&quot;fields&quot;, &quot;id,name&quot;).queryParam(&quot;page-size&quot;, PAGE_SIZE).accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L33">						.get(String.format(GET_TESTSET_FOLDER_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+
+<span class="nc" id="L35">				parentId = JsonPath.with(response.asString()).get(&quot;entities[0].Fields[1].values[0].value&quot;);</span>
+<span class="nc" id="L36">			}</span>
+<span class="nc" id="L37">		} else {</span>
+<span class="nc" id="L38">			throw new ALMException(&quot;Please provide correct path with forward slash&quot;);</span>
+		}
+
+<span class="nc" id="L41">		return parentId;</span>
+	}
+
+	public String getFolderId(String parentId,String folderName) {
+<span class="nc" id="L45">		String folderId = null;</span>
+<span class="nc" id="L46">		Response response = expect().given().queryParams(&quot;query&quot;, &quot;{parent-id[&quot; + parentId + &quot;];name['&quot;+folderName+&quot;']}&quot;)</span>
+<span class="nc" id="L47">				.queryParam(&quot;fields&quot;, &quot;id,name&quot;).queryParam(&quot;page-size&quot;, PAGE_SIZE).accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L48">				.get(String.format(GET_TESTSET_FOLDER_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc" id="L49">		folderId = JsonPath.with(response.asString()).get(&quot;entities[0].Fields[1].values[0].value&quot;);</span>
+<span class="nc" id="L50">		return folderId;</span>
+	}
+
+	public String getFolderHierarchicalPath(String folderId) {
+<span class="nc" id="L54">		Response response = expect().given().queryParams(&quot;query&quot;, &quot;{id[&quot; + folderId + &quot;]}&quot;)</span>
+<span class="nc" id="L55">				.queryParam(&quot;fields&quot;, &quot;hierarchical-path,name&quot;).queryParam(&quot;page-size&quot;, PAGE_SIZE).accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L56">				.get(String.format(GET_TESTSET_FOLDER_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		if(JsonPath.with(response.asString()).getInt(&quot;TotalResults&quot;) == 0) {</span>
+<span class="nc" id="L58">			return null;</span>
+		}else {
+<span class="nc" id="L60">			return JsonPath.with(response.asString()).get(&quot;entities[0].Fields[0].values[0].value&quot;);</span>
+		}
+
+	}
+
+	public Response getChildIdList(String parentId) {
+<span class="nc" id="L66">		Response response = expect().given().queryParams(&quot;query&quot;, &quot;{parent-id[&quot; + parentId + &quot;]}&quot;)</span>
+<span class="nc" id="L67">				.queryParam(&quot;fields&quot;, &quot;name,id&quot;).queryParam(&quot;page-size&quot;, PAGE_SIZE).accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L68">				.get(String.format(GET_TESTSET_FOLDER_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+
+<span class="nc" id="L70">		return response;</span>
+	}
+
+	public String getTestSet(String hierarchicalPath,String testcaseType){
+<span class="nc" id="L74">		Response response = expect().given().queryParams(&quot;query&quot;, &quot;{test-set-folder.hierarchical-path[&quot; + hierarchicalPath + &quot;*];name['&quot;+testcaseType+&quot;']}&quot;)</span>
+<span class="nc" id="L75">				.queryParam(&quot;fields&quot;, &quot;name,id&quot;).queryParam(&quot;page-size&quot;, PAGE_SIZE).accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L76">				.get(String.format(GET_TESTSET_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc" id="L77">		String testsetId = JsonPath.with(response.asString()).get(&quot;entities[0].Fields[1].values[0].value&quot;).toString();</span>
+<span class="nc" id="L78">		return testsetId;</span>
+	}
+
+	public Response getTestCaseStatusForGivenTestSetId(String testSetId)  {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if(EXECUTION_DATE == null ) {</span>
+<span class="nc" id="L83">			EXECUTION_DATE = Utils.getCurrentDate(&quot;yyyy-MM-dd&quot;);</span>
+		}
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		if(EXECUTION_DATE.trim().isEmpty()) {</span>
+<span class="nc" id="L86">			EXECUTION_DATE = Utils.getCurrentDate(&quot;yyyy-MM-dd&quot;);</span>
+		}
+<span class="nc" id="L88">		Response response = expect().given()</span>
+<span class="nc" id="L89">				.queryParams(&quot;query&quot;, &quot;{cycle-id[&quot; + testSetId + &quot;]}&quot;, &quot;test-id&quot;, &quot;status&quot;, &quot;page-size&quot;, PAGE_SIZE)</span>
+<span class="nc" id="L90">				.accept(ContentType.JSON).cookies(cookies).when().get(String.format(GET_TESTSET_TESTCASES_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc" id="L91">		return response;</span>
+	}
+
+	public String getTestPlanFolderId(String folderName,String parentId) {
+<span class="nc" id="L95">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">		if(parentId==null || parentId.isEmpty() ) {</span>
+<span class="nc" id="L97">			queryParameter.put(&quot;query&quot;, &quot;{name['&quot;+ folderName +&quot;']}&quot;);</span>
+		}else {
+<span class="nc" id="L99">			queryParameter.put(&quot;query&quot;, &quot;{name['&quot;+ folderName +&quot;'];parent-id['&quot;+parentId+&quot;']}&quot;);</span>
+		}
+<span class="nc" id="L101">		queryParameter.put(&quot;fields&quot;, &quot;id,name&quot;);</span>
+<span class="nc" id="L102">		queryParameter.put(&quot;page-size&quot;, PAGE_SIZE);</span>
+<span class="nc" id="L103">		Response response = expect().given()</span>
+<span class="nc" id="L104">				.queryParams(queryParameter)</span>
+<span class="nc" id="L105">				.accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L106">				.get(String.format(GET_TESTPLAN_FOLDER_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc" id="L107">		String folderId = JsonPath.with(response.asString()).get(&quot;entities[0].Fields[1].values[0].value&quot;);</span>
+		
+<span class="nc" id="L109">		return folderId;</span>
+	}
+
+	public String getTestPlanFolderHierarchicalPath(String parentId,String folderName) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if(folderName.contains(&quot;:&quot;))</span>
+		{
+<span class="nc" id="L115">			String[] folderNameList = folderName.split(&quot;:&quot;);</span>
+<span class="nc" id="L116">			parentId = getTestPlanFolderId(folderNameList[0],parentId);</span>
+<span class="nc" id="L117">			return (getTestPlanFolderHierarchicalPath(parentId,folderNameList[1]));</span>
+		}
+		else
+		{
+<span class="nc" id="L121">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+<span class="nc" id="L122">		queryParameter.put(&quot;query&quot;, &quot;{name['&quot;+ folderName +&quot;'];parent-id['&quot;+parentId+&quot;']}&quot;);</span>
+		
+<span class="nc" id="L124">		queryParameter.put(&quot;fields&quot;, &quot;hierarchical-path&quot;);</span>
+<span class="nc" id="L125">		queryParameter.put(&quot;page-size&quot;, PAGE_SIZE);</span>
+<span class="nc" id="L126">		Response response = expect().given()</span>
+<span class="nc" id="L127">				.queryParams(queryParameter)</span>
+<span class="nc" id="L128">				.accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L129">				.get(String.format(GET_TESTPLAN_FOLDER_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc" id="L130">		String hierarchicalPath = JsonPath.with(response.asString()).get(&quot;entities[0].Fields[0].values[0].value&quot;);</span>
+		
+<span class="nc" id="L132">		return hierarchicalPath;</span>
+		}
+	}
+	
+	public Response getTestCaseForGivenTestPlanFolder(String folderHierarchicalPath,String testCaseType) {
+<span class="nc" id="L137">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		if(testCaseType.equals(&quot;API&quot;)) {</span>
+<span class="nc" id="L139">			queryParameter.put(&quot;query&quot;,</span>
+					&quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-01['Automated'];user-template-03['Regression Testing'];user-template-03['&quot;+testCaseType+&quot; Testing']}&quot;);
+		}else {
+<span class="nc" id="L142">			queryParameter.put(&quot;query&quot;,</span>
+<span class="nc" id="L143">					&quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-01['Automated'];user-template-03['Regression Testing'];user-template-03['&quot;+ALMConstant.TestType.USER_INTERFACE.getValue()+&quot; Testing']}&quot;);</span>
+		}
+
+<span class="nc" id="L146">		queryParameter.put(&quot;fields&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L147">		queryParameter.put(&quot;page-size&quot;, PAGE_SIZE);</span>
+<span class="nc" id="L148">		Response response = expect().given()</span>
+<span class="nc" id="L149">				.queryParams(queryParameter)</span>
+<span class="nc" id="L150">				.accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L151">				.get(String.format(GET_TESTPLAN_TESTCASES_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+<span class="nc" id="L152">		return response;</span>
+	}
+
+
+	public int getTotalTestsCountForGivenTestPlanFolder(String folderHierarchicalPath, String testCaseType) {
+<span class="nc" id="L157">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+		
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		if (testCaseType.equals(&quot;Total&quot;)) {</span>
+<span class="nc" id="L160">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')]}&quot;);</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">		} else if (testCaseType.equals(&quot;Other&quot;)) {</span>
+<span class="nc" id="L162">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03[not('API Testing')];user-template-03[not('User Interface Testing')]}&quot;);</span>
+		} else {
+<span class="nc" id="L164">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03['&quot;+testCaseType+&quot; Testing']}&quot;);</span>
+		} 
+		
+<span class="nc" id="L167">		return getTestCaseCountForGivenQuery(queryParameter);</span>
+	}
+	
+	public int getRegressionTestsCountForGivenTestPlanFolder(String folderHierarchicalPath, String testCaseType) {
+<span class="nc" id="L171">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+		
+<span class="nc bnc" id="L173" title="All 2 branches missed.">		if (testCaseType.equals(&quot;Total&quot;)) {</span>
+<span class="nc" id="L174">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03['Regression Testing']}&quot;);</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">		} else if (testCaseType.equals(&quot;Other&quot;)) {</span>
+<span class="nc" id="L176">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03[not('API Testing')];user-template-03[not('User Interface Testing')];user-template-03['Regression Testing']}&quot;);</span>
+		} else {
+<span class="nc" id="L178">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03['&quot;+testCaseType+&quot; Testing'];user-template-03['Regression Testing']}&quot;);</span>
+		} 
+		
+<span class="nc" id="L181">		return getTestCaseCountForGivenQuery(queryParameter);</span>
+	}
+	
+	public int getAutomatedTestsCountForGivenTestPlanFolder(String folderHierarchicalPath, String testCaseType) {
+<span class="nc" id="L185">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+	
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		if (testCaseType.equals(&quot;Total&quot;)) {</span>
+<span class="nc" id="L188">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-01['Automated']}&quot;);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">		} else if (testCaseType.equals(&quot;Other&quot;)) {</span>
+<span class="nc" id="L190">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03[not('API Testing')];user-template-03[not('User Interface Testing')];user-template-01['Automated']}&quot;);</span>
+		} else {
+<span class="nc" id="L192">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03['&quot;+testCaseType+&quot; Testing'];user-template-01['Automated']}&quot;);</span>
+		} 		
+		
+<span class="nc" id="L195">		return getTestCaseCountForGivenQuery(queryParameter);</span>
+	}
+	
+	public int getAutomatedRegressionTestsCountForGivenTestPlanFolder(String folderHierarchicalPath, String testCaseType) {
+<span class="nc" id="L199">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+	
+<span class="nc bnc" id="L201" title="All 2 branches missed.">		if (testCaseType.equals(&quot;Total&quot;)) {</span>
+<span class="nc" id="L202">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-01['Automated'];user-template-03['Regression Testing']}&quot;);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">		} else if (testCaseType.equals(&quot;Other&quot;)) {</span>
+<span class="nc" id="L204">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03[not('API Testing')];user-template-03[not('User Interface Testing')];user-template-01['Automated'];user-template-03['Regression Testing']}&quot;);</span>
+		} else {
+<span class="nc" id="L206">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03['&quot;+testCaseType+&quot; Testing'];user-template-01['Automated'];user-template-03['Regression Testing']}&quot;);</span>
+		} 		
+		
+<span class="nc" id="L209">		return getTestCaseCountForGivenQuery(queryParameter);</span>
+	}
+	
+	public int getToBeAutomatedTestsCountForGivenTestPlanFolder(String folderHierarchicalPath, String testCaseType) {
+<span class="nc" id="L213">		Map&lt;String,Object&gt; queryParameter = new HashMap&lt;String,Object&gt;();</span>
+	
+<span class="nc bnc" id="L215" title="All 2 branches missed.">		if (testCaseType.equals(&quot;Total&quot;)) {</span>
+<span class="nc" id="L216">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-01['Manual'];user-template-14['Yes'];user-template-03['Regression Testing']}&quot;);</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">		} else if (testCaseType.equals(&quot;Other&quot;)) {</span>
+<span class="nc" id="L218">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03[not('API Testing')];user-template-03[not('User Interface Testing')];user-template-01['Manual'];user-template-14['Yes'];user-template-03['Regression Testing']}&quot;);</span>
+		} else {
+<span class="nc" id="L220">			queryParameter.put(&quot;query&quot;, &quot;{test-folder.hierarchical-path['&quot;+folderHierarchicalPath+&quot;*'];user-template-06[not('Closed')];user-template-06[not('Invalid')];user-template-03['&quot;+testCaseType+&quot; Testing'];user-template-01['Manual'];user-template-14['Yes'];user-template-03['Regression Testing']}&quot;);</span>
+		} 		
+		
+<span class="nc" id="L223">		return getTestCaseCountForGivenQuery(queryParameter);</span>
+	}
+	
+	protected int getTestCaseCountForGivenQuery(Map&lt;String,Object&gt; queryParameter) {
+<span class="nc" id="L227">		queryParameter.put(&quot;fields&quot;, &quot;id&quot;);</span>
+<span class="nc" id="L228">		queryParameter.put(&quot;page-size&quot;, PAGE_SIZE);</span>
+<span class="nc" id="L229">		Response response = expect().given()</span>
+<span class="nc" id="L230">				.queryParams(queryParameter)</span>
+<span class="nc" id="L231">				.accept(ContentType.JSON).cookies(cookies).when()</span>
+<span class="nc" id="L232">				.get(String.format(GET_TESTPLAN_TESTCASES_URI, DOMAIN_NAME, PROJECT_NAME));</span>
+		
+<span class="nc" id="L234">		int testCaseCount = Integer.parseInt(response.getBody().jsonPath().getString(&quot;TotalResults&quot;));</span>
+<span class="nc" id="L235">		return testCaseCount;</span>
+		
+	}	
+
+	public Response updateTestCaseStatus(String testCaseId,String status){
+
+<span class="nc" id="L241">		String body=&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot; standalone=\&quot;yes\&quot;?&gt;&lt;Entity Type=\&quot;test-instance\&quot;&gt;&lt;Fields&gt;&lt;Field Name=\&quot;status\&quot;&gt;&lt;Value&gt;&quot;+status+&quot;&lt;/Value&gt;&lt;/Field&gt;&lt;/Fields&gt;&lt;/Entity&gt;&quot;;</span>
+
+
+<span class="nc" id="L244">		Response response = expect().given()</span>
+<span class="nc" id="L245">				.body(body)</span>
+<span class="nc" id="L246">				.accept(&quot;application/xml&quot;).contentType(&quot;application/xml&quot;).cookies(cookies).when().put(String.format(GET_TESTSET_TESTCASES_URI, DOMAIN_NAME, PROJECT_NAME)+&quot;/&quot;+testCaseId);</span>
+<span class="nc" id="L247">		return response;</span>
+
+
+
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

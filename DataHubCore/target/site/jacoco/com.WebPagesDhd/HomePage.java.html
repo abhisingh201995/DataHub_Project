@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HomePage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">HomePage.java</span></div><h1>HomePage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+
+import java.util.HashMap;
+import java.util.List;
+
+public class HomePage {
+
+    private MasterPage masterPage;
+
+    //page Elements
+
+<span class="nc" id="L18">    private By tenantConfigurationButton = By.xpath(&quot;//a[normalize-space()='Tenant Configuration']&quot;);</span>
+<span class="nc" id="L19">    private By payCodeMappingButton = By.xpath(&quot;//a[normalize-space()='Paycode Mapping']&quot;);</span>
+<span class="nc" id="L20">    private By locationTypeMappingButton = By.xpath(&quot;//a[normalize-space()='Location Type Mapping']&quot;);</span>
+<span class="nc" id="L21">    private By wrapperButton = By.xpath(&quot;//a[normalize-space()='Wrappers']&quot;);</span>
+<span class="nc" id="L22">    private By pipelineAssignmentButton = By.xpath(&quot;//a[normalize-space()='Pipeline Assignments']&quot;);</span>
+<span class="nc" id="L23">    private By globalSetting = By.xpath(&quot;//a[normalize-space()='Global Settings']&quot;);</span>
+
+    private WebDriver driver;
+<span class="nc" id="L26">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+<span class="nc" id="L28">    private HashMap&lt;String, String&gt; links = new HashMap&lt;&gt;();</span>
+    public HashMap&lt;String, String&gt; getLinks() {
+<span class="nc" id="L30">        return links;</span>
+    }
+
+<span class="nc" id="L33">    public HomePage(WebDriver driver) {</span>
+<span class="nc" id="L34">        this.driver = driver;</span>
+<span class="nc" id="L35">        masterPage=new MasterPage(driver);</span>
+
+<span class="nc" id="L37">        links.put(&quot;Log out&quot;, &quot;Log out&quot;);</span>
+<span class="nc" id="L38">        links.put(&quot;Tenant Configuration&quot;, &quot;Tenant Configuration&quot;);</span>
+<span class="nc" id="L39">        links.put(&quot;Tenant Pipeline Settings&quot;, &quot;Tenant Pipeline Settings&quot;);</span>
+<span class="nc" id="L40">        links.put(&quot;Tenant Versions&quot;, &quot;Tenant Versions&quot;);</span>
+<span class="nc" id="L41">        links.put(&quot;Paycode Mapping&quot;, &quot;Paycode Mapping&quot;);</span>
+<span class="nc" id="L42">        links.put(&quot;Location Type Mapping&quot;, &quot;Location Type Mapping&quot;);</span>
+<span class="nc" id="L43">        links.put(&quot;Custom Driver Mapping&quot;, &quot;Custom Driver Mapping&quot;);</span>
+<span class="nc" id="L44">        links.put(&quot;Wrapper Scheduler&quot;, &quot;Wrapper Scheduler&quot;);</span>
+<span class="nc" id="L45">        links.put(&quot;Job Status&quot;, &quot;Job Status&quot;);</span>
+<span class="nc" id="L46">        links.put(&quot;Wrappers&quot;, &quot;Wrappers&quot;);</span>
+<span class="nc" id="L47">        links.put(&quot;Pipelines&quot;, &quot;Pipelines&quot;);</span>
+<span class="nc" id="L48">        links.put(&quot;Add tenant&quot;, &quot;Add tenant&quot;);</span>
+<span class="nc" id="L49">        links.put(&quot;Add tenant pipeline settings&quot;, &quot;Add tenant pipeline settings&quot;);</span>
+
+<span class="nc" id="L51">    }</span>
+
+    public MasterPage getMasterPage() {
+<span class="nc" id="L54">        return masterPage;</span>
+    }
+
+    public void setMasterPage(MasterPage masterPage) {
+<span class="nc" id="L58">        this.masterPage = masterPage;</span>
+<span class="nc" id="L59">    }</span>
+
+
+    public void clickLinkButton(String linkName) {
+<span class="nc" id="L63">        seleniumHelper.clickElement(driver, By.xpath(&quot;//a[normalize-space()='&quot; + linkName + &quot;']&quot;));</span>
+<span class="nc" id="L64">    }</span>
+
+    public TenantConfigurationPage clickOnTenantConfigurationButton() {
+<span class="nc" id="L67">        seleniumHelper.clickElement(driver, tenantConfigurationButton);</span>
+<span class="nc" id="L68">        return new TenantConfigurationPage(driver);</span>
+    }
+
+    public PayCodeMappingPage clickOnPayCodeMappingButton() {
+<span class="nc" id="L72">        seleniumHelper.clickElement(driver, payCodeMappingButton);</span>
+<span class="nc" id="L73">        return new PayCodeMappingPage(driver);</span>
+    }
+
+    public LocationTypeMappingPage clickOnLocationTypeMappingButton() {
+<span class="nc" id="L77">        seleniumHelper.clickElement(driver, locationTypeMappingButton);</span>
+<span class="nc" id="L78">        return new LocationTypeMappingPage(driver);</span>
+    }
+
+    public Boolean checkElementPresent(String linkName) {
+<span class="nc" id="L82">        Boolean status = false;</span>
+<span class="nc" id="L83">        status = seleniumHelper.validateElementPresent(driver, By.xpath(&quot;//a[normalize-space()='&quot; + linkName + &quot;']&quot;));</span>
+<span class="nc" id="L84">        Assert.assertTrue(status, &quot;Expected element is not present - &quot; + linkName);</span>
+<span class="nc" id="L85">        return status;</span>
+    }
+
+    public List&lt;WebElement&gt; getAllLinkButton() {
+<span class="nc" id="L89">        List&lt;WebElement&gt; links = driver.findElements(By.tagName(&quot;a&quot;));</span>
+<span class="nc" id="L90">        return links;</span>
+    }
+
+    public WrappersPage clickOnWrapperButton(){
+<span class="nc" id="L94">        seleniumHelper.clickElement(driver,wrapperButton);</span>
+<span class="nc" id="L95">        return new WrappersPage(driver);</span>
+    }
+
+    public PipelineAssignmentPage clickOnPipelineAssignmentButton(){
+<span class="nc" id="L99">        seleniumHelper.clickElement(driver,pipelineAssignmentButton);</span>
+<span class="nc" id="L100">        return new PipelineAssignmentPage(driver);</span>
+    }
+
+    public GlobalSettingPage clickOnGlobalSetting(){
+<span class="nc" id="L104">        seleniumHelper.clickElement(driver,globalSetting);</span>
+<span class="nc" id="L105">        return new GlobalSettingPage(driver);</span>
+
+    }
+
+
+   /* public Boolean validatePageHeader(){
+        Boolean status=seleniumHelper.validateElementPresent(driver,//input);
+        return status;
+    }
+*/
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

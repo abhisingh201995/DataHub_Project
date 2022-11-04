@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdditionalPropertiesPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhss</a> &gt; <span class="el_source">AdditionalPropertiesPage.java</span></div><h1>AdditionalPropertiesPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhss;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class AdditionalPropertiesPage {
+    private WebDriver driver;
+<span class="nc" id="L9">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+<span class="nc" id="L11">    private By TEXTFIELD_PROJECTID= By.id(&quot;projectId&quot;);</span>
+<span class="nc" id="L12">    private By TEXTFIELD_GCPPROJECTNAME= By.id(&quot;gcpProjectDesc&quot;);</span>
+<span class="nc" id="L13">    private By BUTTON_ADDANDDOWNLOAD= By.cssSelector(&quot;button[title='Add and Download Key']&quot;);</span>
+<span class="nc" id="L14">    private By BUTTON_DELETE= By.id(&quot;//span[@class='icon-k-delete edap-btn-icon']&quot;);</span>
+
+<span class="nc" id="L16">    public AdditionalPropertiesPage(WebDriver driver) {</span>
+<span class="nc" id="L17">        this.driver = driver;</span>
+<span class="nc" id="L18">    }</span>
+
+    public boolean getProjectIdField(){
+<span class="nc" id="L21">        return seleniumHelper.isReadOnlyField(driver,TEXTFIELD_PROJECTID );</span>
+    }
+
+    public boolean getGCPProjectNameField(){
+<span class="nc" id="L25">        return seleniumHelper.isReadOnlyField(driver,TEXTFIELD_GCPPROJECTNAME );</span>
+    }
+
+<span class="nc" id="L28">    public void clickAddAndDownloadButton(){ seleniumHelper.clickElement(driver,BUTTON_ADDANDDOWNLOAD);</span>
+<span class="nc" id="L29">    }</span>
+
+<span class="nc" id="L31">    public void clickDeleteButton(){ seleniumHelper.clickElement(driver,BUTTON_DELETE);</span>
+<span class="nc" id="L32">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

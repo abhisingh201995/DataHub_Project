@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="DataHub Test Suite">
+    <listeners>
+        <listener class-name="com.Utilities.ExecutionListener"/>
+    </listeners>
+    <test preserve-order="true" name="DataHub Self Service Sprint 2">
+        <groups>
+            <dependencies>
+
+            </dependencies>
+        </groups>
+        <classes>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubApiTests.DataHubLoginApiServicesTest">
+                <methods>
+                    <include name="adminAuthTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubApiTests.DHDCreateTenantApiServicesTest">
+                <methods>
+                    <include name="dhdCreateTenantTest"/>
+                    <include name="dhdUpdateTenantTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceApiTests.DHSSAdminLoginApiServicesTest">
+                <methods>
+                    <include name="dhssAdminAuthTest"/>
+                    <!--<include name="dhssAdminNegativeAuthTest"/>-->
+                    <include name="adminLoginCreateTenantTest"/>
+                    <include name="adminLoginUpdateTenantTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceApiTests.DHSSSeedUserSaveApiServicesTest">
+                <methods>
+                    <include name="dhssSeedUserAuthTest"/>
+                    <!--<include name="AdminLoginNegativeSaveSeedUserTest"/>-->
+                    <include name="saveSeedUserTest"/>
+                    <!--<include name="updateSeedUserTest"/>-->
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceApiTests.DhssServiceKeyFileApiServicesTest">
+                <methods>
+                    <include name="generateDhssServiceKeyFileTest"/>
+                    <include name="generateDhssServiceKeyFileInvalidTenantTest"/>
+                    <include name="generateDhssServiceKeyFileInvalidServiceTypeTest"/>
+                    <include name="getDhssServiceKeyFileTest"/>
+                    <include name="getDhssServiceKeyFileInvalidTenantTest"/>
+                    <include name="deleteDhssServiceKeyFileTest"/>
+                    <include name="deleteDhssServiceKeyFileInvalidTenantAndServiceKeyTest"/>
+                    <include name="deleteDhssServiceKeyFileInvalidTenantTest"/>
+                    <include name="deleteDhssServiceKeyFileInvalidServiceKeyTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubApiTests.DhdServiceKeyFileApiServicesTest">
+                <methods>
+                    <include name="generateDhdServiceKeyFileTest"/>
+                    <include name="generateDhdServiceKeyFileInvalidTenantTest"/>
+                    <include name="generateDhdServiceKeyFileInvalidServiceTypeTest"/>
+                    <include name="getDhdServiceKeyFileTest"/>
+                    <include name="getDhdServiceKeyFileInvalidTenantTest"/>
+                    <include name="deleteDhdServiceKeyFileTest"/>
+                    <include name="deleteDhdServiceKeyFileInvalidTenantAndServiceKeyTest"/>
+                    <include name="deleteDhdServiceKeyFileInvalidTenantTest"/>
+                    <include name="deleteDhdServiceKeyFileInvalidServiceKeyTest"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceApiTests.SeedAdminAdditionalPropertiesCustomerOwnedGcpApiServicesTest">
+                <methods>
+                   <!-- <include name="provisionSeedUserCustomerOwnedGCP"/>-->
+                    <include name="getSeedUserCustomerOwnedGcpProperties"/>
+                    <include name="getTenantVersionCustomerOwnedGcpProperties"/>
+                    <include name="updateProvisionedSeedUserCustomerOwnedGCP"/>
+                </methods>
+            </class>
+            <class name="com.Tests.DataHubSelfServiceTests.DataHubSelfServiceApiTests.DHSSTMSAdminAdditionalPropertiesTenantVersionApiServicesTest">
+                <methods>
+                    <include name="getTenantVersionTMSAdminAdditionalProperties"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

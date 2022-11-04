@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GenDBUtilities.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.FunctionalUtils</a> &gt; <span class="el_source">GenDBUtilities.java</span></div><h1>GenDBUtilities.java</h1><pre class="source lang-java linenums">package com.FunctionalUtils;
+
+import com.Utilities.PostgresDBHelper;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * @author amit.chauhan
+ *
+ */
+public class GenDBUtilities {
+
+	private String projectId;
+	private PostgresDBHelper dbHelper;
+<span class="nc" id="L17">	public GenDBUtilities(String projectId) {</span>
+<span class="nc" id="L18">		this.projectId= projectId;</span>
+<span class="nc" id="L19">		this.dbHelper = new PostgresDBHelper(projectId);</span>
+<span class="nc" id="L20">	}</span>
+
+	/**
+		This method will query from DB for gbqTenant, and return the applicationTenantId
+	**/
+	public String applicationTenantId(String gbqTenant) {
+		//PostgresDBHelper dbHelper = new PostgresDBHelper(projectId);
+<span class="nc" id="L27">		String query =  &quot;SELECT * FROM public.tenantmgr_tenant WHERE \&quot;GBQTENANT\&quot;=&quot;+&quot;'&quot;+gbqTenant+&quot;'&quot;;</span>
+		
+<span class="nc" id="L29">		List&lt;HashMap&lt;String, Object&gt;&gt; queryPostgresTable = dbHelper.queryPostgresTable(query);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">		if (!(queryPostgresTable.size()==1))		</span>
+<span class="nc" id="L31">			throw new RuntimeException(&quot;More than 1 rows were returned from table for &quot;+gbqTenant);</span>
+		else
+<span class="nc" id="L33">			return (String) queryPostgresTable.get(0).get(&quot;WFDTENANT&quot;);</span>
+	}
+	
+	
+	
+	
+	/**
+	 * @className: GenDBUtilities.java
+	 * @Description: Return the query results..
+	 * @author: amit.chauhan
+	 * @date: Jan 24, 2022
+	 */
+	public List&lt;HashMap&lt;String, Object&gt;&gt; returnQueryResult(String selectWhat, String FromTable, String WhereClauseString) {
+		
+		///PostgresDBHelper postgresDBHelper = new PostgresDBHelper(projectId);
+<span class="nc" id="L48">		String query = selectWhat +&quot; FROM &quot;+FromTable+&quot; WHERE &quot;+WhereClauseString;</span>
+		
+<span class="nc" id="L50">		System.out.println(&quot;The query to be fired is: &quot;+query);</span>
+<span class="nc" id="L51">		return 	this.dbHelper.queryPostgresTable(query);</span>
+		
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Helper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">Helper.java</span></div><h1>Helper.java</h1><pre class="source lang-java linenums">package com.Utilities;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.Cookies;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+
+import org.apache.poi.util.SystemOutLogger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.testng.Assert;
+import org.testng.reporters.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static io.restassured.RestAssured.given;
+
+public class Helper extends SuiteInitializer {
+
+
+<span class="nc" id="L26">    public Helper(String projectId) {</span>
+
+<span class="nc" id="L28">        this.projectId=projectId;</span>
+<span class="nc" id="L29">        this.gcpHelper = new GcpHelper(projectId);</span>
+<span class="nc" id="L30">    }</span>
+    String projectId;
+    GcpHelper gcpHelper;
+
+    public void loadTestData() throws IOException {
+
+<span class="nc" id="L36">        HashMap&lt;Object,JSONArray&gt; testDataPool = new HashMap&lt;Object, JSONArray&gt;();</span>
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(System.getenv(&quot;readFromGcp&quot;).equals(&quot;yes&quot;)) {</span>
+
+<span class="nc" id="L40">            GcpHelper gcpHelperTestData = new GcpHelper(&quot;repd-e-eng-01&quot;);</span>
+
+<span class="nc" id="L42">            List&lt;String&gt; data = gcpHelperTestData.listBucketObjects(&quot;qa-test-data&quot;);</span>
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            for (String file : data) {</span>
+
+<span class="nc bnc" id="L46" title="All 2 branches missed.">                if (file.contains(&quot;CoreTestData&quot;)) {</span>
+<span class="nc" id="L47">                    String fileData = gcpHelperTestData.readFileFromBucket(</span>
+                            &quot;qa-test-data&quot;,
+                            file);
+<span class="nc bnc" id="L50" title="All 2 branches missed.">                    if (!fileData.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L51">                        JSONParser jsonParser = new JSONParser();</span>
+<span class="nc" id="L52">                        JSONObject jsonObject = null;</span>
+                        try {
+<span class="nc" id="L54">                            jsonObject = (JSONObject) jsonParser.parse(fileData);</span>
+<span class="nc" id="L55">                        } catch (ParseException e) {</span>
+
+<span class="nc" id="L57">                        }</span>
+<span class="nc" id="L58">                        jsonObject.forEach((key, value) -&gt; {</span>
+<span class="nc" id="L59">                            testDataPool.put(key, (JSONArray) value);</span>
+<span class="nc" id="L60">                        });</span>
+                    }
+                }
+<span class="nc" id="L63">            }</span>
+
+<span class="nc" id="L65">            dataPool.setTestDataPool(testDataPool);</span>
+<span class="nc" id="L66">        }else {</span>
+
+            // for local testing only
+<span class="nc" id="L69">            Map&lt;String, String&gt; testDataPath = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L70">            File folder = new File(&quot;src/main/resources/TestData&quot;);</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            for (final File fileEntry : folder.listFiles()) {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                if (fileEntry.isFile()) {</span>
+<span class="nc" id="L74">                    testDataPath.put(fileEntry.getName(), fileEntry.getCanonicalPath());</span>
+                   // System.out.println(fileEntry.getName()+&quot;\n&quot;);
+                }
+            }
+
+<span class="nc" id="L79">            testDataPath.forEach((k, v) -&gt; {</span>
+                try {
+<span class="nc" id="L81">                    File file = new File(v);</span>
+<span class="nc" id="L82">                    String content = (String) Files.readFile(file);</span>
+<span class="nc" id="L83">                    JSONParser jsonParser = new JSONParser();</span>
+<span class="nc" id="L84">                    JSONObject jsonObject = (JSONObject) jsonParser.parse(content);</span>
+<span class="nc" id="L85">                    jsonObject.forEach((key, value) -&gt; {</span>
+<span class="nc" id="L86">                        testDataPool.put(key, (JSONArray) value);</span>
+
+<span class="nc" id="L88">                    });</span>
+<span class="nc" id="L89">                } catch (Exception e) {</span>
+<span class="nc" id="L90">                    System.out.println(v+&quot;*****************&quot;);</span>
+<span class="nc" id="L91">                	throw new Error(&quot;Unable to get json from files&quot;);</span>
+<span class="nc" id="L92">                }</span>
+<span class="nc" id="L93">            });</span>
+<span class="nc" id="L94">            dataPool.setTestDataPool(testDataPool);</span>
+        }
+     //end local testing
+<span class="nc" id="L97">    }</span>
+
+    public Object[][] testNgProvider(JSONArray jsonElements){
+<span class="nc" id="L100">        Object[][] testData=new Object[jsonElements.size()][];</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for(int i=0;i&lt;jsonElements.size();i++){</span>
+<span class="nc" id="L102">            testData[i] = new Object[1];</span>
+<span class="nc" id="L103">            testData[i][0]= jsonElements.get(i);</span>
+        }
+<span class="nc" id="L105">        return testData;</span>
+
+    }
+
+    public void authenticationOAuth(){
+<span class="nc" id="L110">        RequestSpecification specification=given().auth().preemptive().basic(&quot;&quot;,&quot;&quot;).formParam(&quot;&quot;,&quot;&quot;);</span>
+<span class="nc" id="L111">        Response response=specification.request(&quot;&quot;,&quot;&quot;).then().extract().response();</span>
+<span class="nc" id="L112">    }</span>
+
+    public String getDateTimeStamp(){
+<span class="nc" id="L115">        String dateTime= LocalDateTime.now().toString().replace(&quot;:&quot;,&quot;&quot;).replace(&quot;.&quot;,&quot;&quot;).replace(&quot;-&quot;,&quot;&quot;);</span>
+<span class="nc" id="L116">        return dateTime;</span>
+    }
+
+    public Response sendApiRequest(String method,String url,String payload, String authToken){
+<span class="nc" id="L120">        RequestSpecification spec = given();</span>
+<span class="nc" id="L121">        spec = spec.</span>
+<span class="nc" id="L122">                contentType(&quot;application/json&quot;).</span>
+<span class="nc" id="L123">                accept(&quot;application/json&quot;);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(payload!=null){</span>
+<span class="nc" id="L125">            spec=spec.body(payload);</span>
+        }
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if(authToken!=null){</span>
+<span class="nc" id="L128">            spec=spec.header(&quot;Authorization&quot;,authToken);</span>
+
+        }
+<span class="nc" id="L131">        Response response=spec.request(method,url).then().extract().response();</span>
+<span class="nc" id="L132">        return response;</span>
+    }
+
+    public Response sendApiRequestRelaxedHttps(String method,String url,String payload, String authToken){
+<span class="nc" id="L136">        RequestSpecification spec = given().relaxedHTTPSValidation();</span>
+<span class="nc" id="L137">        spec = spec.</span>
+<span class="nc" id="L138">                contentType(&quot;application/json&quot;).</span>
+<span class="nc" id="L139">                accept(&quot;application/json&quot;);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        if(payload!=null){</span>
+<span class="nc" id="L141">            spec=spec.body(payload);</span>
+        }
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if(authToken!=null){</span>
+<span class="nc" id="L144">            spec=spec.header(&quot;Authorization&quot;,authToken);</span>
+
+        }
+<span class="nc" id="L147">        Response response=spec.log().all().request(method,url).then().extract().response();</span>
+<span class="nc" id="L148">        System.out.println(response.prettyPrint());</span>
+<span class="nc" id="L149">        return response;</span>
+    }
+
+    public Response sendApiRequestRelaxedHttpsCustomHeader(String method, String url, String payload, HashMap&lt;String,Object&gt; headers){
+<span class="nc" id="L153">        RequestSpecification spec = given().relaxedHTTPSValidation();</span>
+       // spec = spec.headers(headers).log().all();
+
+<span class="nc" id="L156">        HashMap&lt;String,String&gt; headersMap= new HashMap&lt;&gt;();</span>
+<span class="nc" id="L157">        headers.forEach((k,v)-&gt;{</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if(k!=&quot;cookies&quot;) {</span>
+<span class="nc" id="L159">                headersMap.put(k, v.toString());</span>
+            }
+<span class="nc" id="L161">        });</span>
+
+<span class="nc" id="L163">        spec = spec.headers(headersMap);</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        if(payload!=null){</span>
+<span class="nc" id="L165">            spec=spec.body(payload);</span>
+        }
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if(headers.get(&quot;cookies&quot;)!=null) {</span>
+<span class="nc" id="L168">            spec.cookies((Cookies) headers.get(&quot;cookies&quot;));</span>
+        }
+<span class="nc" id="L170">        Response response=spec.log().all().request(method,url).then().extract().response();</span>
+<span class="nc" id="L171">        return response;</span>
+    }
+
+    public void sendMessageOnTeams(String message){
+<span class="nc" id="L175">        ObjectMapper OM = new ObjectMapper();</span>
+<span class="nc" id="L176">        String CONTENT_TYPE = &quot;Content-Type&quot;;</span>
+<span class="nc" id="L177">        String CONTENT_TYPE_VALUE = &quot;application/json&quot;;</span>
+
+<span class="nc" id="L179">        sendApiRequest(&quot;POST&quot;,configParser.inputParam.get(&quot;conf.teamsWebHook&quot;),message,null);</span>
+
+<span class="nc" id="L181">    }</span>
+
+    public boolean isToday(Date date){
+<span class="nc" id="L184">        Calendar today = Calendar.getInstance();</span>
+<span class="nc" id="L185">        Calendar specifiedDate  = Calendar.getInstance();</span>
+<span class="nc" id="L186">        specifiedDate.setTime(date);</span>
+
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        return today.get(Calendar.DAY_OF_MONTH) == specifiedDate.get(Calendar.DAY_OF_MONTH)</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                &amp;&amp;  today.get(Calendar.MONTH) == specifiedDate.get(Calendar.MONTH)</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">                &amp;&amp;  today.get(Calendar.YEAR) == specifiedDate.get(Calendar.YEAR);</span>
+    }
+
+    public void validateApiResponseStatusCode(Response response, DataLoader dataLoader){
+<span class="nc" id="L194">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Response status code is incorrect with response=&quot;+response.prettyPrint());</span>
+
+<span class="nc" id="L196">    }</span>
+
+    /**
+     * author:amit.chauhan
+     * @param method
+     * @param url
+     * @param payload(this param will be an object)
+     * @return
+     */
+    public Response sendApiRequestRelaxedHttpsCustomHeader(String method,String url,Object payload,HashMap&lt;String,Object&gt; headers){
+<span class="nc" id="L206">        RequestSpecification spec = given().relaxedHTTPSValidation();</span>
+<span class="nc" id="L207">        spec = spec.headers(headers).log().all();</span>
+
+<span class="nc" id="L209">        HashMap&lt;String,String&gt; headersMap= new HashMap&lt;&gt;();</span>
+<span class="nc" id="L210">        headers.forEach((k,v)-&gt;{</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">            if(k!=&quot;cookies&quot;) {</span>
+<span class="nc" id="L212">                headersMap.put(k, v.toString());</span>
+            }
+<span class="nc" id="L214">        });</span>
+
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        if(payload!=null){</span>
+<span class="nc" id="L217">            spec=spec.body(payload);</span>
+        }
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if(headers.get(&quot;cookies&quot;)!=null) {</span>
+<span class="nc" id="L220">            spec.cookies((Cookies) headers.get(&quot;cookies&quot;));</span>
+        }
+<span class="nc" id="L222">        Response response=spec.request(method,url).then().extract().response();</span>
+<span class="nc" id="L223">        return response;</span>
+    }
+
+
+    /**
+     * author:amit.chauhan
+     * @param method
+     * @param url
+     * @param payload(this param will be an object)
+     * @param authToken
+     * @return
+     */
+    public Response sendApiRequestRelaxedHttps(String method,String url,Object payload, String authToken){
+<span class="nc" id="L236">        RequestSpecification spec = given().relaxedHTTPSValidation();</span>
+<span class="nc" id="L237">        spec = spec.</span>
+<span class="nc" id="L238">                contentType(&quot;application/json&quot;).</span>
+<span class="nc" id="L239">                accept(&quot;application/json&quot;);</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">        if(payload!=null){</span>
+<span class="nc" id="L241">            spec=spec.body(payload);</span>
+        }
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        if(authToken!=null){</span>
+<span class="nc" id="L244">            spec=spec.header(&quot;Authorization&quot;,authToken);</span>
+
+        }
+<span class="nc" id="L247">        Response response=spec.log().all().request(method,url).then().extract().response();</span>
+//        Response response=spec.request(method,url).then().extract().response();
+        // response.prettyPrint();
+<span class="nc" id="L250">        return response;</span>
+    }
+
+
+    public String getLatestFileNamefromDir(String dirPath){
+<span class="nc" id="L255">        File dir = new File(dirPath);</span>
+<span class="nc" id="L256">        File[] files = dir.listFiles();</span>
+<span class="nc bnc" id="L257" title="All 4 branches missed.">        if (files == null || files.length == 0) {</span>
+<span class="nc" id="L258">            return null;</span>
+        }
+
+<span class="nc" id="L261">        File lastModifiedFile = files[0];</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        for (int i = 1; i &lt; files.length; i++) {</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            if (lastModifiedFile.lastModified() &lt; files[i].lastModified()) {</span>
+<span class="nc" id="L264">                lastModifiedFile = files[i];</span>
+            }
+        }
+<span class="nc" id="L267">        return lastModifiedFile.getName();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

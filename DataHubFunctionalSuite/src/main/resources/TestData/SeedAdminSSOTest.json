@@ -1,0 +1,38 @@
+{
+  "SeedAdminSSOAuthTest.validateSeedAdminSSOLoginTest": [
+    {
+      "input": {
+        "URL": "seedadminsso/seed/seedlogin",
+        "method": "",
+        "payload": "",
+        "parameter": {
+          "username": "admin",
+          "password": "Kr0n0s@CLoud",
+          "tenantName": "dschaub_nonprd_09"
+        },
+        "testcaseId": "231276"
+      },
+      "output": {
+        "response": ""
+      }
+    }
+    ],
+    "SeedAdminSSOAuthTest.validateFedSeedAdminSSOLoginTest": [
+    {
+      "input": {
+        "URL": "https://ets-2-sso.cfn.mykronos.com",
+        "method": "",
+        "payload": "",
+        "parameter": {
+          "username": "AnnaClark",
+          "password": "Kr0n0s@CLoud",
+          "tenantName": "dschaub_nonprd_09"
+        },
+        "testcaseId": "231276"
+      },
+      "output": {
+        "response": ""
+      }
+    }
+    ]
+}

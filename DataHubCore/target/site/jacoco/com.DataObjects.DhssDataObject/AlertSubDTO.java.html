@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlertSubDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">AlertSubDTO.java</span></div><h1>AlertSubDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+<span class="nc" id="L8">public class AlertSubDTO {</span>
+    public String alertId;
+    public String category;
+    public List&lt;String&gt; subCategory;
+    public String seperateEmail;
+    public String schedule;
+    public String scheduleTimezone;
+    public String scheduleTime;
+    public List&lt;String&gt; emails;
+    public auditInformation auditInformation;
+    public String updatedtm;
+
+    public String getAlertId() {
+<span class="nc" id="L21">        return alertId;</span>
+    }
+
+    public void setAlertId(String alertId) {
+<span class="nc" id="L25">        this.alertId = alertId;</span>
+<span class="nc" id="L26">    }</span>
+
+    public String getCategory() {
+<span class="nc" id="L29">        return category;</span>
+    }
+
+    public void setCategory(String category) {
+<span class="nc" id="L33">        this.category = category;</span>
+<span class="nc" id="L34">    }</span>
+
+    public List&lt;String&gt; getSubCategory() {
+<span class="nc" id="L37">        return subCategory;</span>
+    }
+
+    public void setSubCategory(List&lt;String&gt; subCategory) {
+<span class="nc" id="L41">        this.subCategory = subCategory;</span>
+<span class="nc" id="L42">    }</span>
+
+    public String getSeperateEmail() {
+<span class="nc" id="L45">        return seperateEmail;</span>
+    }
+
+    public void setSeperateEmail(String seperateEmail) {
+<span class="nc" id="L49">        this.seperateEmail = seperateEmail;</span>
+<span class="nc" id="L50">    }</span>
+
+    public String getSchedule() {
+<span class="nc" id="L53">        return schedule;</span>
+    }
+
+    public void setSchedule(String schedule) {
+<span class="nc" id="L57">        this.schedule = schedule;</span>
+<span class="nc" id="L58">    }</span>
+
+    public String getScheduleTimezone() {
+<span class="nc" id="L61">        return scheduleTimezone;</span>
+    }
+
+    public void setScheduleTimezone(String scheduleTimezone) {
+<span class="nc" id="L65">        this.scheduleTimezone = scheduleTimezone;</span>
+<span class="nc" id="L66">    }</span>
+
+    public String getScheduleTime() {
+<span class="nc" id="L69">        return scheduleTime;</span>
+    }
+
+    public void setScheduleTime(String scheduleTime) {
+<span class="nc" id="L73">        this.scheduleTime = scheduleTime;</span>
+<span class="nc" id="L74">    }</span>
+
+    public List&lt;String&gt; getEmails() {
+<span class="nc" id="L77">        return emails;</span>
+    }
+
+    public void setEmails(List&lt;String&gt; emails) {
+<span class="nc" id="L81">        this.emails = emails;</span>
+<span class="nc" id="L82">    }</span>
+
+    @Getter
+<span class="nc" id="L85">    @Setter</span>
+<span class="nc" id="L86">    public static class auditInformation {</span>
+<span class="nc" id="L87">        private String wfdUsername;</span>
+<span class="nc" id="L88">        private String action;</span>
+    }
+
+    public String getUpdatedtm() {
+<span class="nc" id="L92">        return updatedtm;</span>
+    }
+    public void setUpdatedtm(String updatedtm) {
+<span class="nc" id="L95">        this.updatedtm = updatedtm;</span>
+<span class="nc" id="L96">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

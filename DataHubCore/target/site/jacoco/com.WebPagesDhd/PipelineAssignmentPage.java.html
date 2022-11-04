@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PipelineAssignmentPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">PipelineAssignmentPage.java</span></div><h1>PipelineAssignmentPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+import java.util.List;
+
+public class PipelineAssignmentPage {
+
+    private MasterPage masterPage;
+
+    private WebDriver driver;
+
+<span class="nc" id="L15">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+
+<span class="nc" id="L18">    public PipelineAssignmentPage(WebDriver driver) {</span>
+<span class="nc" id="L19">        this.driver = driver;</span>
+<span class="nc" id="L20">        masterPage=new MasterPage(driver);</span>
+<span class="nc" id="L21">    }</span>
+
+    public MasterPage getMasterPage() {
+<span class="nc" id="L24">        return masterPage;</span>
+    }
+
+    public void setMasterPage(MasterPage masterPage) {
+<span class="nc" id="L28">        this.masterPage = masterPage;</span>
+<span class="nc" id="L29">    }</span>
+
+<span class="nc" id="L31">    private By addPipelineAssignment = By.xpath(&quot;//a[normalize-space()='Add pipelineassignments']&quot;);</span>
+
+<span class="nc" id="L33">    private By paWrapperDropdown = By.xpath(&quot;//select[@id='id_pa_wrapper']&quot;);</span>
+<span class="nc" id="L34">    private By paPipelineDropdown = By.xpath(&quot;//select[@id='id_pa_pipeline']&quot;);</span>
+<span class="nc" id="L35">    private By sequence = By.xpath(&quot;//input[@id='id_sequence']&quot;);</span>
+<span class="nc" id="L36">    private By enableDswt = By.xpath(&quot;//select[@id='id_enabledswt']&quot;);</span>
+
+<span class="nc" id="L38">    private By savePaAssignment = By.xpath(&quot;//input[@name='_save']&quot;);</span>
+
+<span class="nc" id="L40">    private By sucessMessage = By.xpath(&quot;//li[@class='success']&quot;);</span>
+
+
+    public void createPipelineAssignment(String wrapper, String pipeline, String dswt){
+<span class="nc" id="L44">        seleniumHelper.selectFromDropdown(driver,paWrapperDropdown,wrapper);</span>
+<span class="nc" id="L45">        seleniumHelper.selectFromDropdown(driver,paPipelineDropdown,pipeline);</span>
+<span class="nc" id="L46">        seleniumHelper.enterTextElement(driver,sequence,&quot;100&quot;);</span>
+<span class="nc" id="L47">        seleniumHelper.selectFromDropdown(driver,enableDswt,dswt);</span>
+<span class="nc" id="L48">        seleniumHelper.clickElement(driver,savePaAssignment);</span>
+<span class="nc" id="L49">        seleniumHelper.validateElementPresent(driver,sucessMessage);</span>
+<span class="nc" id="L50">    }</span>
+
+    public List&lt;String&gt; getListOfWrappers(){
+<span class="nc" id="L53">        return seleniumHelper.getListOfElementsInDropDown(driver, paWrapperDropdown);</span>
+    }
+
+    public void clickOnAddPipelineAssignment(){
+<span class="nc" id="L57">        seleniumHelper.clickElement(driver,addPipelineAssignment);</span>
+<span class="nc" id="L58">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

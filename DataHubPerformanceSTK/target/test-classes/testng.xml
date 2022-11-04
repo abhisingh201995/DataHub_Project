@@ -1,0 +1,16 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="DATAHUB performance suit Historical">
+
+    <!-- Values of pipeline and maxConcurrentApiCalls can be multiple values separated with comma
+         example <parameter name="maxConcurrentApiCalls" value="4,8,16,20"/>
+        <parameter name="pipeline" value="essAvailability,essOpenShift"/>-->
+
+    <test name="DHD Scalability test for Performance Tier 7000-14000" enabled="true">
+        <classes>
+            <class name="com.ukg.datahub.perf.test.jarTest"/>
+        </classes>
+    </test>
+
+</suite>

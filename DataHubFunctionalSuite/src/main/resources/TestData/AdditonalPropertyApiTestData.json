@@ -1,0 +1,54 @@
+{
+  "DHSSAdditionalPropertyApiServicesTest.updateAdditionalPropertyTest": [
+    {
+      "input": {
+        "description": "Validate the API response for updating additional property",
+        "URL": "admin/dhss/tenant/provisioning/update/additionalTenantProperties",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "edapTenantId": "",
+          "tenantName": "",
+          "isViewPointTenant": "Yes",
+          "isUkgProCustomer": "No",
+          "isLicensedCustomer": "No",
+          "isGcpUkgOwned": "No",
+          "isScrubbed": "Yes",
+          "performanceTier": "7000-14000 - OnDemand",
+          "timeZone": "Africa/Abidjan",
+          "gcpProjectId": ""
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    },
+    {
+      "input": {
+        "description": "Validate the API response for updating additional property",
+        "URL": "admin/dhss/tenant/provisioning/update/additionalTenantProperties",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          "edapTenantId": "",
+          "tenantName": "",
+          "isViewPointTenant": "No",
+          "isUkgProCustomer": "No",
+          "isLicensedCustomer": "Yes",
+          "isGcpUkgOwned": "Yes",
+          "isScrubbed": "Yes",
+          "performanceTier": "7000-14000 - OnDemand",
+          "timeZone": "Africa/Abidjan",
+          "gcpProjectId": ""
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "statusCode": "200",
+        "response": ""
+      }
+    }
+  ]
+}

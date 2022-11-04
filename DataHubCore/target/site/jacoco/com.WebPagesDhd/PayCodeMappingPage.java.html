@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PayCodeMappingPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">PayCodeMappingPage.java</span></div><h1>PayCodeMappingPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class PayCodeMappingPage {
+
+    private MasterPage masterPage;
+
+    private WebDriver driver;
+
+
+<span class="nc" id="L14">    public PayCodeMappingPage(WebDriver driver) {</span>
+
+<span class="nc" id="L16">        this.driver = driver;</span>
+<span class="nc" id="L17">        masterPage=new MasterPage(driver);</span>
+<span class="nc" id="L18">    }</span>
+
+    public MasterPage getMasterPage() {
+<span class="nc" id="L21">        return masterPage;</span>
+    }
+
+    public void setMasterPage(MasterPage masterPage) {
+<span class="nc" id="L25">        this.masterPage = masterPage;</span>
+<span class="nc" id="L26">    }</span>
+<span class="nc" id="L27">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+<span class="nc" id="L29">    private By pageHeader = By.xpath(&quot;//h1[normalize-space()='Select paycodemapping to change']&quot;);</span>
+<span class="nc" id="L30">    private By actionDropDown = By.xpath(&quot;//select[@name='action']&quot;);</span>
+
+
+    public Boolean validatePageHeader(){
+<span class="nc" id="L34">        return seleniumHelper.validateElementPresent(driver,pageHeader);</span>
+    }
+
+    public Boolean validateTenantInFilterGrid(String tenant){
+<span class="nc" id="L38">        return seleniumHelper.validateElementPresent(driver,By.xpath(&quot;//a[@title='&quot;+tenant+&quot;']&quot;));</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

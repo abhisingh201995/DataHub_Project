@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BitBucketConnectHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">BitBucketConnectHelper.java</span></div><h1>BitBucketConnectHelper.java</h1><pre class="source lang-java linenums">package com.Utilities;
+//https://kronos.webhook.office.com/webhookb2/b3d3d9ff-8eb3-46f7-9268-8e601aa9ad89@7b6f35d2-1f98-4e5e-82eb-e78f6ea5a1de/IncomingWebhook/f9e14449a6f4479d8c0ef095e67f82f2/b703d4f7-4ff9-49eb-a455-464b4d931e1d
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+
+public class BitBucketConnectHelper extends SuiteInitializer {
+
+<span class="nc" id="L19">    private final ConfigParser configParser = ConfigParser.getConfigParser();</span>
+
+    private String username;
+    private String appToken;
+    private String encodedCredentials;
+    private String repositoryName;
+    private String branchName;
+    private String filename;
+
+<span class="nc" id="L28">    public BitBucketConnectHelper() {</span>
+
+<span class="nc" id="L30">        username = configParser.inputParam.get(&quot;conf.bitBucketUserName&quot;);</span>
+<span class="nc" id="L31">        appToken = configParser.inputParam.get(&quot;conf.bitBucketToken&quot;);//enter your 20 character app password here</span>
+        try {
+<span class="nc" id="L33">            encodedCredentials = Base64.getEncoder().encodeToString((username+&quot;:&quot;+appToken).getBytes(&quot;UTF-8&quot;)); //Bitbucket REST API needs the credentials to be Base64 encoded with &quot;UTF-8&quot; formatting</span>
+<span class="nc" id="L34">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L35">            e.printStackTrace();</span>
+<span class="nc" id="L36">        }</span>
+<span class="nc" id="L37">        repositoryName = &quot;data-hub&quot;;</span>
+<span class="nc" id="L38">    }</span>
+
+    public List&lt;String&gt; getFilesFromFolder(String folderPath) {
+<span class="nc" id="L41">        String urlToAccess = &quot;https://engstash.int.kronos.com/rest/api/1.0/projects/EXT/repos/&quot;+repositoryName+&quot;/browse/&quot;+folderPath+&quot;?until=&quot;+System.getenv(&quot;codebase_branch&quot;);</span>
+<span class="nc" id="L42">        String connectionStreamData=&quot;&quot;;</span>
+        try {
+<span class="nc" id="L44">            URL repositoryUrl = new URL (urlToAccess);</span>
+<span class="nc" id="L45">            HttpURLConnection connection = (HttpURLConnection) repositoryUrl.openConnection();</span>
+            //For authentication
+
+<span class="nc" id="L48">            connection.addRequestProperty(&quot;Authorization&quot;, &quot;Basic &quot; + encodedCredentials);</span>
+<span class="nc" id="L49">            connection.setRequestMethod(&quot;GET&quot;);</span>
+<span class="nc" id="L50">            connection.connect();</span>
+<span class="nc" id="L51">            System.out.println(connection.getResponseCode() + &quot; &quot; + connection.getResponseMessage());</span>
+            //The InputStream is required to read in the data of the GET request
+<span class="nc" id="L53">            InputStream connectionDataStream = connection.getInputStream();</span>
+<span class="nc" id="L54">            connectionStreamData = IOUtils.toString(connectionDataStream, StandardCharsets.UTF_8);</span>
+<span class="nc" id="L55">        }catch (Exception e){</span>
+
+<span class="nc" id="L57">        }</span>
+<span class="nc" id="L58">        System.out.println(connectionStreamData);</span>
+
+<span class="nc" id="L60">        HashMap&lt;Object,Object&gt; data = new Gson().fromJson(connectionStreamData, HashMap.class);</span>
+<span class="nc" id="L61">        List&lt;LinkedTreeMap&gt; listOfFileData= new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L62">        listOfFileData= (List&lt;LinkedTreeMap&gt;) ((LinkedTreeMap)data.get(&quot;children&quot;)).get(&quot;values&quot;);</span>
+<span class="nc" id="L63">        List&lt;String&gt; listFileName= new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for(LinkedTreeMap item: listOfFileData){</span>
+<span class="nc" id="L65">           listFileName.add((String) ((LinkedTreeMap)item.get(&quot;path&quot;)).get(&quot;name&quot;));</span>
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">        return listFileName;</span>
+    }
+
+    public String getFileData(String fileName, String folderPath) {
+<span class="nc" id="L71">        String urlToAccess = &quot;https://engstash.int.kronos.com/rest/api/1.0/projects/EXT/repos/&quot;+repositoryName+&quot;/browse/&quot;+folderPath+fileName;</span>
+<span class="nc" id="L72">        String connectionStreamData=&quot;&quot;;</span>
+        try {
+<span class="nc" id="L74">            URL repositoryUrl = new URL (urlToAccess);</span>
+<span class="nc" id="L75">            HttpURLConnection connection = (HttpURLConnection) repositoryUrl.openConnection();</span>
+            //For authentication
+
+<span class="nc" id="L78">            connection.addRequestProperty(&quot;Authorization&quot;, &quot;Basic &quot; + encodedCredentials);</span>
+<span class="nc" id="L79">            connection.setRequestMethod(&quot;GET&quot;);</span>
+<span class="nc" id="L80">            connection.connect();</span>
+            //The InputStream is required to read in the data of the GET request
+<span class="nc" id="L82">            InputStream connectionDataStream = connection.getInputStream();</span>
+<span class="nc" id="L83">            connectionStreamData = IOUtils.toString(connectionDataStream, StandardCharsets.US_ASCII);</span>
+<span class="nc" id="L84">        }catch (Exception e){</span>
+
+<span class="nc" id="L86">        }</span>
+
+<span class="nc" id="L88">        return connectionStreamData;</span>
+    }
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

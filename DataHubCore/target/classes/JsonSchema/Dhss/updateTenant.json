@@ -1,0 +1,96 @@
+{
+  "tenantProvision": {
+    "component": {
+      "id": 1,
+      "name": "EDAP",
+      "provisionType": "update",
+      "source_request": "EDAP_Admin"
+    },
+    "callback": {
+      "dataSet": []
+    },
+    "tenant": {
+      "dataSet": [
+        {
+          "name": "tenantName",
+          "value": "{tenantname}"
+        },
+        {
+          "name": "shortName",
+          "value": "{tenantshortname}"
+        },
+        {
+          "name": "tenantId",
+          "value": "{tenantAppId}"
+        },
+        {
+          "name": "tenantVanityURL",
+          "value": "{edapvanityurl}"
+        },
+        {
+          "name": "ClientId",
+          "value": "{clientid}"
+        },
+        {
+          "name": "ClientSecret",
+          "value": "{clientsecret}"
+        },
+        {
+          "name": "OpenAMURL",
+          "value": "{openamurl}"
+        },
+        {
+          "name": "WFDURL",
+          "value": "{wfdurl}"
+        },
+        {
+          "name": "isSSOEnabled",
+          "value": "{ssoenabled}"
+        },
+        {
+          "name": "solution",
+          "value": "{solution}"
+        },
+        {
+          "name": "environment",
+          "value": "{environment}"
+        },
+        {
+          "name": "tenantSeedUser",
+          "value": "{seeduser}"
+        },
+        {
+          "name": "updatedBy",
+          "value": "{updatedBy}"
+        },
+        {
+          "name": "description",
+          "value": null
+        },
+        {
+          "name": "isActive",
+          "value": "true"
+        },
+        {
+          "name": "isDeleted",
+          "value": "false"
+        },
+        {
+          "name": "localeProfileId",
+          "value": 1
+        },
+        {
+          "name": "federatedTenantVanityURL",
+          "value": ""
+        }
+      ],
+      "provisionInfo": {},
+      "systemAccounts": [
+        {
+          "service": "EDAP",
+          "systemAccountUsers": []
+        }
+      ]
+    }
+  }
+}

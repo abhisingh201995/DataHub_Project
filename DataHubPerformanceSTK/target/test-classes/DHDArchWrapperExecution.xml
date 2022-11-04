@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="DATAHUB performance suit with Partial DR for timecardMetrics">
+
+    <listeners>
+        <listener class-name="com.ukg.datahub.perf.listeners.ExecutionListener"/>
+        <listener class-name="com.ukg.datahub.perf.listeners.PerfTestReporterListener"/>
+    </listeners>
+
+
+    <test name="DHD Scalability test for wrapper" enabled="true">
+        <parameter name="testDescription"
+                   value="Performance test to measure the scalability of the DHD infrastructure"></parameter>
+        <parameter name="maxConcurrentApiCalls" value="4"/>
+        <parameter name="performanceTier" value="PerfTest_upto_500K-OnDemand"></parameter>
+        <parameter name="tenantName" value="dschaub_8_cfn"></parameter>
+        <parameter name="wrapperName" value="Core"></parameter>
+        <parameter name="runType" value="Historical"/>
+        <parameter name="pipelinePerformanceSettings" value="[
+         {'personCount':'100', 'dayCount':'20'}
+          ]"/>
+        <classes>
+            <class name="com.ukg.datahub.perf.test.DHDArchitectureWithWrapperExecutionTest"/>
+        </classes>
+    </test>
+
+</suite>

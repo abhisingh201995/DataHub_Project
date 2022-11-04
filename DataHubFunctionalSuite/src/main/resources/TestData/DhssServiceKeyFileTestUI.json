@@ -1,0 +1,52 @@
+{
+  "ServiceKeyFileServicesTest.generateServiceKeyFileTest": [
+    {
+      "input": {
+        "parameter": {
+        },
+        "testcaseId": "227756"
+      },
+      "output": {
+        "outputParameter": {
+          "expectedProjectIDLabel": "Project id",
+          "expectedGCPProjectNameLabel": "GCP Project Name",
+          "expectedFileDownloadSuccessMessage": "Success Service Account Key file downloaded successfully.",
+          "expectedFileNameColumnLabel": "File Name",
+          "expectedStatusColumnLabel": "Status",
+          "expectedKeyColumnLabel": "Key",
+          "expectedKeyCreationDateColumnLabel": "Key Creation Date",
+          "expectedKeyExpirationDateColumnLabel": "Key Expiration Date"
+        }
+      }
+    }
+  ],
+  "ServiceKeyFileServicesTest.verifyExpectedFileName": [
+    {
+      "input": {
+        "parameter": {
+        },
+        "testcaseId": ""
+      },
+      "output": {
+        "outputParameter": {
+          "downloadPath": "C:\\Users\\anupam.sinha\\Downloads"
+        }
+      }
+    }
+  ],
+  "ServiceKeyFileServicesTest.deleteServiceKeyFileTest": [
+    {
+      "input": {
+        "parameter": {
+        },
+        "testcaseId": "227758"
+      },
+      "output": {
+        "outputParameter": {
+          "expectedFileDeleteSuccessMessage": "Success Service Account Key deleted successfully.",
+          "expectedFileModalBoxMessage": "You are about to delete the Service Account Key. Do you want to proceed?"
+        }
+      }
+    }
+  ]
+}

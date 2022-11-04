@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DHSSTenantHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.FunctionalUtils</a> &gt; <span class="el_source">DHSSTenantHelper.java</span></div><h1>DHSSTenantHelper.java</h1><pre class="source lang-java linenums">package com.FunctionalUtils;
+
+import com.DataObjects.DhssDataObject.AdditionalPropertDto;
+import com.DataObjects.DhssDataObject.AuditInformation;
+import com.DataObjects.DhssDataObject.CustomerOwnedGcpDto;
+import com.DataObjects.DhssDataObject.StartWrapperDTO;
+import com.DataObjects.DhssDataObject.StopWrapperDTO;
+import com.Utilities.ConfigParser;
+import com.Utilities.DataLoader;
+import com.Utilities.DataPool;
+import com.Utilities.Helper;
+import com.google.gson.Gson;
+import io.restassured.response.Response;
+import org.json.simple.JSONObject;
+import org.testng.Assert;
+
+import java.util.HashMap;
+import java.util.List;
+
+public class DHSSTenantHelper {
+
+    private String projectId;
+    Helper helper;
+    String env;
+    DataPool dataPool;
+    String timeStamp;
+    ConfigParser configParser;
+    CustomerOwnedGcpDto customerOwnedGcpDto;
+<span class="nc" id="L29">    private HashMap&lt;String, Object&gt; dhssAdminReqHeadersMap = new HashMap&lt;&gt;();</span>
+
+    private static Boolean customerOwnedActive;
+
+<span class="nc" id="L33">    public DHSSTenantHelper(String projectId) {</span>
+<span class="nc" id="L34">        this.projectId = projectId;</span>
+<span class="nc" id="L35">        this.dataPool = DataPool.getDataPool();</span>
+<span class="nc" id="L36">        this.helper = new Helper(projectId);</span>
+<span class="nc" id="L37">        this.timeStamp = helper.getDateTimeStamp();</span>
+<span class="nc" id="L38">        this.dataPool.setEnvironment(projectId.split(&quot;-&quot;)[2] + projectId.split(&quot;-&quot;)[3]);</span>
+<span class="nc" id="L39">        this.env = DataPool.getDataPool().getEnvironment();</span>
+<span class="nc" id="L40">        this.configParser = ConfigParser.getConfigParser();</span>
+<span class="nc" id="L41">        this.customerOwnedGcpDto = new CustomerOwnedGcpDto(new AuditInformation(&quot;SeanrIvan&quot;, &quot;UpdateProvision&quot;));</span>
+<span class="nc" id="L42">    }</span>
+
+    public HashMap&lt;String, Object&gt; dhssAdminReqHeaders() {
+<span class="nc" id="L45">        dhssAdminReqHeadersMap.put(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+<span class="nc" id="L46">        dhssAdminReqHeadersMap.put(&quot;X-XSRF-TOKEN&quot;, dataPool.getAdminlogindto().getXSRF_Token());</span>
+<span class="nc" id="L47">        dhssAdminReqHeadersMap.put(&quot;edap-authn-ssid&quot;,dataPool.getAdminlogindto().getEdap_authn_ssid());</span>
+<span class="nc" id="L48">        dhssAdminReqHeadersMap.put(&quot;Authorization&quot;, dataPool.getAdminlogindto().getAdminSessionId());</span>
+<span class="nc" id="L49">        dhssAdminReqHeadersMap.put(&quot;cookies&quot;,dataPool.getAdminlogindto().getCookies());</span>
+<span class="nc" id="L50">        return dhssAdminReqHeadersMap;</span>
+    }
+
+<span class="nc" id="L53">    private HashMap&lt;String, Object&gt; dhssSeedReqHeadersMap = new HashMap&lt;&gt;();</span>
+
+    public HashMap&lt;String, Object&gt; dhssSeedReqHeaders() {
+
+
+<span class="nc" id="L58">        dhssSeedReqHeadersMap.put(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+<span class="nc" id="L59">        dhssSeedReqHeadersMap.put(&quot;X-XSRF-TOKEN&quot;, dataPool.getSeedlogindto().getXSRF_Token());</span>
+<span class="nc" id="L60">        dhssSeedReqHeadersMap.put(&quot;edap-authn-ssid&quot;, dataPool.getSeedlogindto().getEdap_authn_ssid());</span>
+<span class="nc" id="L61">        dhssSeedReqHeadersMap.put(&quot;Authorization&quot;, dataPool.getSeedlogindto().getAccess_token());</span>
+<span class="nc" id="L62">        dhssSeedReqHeadersMap.put(&quot;cookies&quot;, dataPool.getSeedlogindto().getCookies());</span>
+<span class="nc" id="L63">        return dhssSeedReqHeadersMap;</span>
+    }
+
+
+
+    public void refreshAuthToken(){
+
+<span class="nc" id="L70">        String payload = &quot;{\&quot;username\&quot;: \&quot;{username}\&quot;,\&quot;password\&quot;: \&quot;{password}\&quot;}&quot;;</span>
+<span class="nc" id="L71">        payload =payload</span>
+<span class="nc" id="L72">                .replace(&quot;{username}&quot;, configParser.inputParam.get(&quot;conf.dhssAdminUsername&quot;))</span>
+<span class="nc" id="L73">                .replace(&quot;{password}&quot;,configParser.inputParam.get(&quot;conf.dhssAdminPassword&quot;));</span>
+
+<span class="nc" id="L75">        Response response = helper.sendApiRequestRelaxedHttps(&quot;POST&quot;, dataPool.getDhssApiBaseUrl(env)+&quot;admin/tenant/login&quot;, payload, null);</span>
+<span class="nc" id="L76">        dataPool.getAdminlogindto().setAdminSessionId(response.path(&quot;authToken&quot;));</span>
+<span class="nc" id="L77">        setAdminSessionInfo();</span>
+<span class="nc" id="L78">    }</span>
+
+    public void refreshSeedAuthToken(String tenantType){
+
+<span class="nc" id="L82">        String payload = &quot;{\&quot;userId\&quot;: \&quot;{username}\&quot;,\&quot;password\&quot;: \&quot;{password}\&quot;}&quot;;</span>
+<span class="nc" id="L83">        payload =payload</span>
+<span class="nc" id="L84">                .replace(&quot;{username}&quot;,  configParser.inputParam.get(tenantType+&quot;.tenantSeedUser&quot;))</span>
+<span class="nc" id="L85">                .replace(&quot;{password}&quot;, configParser.inputParam.get(tenantType+&quot;.password&quot;));</span>
+
+<span class="nc" id="L87">        Response response = helper.sendApiRequestRelaxedHttps(&quot;POST&quot;, dataPool.getDhssApiBaseUrl(env)+&quot;tenant/seeduser/login&quot;, payload, null);</span>
+<span class="nc" id="L88">        dataPool.getSeedlogindto().setAccess_token(response.path(&quot;authToken&quot;));</span>
+<span class="nc" id="L89">        dataPool.getSeedlogindto().setTenantid(response.path(&quot;tenantId&quot;));</span>
+<span class="nc" id="L90">        setSeedSessionInfo();</span>
+<span class="nc" id="L91">    }</span>
+
+    public void setSeedSessionInfo() {
+<span class="nc" id="L94">        HashMap&lt;String,Object&gt;headersMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L95">        headersMap.put(&quot;Authorization&quot;, dataPool.getSeedlogindto().getAccess_token());</span>
+<span class="nc" id="L96">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;GET&quot;,dataPool.getDhssApiBaseUrl(env)+&quot;sessions?action=info&quot;,null,headersMap);</span>
+<span class="nc" id="L97">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;);</span>
+<span class="nc" id="L98">        dataPool.getSeedlogindto().setXSRF_Token(response.getCookie(&quot;EDAP-XSRF-TOKEN&quot;));</span>
+<span class="nc" id="L99">        dataPool.getSeedlogindto().setEdap_authn_ssid(response.getCookie(&quot;edap-authn-ssid&quot;));</span>
+<span class="nc" id="L100">        dataPool.getSeedlogindto().setCookies(response.getDetailedCookies());</span>
+<span class="nc" id="L101">    }</span>
+
+
+    public void setAdminSessionInfo() {
+<span class="nc" id="L105">        HashMap&lt;String,Object&gt;headersMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L106">        headersMap.put(&quot;Authorization&quot;, dataPool.getAdminlogindto().getAdminSessionId());</span>
+<span class="nc" id="L107">        headersMap.put(&quot;x-tenantId&quot;, &quot;edap&quot;);</span>
+<span class="nc" id="L108">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;GET&quot;,dataPool.getDhssApiBaseUrl(env)+&quot;sessions?action=info&quot;,null,headersMap);</span>
+<span class="nc" id="L109">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;);</span>
+<span class="nc" id="L110">        dataPool.getAdminlogindto().setXSRF_Token(response.getCookie(&quot;EDAP-XSRF-TOKEN&quot;));</span>
+<span class="nc" id="L111">        dataPool.getAdminlogindto().setEdap_authn_ssid(response.getCookie(&quot;edap-authn-ssid&quot;));</span>
+<span class="nc" id="L112">        dataPool.getAdminlogindto().setCookies(response.getDetailedCookies());</span>
+<span class="nc" id="L113">    }</span>
+
+    public String createTenant() {
+
+<span class="nc" id="L117">        String timeStampNow = helper.getDateTimeStamp();</span>
+<span class="nc" id="L118">        JSONObject TenantTestData = (JSONObject) dataPool.getTestDataPool().get(&quot;DHSSAdminLoginApiServicesTest.adminLoginCreateTenantTest&quot;).get(0);</span>
+<span class="nc" id="L119">        DataLoader dataLoader = new DataLoader(TenantTestData);</span>
+
+<span class="nc" id="L121">        String payload = dataPool.getJsonSchemaPool().get(&quot;registerTenant.json&quot;)</span>
+<span class="nc" id="L122">                .replace(&quot;{tenantname}&quot;, dataLoader.getTestParameter().get(&quot;tenantName&quot;) + timeStampNow)</span>
+<span class="nc" id="L123">                .replace(&quot;{tenantshortname}&quot;, dataLoader.getTestParameter().get(&quot;tenantShortName&quot;) + timeStampNow)</span>
+<span class="nc" id="L124">                .replace(&quot;{edapvanityurl}&quot;, dataLoader.getTestParameter().get(&quot;tenantVanityURL&quot;)+ timeStampNow +&quot;.com:9393&quot;)</span>
+<span class="nc" id="L125">                .replace(&quot;{openamurl}&quot;, dataLoader.getTestParameter().get(&quot;OpenAMURL&quot;))</span>
+<span class="nc" id="L126">                .replace(&quot;{wfdurl}&quot;, dataLoader.getTestParameter().get(&quot;WFDURL&quot;).replace(&quot;{addUniqueChar}&quot;,timeStampNow))</span>
+<span class="nc" id="L127">                .replace(&quot;{environment}&quot;, dataLoader.getTestParameter().get(&quot;environment&quot;))</span>
+<span class="nc" id="L128">                .replace(&quot;{solution}&quot;, dataLoader.getTestParameter().get(&quot;solution&quot;))</span>
+<span class="nc" id="L129">                .replace(&quot;{seeduser}&quot;, dataLoader.getTestParameter().get(&quot;tenantSeedUser&quot;))</span>
+<span class="nc" id="L130">                .replace(&quot;{ssoenabled}&quot;, dataLoader.getTestParameter().get(&quot;isSSOEnabled&quot;))</span>
+<span class="nc" id="L131">                .replace(&quot;{clientid}&quot;, dataLoader.getTestParameter().get(&quot;ClientId&quot;))</span>
+<span class="nc" id="L132">                .replace(&quot;{clientsecret}&quot;, dataLoader.getTestParameter().get(&quot;ClientSecret&quot;))</span>
+<span class="nc" id="L133">                .replace(&quot;{createdBy}&quot;, dataLoader.getTestParameter().get(&quot;createdBy&quot;));</span>
+<span class="nc" id="L134">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(), dataPool.getDhssApiBaseUrl(env) + dataLoader.getUrl(), payload, dhssAdminReqHeaders());</span>
+
+<span class="nc" id="L136">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Create tenant failed with response = &quot;+ response.prettyPrint());</span>
+
+<span class="nc" id="L138">        return dataLoader.getTestParameter().get(&quot;tenantName&quot;) + timeStampNow;</span>
+
+    }
+
+    public Response createTenant(DataLoader dataLoader) {
+
+<span class="nc" id="L144">        String payload = dataPool.getJsonSchemaPool().get(&quot;registerTenant.json&quot;)</span>
+<span class="nc" id="L145">                .replace(&quot;{tenantname}&quot;, dataLoader.getTestParameter().get(&quot;tenantName&quot;) + timeStamp)</span>
+<span class="nc" id="L146">                .replace(&quot;{tenantshortname}&quot;, dataLoader.getTestParameter().get(&quot;tenantShortName&quot;) + timeStamp)</span>
+<span class="nc" id="L147">                .replace(&quot;{edapvanityurl}&quot;, dataLoader.getTestParameter().get(&quot;tenantVanityURL&quot;)+ timeStamp +&quot;.com:9393&quot;)</span>
+<span class="nc" id="L148">                .replace(&quot;{openamurl}&quot;, dataLoader.getTestParameter().get(&quot;OpenAMURL&quot;))</span>
+<span class="nc" id="L149">                .replace(&quot;{wfdurl}&quot;, dataLoader.getTestParameter().get(&quot;WFDURL&quot;).replace(&quot;{addUniqueChar}&quot;,timeStamp))</span>
+<span class="nc" id="L150">                .replace(&quot;{environment}&quot;, dataLoader.getTestParameter().get(&quot;environment&quot;))</span>
+<span class="nc" id="L151">                .replace(&quot;{solution}&quot;, dataLoader.getTestParameter().get(&quot;solution&quot;))</span>
+<span class="nc" id="L152">                .replace(&quot;{seeduser}&quot;, dataLoader.getTestParameter().get(&quot;tenantSeedUser&quot;))</span>
+<span class="nc" id="L153">                .replace(&quot;{ssoenabled}&quot;, dataLoader.getTestParameter().get(&quot;isSSOEnabled&quot;))</span>
+<span class="nc" id="L154">                .replace(&quot;{clientid}&quot;, dataLoader.getTestParameter().get(&quot;ClientId&quot;))</span>
+<span class="nc" id="L155">                .replace(&quot;{clientsecret}&quot;, dataLoader.getTestParameter().get(&quot;ClientSecret&quot;))</span>
+<span class="nc" id="L156">                .replace(&quot;{createdBy}&quot;, dataLoader.getTestParameter().get(&quot;createdBy&quot;));</span>
+<span class="nc" id="L157">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(), dataPool.getDhssApiBaseUrl(env) + dataLoader.getUrl(), payload, dhssAdminReqHeaders());</span>
+
+<span class="nc" id="L159">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Create tenant failed with response = &quot;+ response.prettyPrint());</span>
+
+<span class="nc" id="L161">        dataPool.setTenantNameUser(dataLoader.getTestParameter().get(&quot;tenantName&quot;) + timeStamp);</span>
+<span class="nc" id="L162">        dataPool.setTenantShortName(dataLoader.getTestParameter().get(&quot;tenantShortName&quot;) + timeStamp);</span>
+<span class="nc" id="L163">        return response;</span>
+
+    }
+
+    public Response updateTenant(DataLoader dataLoader){
+
+<span class="nc" id="L169">        String payload = dataPool.getJsonSchemaPool().get(&quot;updateTenant.json&quot;)</span>
+<span class="nc" id="L170">                .replace(&quot;{tenantname}&quot;, dataPool.getTenantNameUser())</span>
+<span class="nc" id="L171">                .replace(&quot;{tenantshortname}&quot;,dataPool.getTenantShortName())</span>
+<span class="nc" id="L172">                .replace(&quot;{tenantAppId}&quot;, getTenantAppId(dataPool.getTenantShortName()))</span>
+<span class="nc" id="L173">                .replace(&quot;{edapvanityurl}&quot;, dataLoader.getTestParameter().get(&quot;tenantVanityURL&quot;)+ helper.getDateTimeStamp() +&quot;.com:9393&quot;)</span>
+<span class="nc" id="L174">                .replace(&quot;{openamurl}&quot;, dataLoader.getTestParameter().get(&quot;OpenAMURL&quot;))</span>
+<span class="nc" id="L175">                .replace(&quot;{wfdurl}&quot;, dataLoader.getTestParameter().get(&quot;WFDURL&quot;).replace(&quot;{addUniqueChar}&quot;,helper.getDateTimeStamp()))</span>
+<span class="nc" id="L176">                .replace(&quot;{environment}&quot;, dataLoader.getTestParameter().get(&quot;environment&quot;))</span>
+<span class="nc" id="L177">                .replace(&quot;{solution}&quot;, dataLoader.getTestParameter().get(&quot;solution&quot;))</span>
+<span class="nc" id="L178">                .replace(&quot;{seeduser}&quot;, dataLoader.getTestParameter().get(&quot;tenantSeedUser&quot;))</span>
+<span class="nc" id="L179">                .replace(&quot;{ssoenabled}&quot;, dataLoader.getTestParameter().get(&quot;isSSOEnabled&quot;))</span>
+<span class="nc" id="L180">                .replace(&quot;{clientid}&quot;, dataLoader.getTestParameter().get(&quot;ClientId&quot;))</span>
+<span class="nc" id="L181">                .replace(&quot;{clientsecret}&quot;, dataLoader.getTestParameter().get(&quot;ClientSecret&quot;))</span>
+<span class="nc" id="L182">                .replace(&quot;{updatedBy}&quot;, dataLoader.getTestParameter().get(&quot;updatedBy&quot;));</span>
+<span class="nc" id="L183">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),dataPool.getDhssApiBaseUrl(env)+dataLoader.getUrl(),payload,dhssAdminReqHeaders());</span>
+
+<span class="nc" id="L185">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Create tenant failed with response = &quot;+ response.prettyPrint());</span>
+<span class="nc" id="L186">        dataPool.setTenantNameUser(dataLoader.getTestParameter().get(&quot;tenantName&quot;) + timeStamp);</span>
+<span class="nc" id="L187">        dataPool.setTenantShortName(dataLoader.getTestParameter().get(&quot;tenantShortName&quot;) + timeStamp);</span>
+
+<span class="nc" id="L189">        return response;</span>
+
+    }
+
+    public Response updateTenant(String TenantType, String vanityUrl){
+
+<span class="nc" id="L195">        String payload = dataPool.getJsonSchemaPool().get(&quot;updateTenant.json&quot;)</span>
+<span class="nc" id="L196">                .replace(&quot;{tenantname}&quot;, configParser.inputParam.get(TenantType+&quot;.tenantName&quot;))</span>
+<span class="nc" id="L197">                .replace(&quot;{tenantshortname}&quot;,configParser.inputParam.get(TenantType+&quot;.tenantName&quot;))</span>
+<span class="nc" id="L198">                .replace(&quot;{edapvanityurl}&quot;, vanityUrl)</span>
+<span class="nc" id="L199">                .replace(&quot;{openamurl}&quot;, configParser.inputParam.get(TenantType+&quot;.OpenAMURL&quot;))</span>
+<span class="nc" id="L200">                .replace(&quot;{wfdurl}&quot;, configParser.inputParam.get(TenantType+&quot;.WFDURL&quot;))</span>
+<span class="nc" id="L201">                .replace(&quot;{environment}&quot;, configParser.inputParam.get(TenantType+&quot;.environment&quot;))</span>
+<span class="nc" id="L202">                .replace(&quot;{solution}&quot;, configParser.inputParam.get(TenantType+&quot;.solution&quot;))</span>
+<span class="nc" id="L203">                .replace(&quot;{seeduser}&quot;, configParser.inputParam.get(TenantType+&quot;.tenantSeedUser&quot;))</span>
+<span class="nc" id="L204">                .replace(&quot;{ssoenabled}&quot;, configParser.inputParam.get(TenantType+&quot;.isSSOEnabled&quot;))</span>
+<span class="nc" id="L205">                .replace(&quot;{clientid}&quot;, configParser.inputParam.get(TenantType+&quot;.ClientId&quot;))</span>
+<span class="nc" id="L206">                .replace(&quot;{clientsecret}&quot;, configParser.inputParam.get(TenantType+&quot;.ClientSecret&quot;))</span>
+<span class="nc" id="L207">                .replace(&quot;{updatedBy}&quot;, configParser.inputParam.get(TenantType+&quot;.updatedBy&quot;))</span>
+<span class="nc" id="L208">                .replace(&quot;{tenantAppId}&quot;, getTenantAppId(configParser.inputParam.get(TenantType+&quot;.tenantName&quot;)));</span>
+
+<span class="nc" id="L210">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;POST&quot;,dataPool.getDhssApiBaseUrl(env)+&quot;admin/tenant/provisioning/update&quot;,payload,dhssAdminReqHeaders());</span>
+<span class="nc" id="L211">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;,&quot;Update tenant failed with response = &quot;+ response.prettyPrint());</span>
+
+<span class="nc" id="L213">        return response;</span>
+
+    }
+
+
+    public Response saveSeedUser(DataLoader dataLoader){
+
+<span class="nc" id="L220">        String payload = dataPool.getJsonSchemaPool().get(&quot;saveSeedUser.json&quot;)</span>
+<span class="nc" id="L221">                .replace(&quot;{appkey}&quot;,dataLoader.getTestParameter().get(&quot;appkey&quot;))</span>
+<span class="nc" id="L222">                .replace(&quot;{username}&quot;,dataLoader.getTestParameter().get(&quot;username&quot;))</span>
+<span class="nc" id="L223">                .replace(&quot;{password}&quot;,dataLoader.getTestParameter().get(&quot;password&quot;))</span>
+<span class="nc" id="L224">                .replace(&quot;{createdBy}&quot;,dataLoader.getTestParameter().get(&quot;createdBy&quot;));</span>
+<span class="nc" id="L225">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),dataPool.getDhssApiBaseUrl(env)+dataLoader.getUrl(),payload,dhssSeedReqHeaders());</span>
+<span class="nc" id="L226">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Save seed user failed with response = &quot;+ response.prettyPrint());</span>
+
+
+<span class="nc" id="L229">        return response;</span>
+
+    }
+
+    public Response saveSeedUser(DataLoader dataLoader,String tenantType){
+
+<span class="nc" id="L235">        String payload = dataPool.getJsonSchemaPool().get(&quot;saveSeedUser.json&quot;)</span>
+<span class="nc" id="L236">                .replace(&quot;{appkey}&quot;,configParser.inputParam.get(tenantType+&quot;.appkey&quot;))</span>
+<span class="nc" id="L237">                .replace(&quot;{username}&quot;,configParser.inputParam.get(tenantType+&quot;.tenantSeedUser&quot;))</span>
+<span class="nc" id="L238">                .replace(&quot;{password}&quot;,configParser.inputParam.get(tenantType+&quot;.password&quot;))</span>
+<span class="nc" id="L239">                .replace(&quot;{createdBy}&quot;,configParser.inputParam.get(tenantType+&quot;.tenantSeedUser&quot;));</span>
+<span class="nc" id="L240">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),dataPool.getDhssApiBaseUrl(env)+dataLoader.getUrl(),payload,dhssSeedReqHeaders());</span>
+<span class="nc" id="L241">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Save seed user failed with response = &quot;+ response.prettyPrint());</span>
+
+
+<span class="nc" id="L244">        return response;</span>
+
+    }
+
+    public Response updateSeedUser(DataLoader dataLoader){
+
+<span class="nc" id="L250">        String payload = dataPool.getJsonSchemaPool().get(&quot;saveSeedUser.json&quot;)</span>
+<span class="nc" id="L251">                .replace(&quot;{appkey}&quot;,dataLoader.getTestParameter().get(&quot;appkey&quot;))</span>
+<span class="nc" id="L252">                .replace(&quot;{username}&quot;,dataLoader.getTestParameter().get(&quot;username&quot;))</span>
+<span class="nc" id="L253">                .replace(&quot;{password}&quot;,dataLoader.getTestParameter().get(&quot;password&quot;))</span>
+<span class="nc" id="L254">                .replace(&quot;{createdby}&quot;,dataLoader.getTestParameter().get(&quot;createdBy&quot;));</span>
+<span class="nc" id="L255">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),dataPool.getDhssApiBaseUrl(env)+dataLoader.getUrl(),payload,dhssSeedReqHeaders());</span>
+<span class="nc" id="L256">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Update seed user failed with response = &quot;+ response.prettyPrint());</span>
+
+<span class="nc" id="L258">        return response;</span>
+
+    }
+
+    public Response addAdditionalProperty(DataLoader dataLoader, String tenantShortName){
+
+<span class="nc" id="L264">        AdditionalPropertDto additionalPropertDto = new AdditionalPropertDto(</span>
+<span class="nc" id="L265">                dataLoader.getTestParameter().get(&quot;edapTenantId&quot;),</span>
+<span class="nc" id="L266">                dataLoader.getTestParameter().get(&quot;tenantName&quot;),</span>
+<span class="nc" id="L267">                dataLoader.getTestParameter().get(&quot;isViewPointTenant&quot;),</span>
+<span class="nc" id="L268">                dataLoader.getTestParameter().get(&quot;isUkgProCustomer&quot;),</span>
+<span class="nc" id="L269">                dataLoader.getTestParameter().get(&quot;isLicensedCustomer&quot;),</span>
+<span class="nc" id="L270">                dataLoader.getTestParameter().get(&quot;isGcpUkgOwned&quot;),</span>
+<span class="nc" id="L271">                dataLoader.getTestParameter().get(&quot;isScrubbed&quot;),</span>
+<span class="nc" id="L272">                dataLoader.getTestParameter().get(&quot;performanceTier&quot;),</span>
+<span class="nc" id="L273">                dataLoader.getTestParameter().get(&quot;timeZone&quot;),</span>
+<span class="nc" id="L274">                dataLoader.getTestParameter().get(&quot;gcpProjectId&quot;),</span>
+                tenantShortName
+        );
+
+<span class="nc" id="L278">        String payload = new Gson().toJson(additionalPropertDto);</span>
+<span class="nc" id="L279">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),</span>
+<span class="nc" id="L280">                dataPool.getDhssApiBaseUrl(env)+dataLoader.getUrl(),</span>
+<span class="nc" id="L281">                payload, dhssAdminReqHeaders());</span>
+<span class="nc" id="L282">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Addtional property save failed with response = &quot;+ response.prettyPrint());</span>
+<span class="nc" id="L283">        return response;</span>
+    }
+
+    /**
+     * Delete a tenant from the system
+     * @param tenantShortName
+     */
+    public void deleteTenant(String tenantShortName){
+
+<span class="nc" id="L292">        String payload = dataPool.getJsonSchemaPool().get(&quot;deleteTenant.json&quot;)</span>
+<span class="nc" id="L293">                .replace(&quot;{TransactionType}&quot;,&quot;deactivate&quot;)</span>
+<span class="nc" id="L294">                .replace(&quot;{TenantShortName}&quot;,tenantShortName);</span>
+<span class="nc" id="L295">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;POST&quot;,</span>
+<span class="nc" id="L296">                dataPool.getDhssApiBaseUrl(env)+&quot;admin/tenant/provisioning/deactivate&quot;,</span>
+<span class="nc" id="L297">                payload, dhssAdminReqHeaders());</span>
+<span class="nc" id="L298">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;,&quot;Tenant Deactivate failed with following response = &quot;+ response.prettyPrint());</span>
+
+
+<span class="nc" id="L301">        String payloadDelete = dataPool.getJsonSchemaPool().get(&quot;deleteTenant.json&quot;)</span>
+<span class="nc" id="L302">                .replace(&quot;{TransactionType}&quot;,&quot;delete&quot;)</span>
+<span class="nc" id="L303">                .replace(&quot;{TenantShortName}&quot;,tenantShortName);</span>
+<span class="nc" id="L304">        Response responseDelete = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;POST&quot;,</span>
+<span class="nc" id="L305">                dataPool.getDhssApiBaseUrl(env)+&quot;admin/tenant/provisioning/delete&quot;,</span>
+<span class="nc" id="L306">                payloadDelete, dhssAdminReqHeaders());</span>
+<span class="nc" id="L307">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;,&quot;Tenant Delete failed with following response = &quot;+ response.prettyPrint());</span>
+
+
+<span class="nc" id="L310">        String payloadCleanUp = dataPool.getJsonSchemaPool().get(&quot;deleteTenant.json&quot;)</span>
+<span class="nc" id="L311">                .replace(&quot;{TransactionType}&quot;,&quot;cleanup&quot;)</span>
+<span class="nc" id="L312">                .replace(&quot;{TenantShortName}&quot;,tenantShortName);</span>
+<span class="nc" id="L313">        Response responseCleanup = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;POST&quot;,</span>
+<span class="nc" id="L314">                dataPool.getDhssApiBaseUrl(env)+&quot;admin/tenant/provisioning/cleanup&quot;,</span>
+<span class="nc" id="L315">                payloadCleanUp, dhssAdminReqHeaders());</span>
+<span class="nc" id="L316">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;,&quot;Tenant cleanup failed with following response = &quot;+ response.prettyPrint());</span>
+
+<span class="nc" id="L318">    }</span>
+
+    public Response createServiceKeyFile(DataLoader dataLoader, String payload ){
+
+<span class="nc" id="L322">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;POST&quot;, dataPool.getDhssWebBaseUrl(env) + dataLoader.getUrl() , payload, dhssSeedReqHeaders());</span>
+<span class="nc" id="L323">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Create service key failed with response = &quot;+response.prettyPrint());</span>
+
+<span class="nc" id="L325">        return response;</span>
+
+    }
+
+    public Response getServiceKeyFile(DataLoader dataLoader, String tenantId){
+
+<span class="nc" id="L331">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;GET&quot;, dataPool.getDhssWebBaseUrl(env) + dataLoader.getUrl() + tenantId, null, dhssSeedReqHeaders());</span>
+<span class="nc" id="L332">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Get service key failed with response = &quot;+response.prettyPrint());</span>
+
+<span class="nc" id="L334">        return response;</span>
+
+    }
+
+    public Response deleteServiceKeyFile(DataLoader dataLoader, String payload){
+
+<span class="nc" id="L340">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(), dataPool.getDhssWebBaseUrl(env) + dataLoader.getUrl(), payload, dhssSeedReqHeaders());</span>
+<span class="nc" id="L341">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Delete service key failed with response = &quot;+response.prettyPrint());</span>
+
+<span class="nc" id="L343">        return response;</span>
+
+    }
+
+    public void activateUkgOwnedTenant(){
+
+<span class="nc bnc" id="L349" title="All 2 branches missed.">        if(customerOwnedActive==null){</span>
+<span class="nc" id="L350">           Boolean flag =  getTenantVanityUrlCustomerOwned();</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">           if(flag=true){</span>
+<span class="nc" id="L352">               customerOwnedActive=true;</span>
+           }
+        }
+<span class="nc bnc" id="L355" title="All 2 branches missed.">        if(customerOwnedActive==true) {</span>
+<span class="nc" id="L356">            updateTenant(&quot;customerOwnedTenant&quot;, &quot;https://goog&quot; + helper.getDateTimeStamp() + &quot;.com&quot;);</span>
+<span class="nc" id="L357">            updateTenant(&quot;ukgOwnedTenant&quot;, configParser.inputParam.get(&quot;serverAdd&quot;).replace(&quot;{replaceEnv}&quot;, DataPool.getDataPool().getEnvironment()));</span>
+<span class="nc" id="L358">            customerOwnedActive=false;</span>
+        }
+
+<span class="nc" id="L361">    }</span>
+
+    public void activateCustomerOwnedTenant(){
+<span class="nc bnc" id="L364" title="All 2 branches missed.">        if(customerOwnedActive==null){</span>
+<span class="nc" id="L365">            Boolean flag =  getTenantVanityUrlCustomerOwned();</span>
+<span class="nc bnc" id="L366" title="All 2 branches missed.">            if(flag=true){</span>
+<span class="nc" id="L367">                customerOwnedActive=true;</span>
+            }
+        }
+
+<span class="nc bnc" id="L371" title="All 2 branches missed.">        if(customerOwnedActive==false) {</span>
+<span class="nc" id="L372">            updateTenant(&quot;ukgOwnedTenant&quot;, &quot;https://goog&quot; + helper.getDateTimeStamp() + &quot;.com&quot;);</span>
+<span class="nc" id="L373">            updateTenant(&quot;customerOwnedTenant&quot;, configParser.inputParam.get(&quot;serverAdd&quot;).replace(&quot;{replaceEnv}&quot;, DataPool.getDataPool().getEnvironment()));</span>
+<span class="nc" id="L374">            customerOwnedActive=true;</span>
+        }
+<span class="nc" id="L376">    }</span>
+
+    public Response provisionCustomerOwnedGcp(DataLoader dataLoader){
+
+<span class="nc" id="L380">        customerOwnedGcpDto.setTenantId(dataLoader.getTestParameter().get(&quot;tenantId&quot;));</span>
+<span class="nc" id="L381">        customerOwnedGcpDto.setGcpProjectId(dataLoader.getTestParameter().get(&quot;gcpProjectId&quot;));</span>
+<span class="nc" id="L382">        customerOwnedGcpDto.setGcpProjectDesc(dataLoader.getTestParameter().get(&quot;gcpProjectDesc&quot;));</span>
+<span class="nc" id="L383">        customerOwnedGcpDto.setServiceAccountKey(dataLoader.getTestParameter().get(&quot;serviceAccountKey&quot;));</span>
+
+<span class="nc" id="L385">        String payload = new Gson().toJson(customerOwnedGcpDto);</span>
+<span class="nc" id="L386">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),</span>
+<span class="nc" id="L387">                dataPool.getDhssApiBaseUrl(env)+dataLoader.getUrl(),</span>
+<span class="nc" id="L388">                payload, dhssAdminReqHeaders());</span>
+<span class="nc" id="L389">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Provision customer owned gcp failed with response = &quot;+ response.prettyPrint());</span>
+<span class="nc" id="L390">        return response;</span>
+    }
+
+    public Response updateProvisionedCustomerOwnedGcp(DataLoader dataLoader, String payload){
+
+<span class="nc" id="L395">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(),</span>
+<span class="nc" id="L396">                dataPool.getDhssWebBaseUrl(env)+dataLoader.getUrl(),</span>
+<span class="nc" id="L397">                payload, dhssSeedReqHeaders());</span>
+<span class="nc" id="L398">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Provision customer owned gcp failed with response = &quot;+ response.prettyPrint());</span>
+<span class="nc" id="L399">        return response;</span>
+    }
+    public Response getCustomerOwnedGcpAddProp(DataLoader dataLoader, String tenantId){
+
+        //Todo add the actual values from dto class
+
+<span class="nc" id="L405">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(), dataPool.getDhssWebBaseUrl(env) + dataLoader.getUrl() + tenantId, null, dhssSeedReqHeaders());</span>
+<span class="nc" id="L406">        response.prettyPrint();</span>
+<span class="nc" id="L407">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Get customer ownd gcp properties failed with response = &quot;+response.prettyPrint());</span>
+
+<span class="nc" id="L409">        return response;</span>
+    }
+
+    public Response getTenantVersionSeedAddProp(DataLoader dataLoader, String tenantId){
+
+        //Todo add the actual values from dto class
+
+<span class="nc" id="L416">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(), dataPool.getDhssWebBaseUrl(env) + dataLoader.getUrl() + tenantId, null, dhssSeedReqHeaders());</span>
+<span class="nc" id="L417">        response.prettyPrint();</span>
+<span class="nc" id="L418">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Get customer ownd gcp properties failed with response = &quot;+response.prettyPrint());</span>
+
+<span class="nc" id="L420">        return response;</span>
+
+    }
+
+    public Response getTenantVersionTMSAdminAddProp(DataLoader dataLoader, String tenantId){
+
+<span class="nc" id="L426">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(dataLoader.getMethod(), dataPool.getDhssApiBaseUrl(env) + dataLoader.getUrl() + tenantId, null, dhssAdminReqHeaders());</span>
+        // Verify status code
+<span class="nc" id="L428">        Assert.assertEquals(String.valueOf(response.getStatusCode()),dataLoader.getOutputStatusCode(),&quot;Get tenant version on TMS additional properties page failed with response = &quot;+response.prettyPrint());</span>
+<span class="nc" id="L429">        return response;</span>
+    }
+
+    public void refreshEndUserAuthToken(String tenantType){
+
+<span class="nc" id="L434">        String payload = &quot;{\&quot;userId\&quot;: \&quot;{username}\&quot;,\&quot;password\&quot;: \&quot;{password}\&quot;}&quot;;</span>
+<span class="nc" id="L435">        payload =payload</span>
+<span class="nc" id="L436">                .replace(&quot;{username}&quot;,  configParser.inputParam.get(tenantType+&quot;.tenantSeedUser&quot;))</span>
+<span class="nc" id="L437">                .replace(&quot;{password}&quot;, configParser.inputParam.get(tenantType+&quot;.password&quot;));</span>
+
+<span class="nc" id="L439">        Response response = helper.sendApiRequestRelaxedHttps(&quot;POST&quot;, dataPool.getDhssApiBaseUrl(env)+&quot;authenticate/basic&quot;, payload, null);</span>
+<span class="nc" id="L440">        dataPool.getEndUserlogindto().setAccess_token(response.path(&quot;authToken&quot;));</span>
+<span class="nc" id="L441">        dataPool.getEndUserlogindto().setTenantid(response.path(&quot;tenantId&quot;));</span>
+<span class="nc" id="L442">        setEndUserSessionInfo(tenantType);</span>
+<span class="nc" id="L443">    }</span>
+
+    public void setEndUserSessionInfo(String tenantType) {
+<span class="nc" id="L446">        HashMap&lt;String,Object&gt;headersMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L447">        headersMap.put(&quot;Authorization&quot;, dataPool.getEndUserlogindto().getAccess_token());</span>
+<span class="nc" id="L448">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;GET&quot;,dataPool.getDhssApiBaseUrl(env)+&quot;sessions?action=info&quot;,null,headersMap);</span>
+<span class="nc" id="L449">        Assert.assertEquals(String.valueOf(response.getStatusCode()),&quot;200&quot;);</span>
+<span class="nc" id="L450">        dataPool.getEndUserlogindto().setXSRF_Token(response.getCookie(&quot;EDAP-XSRF-TOKEN&quot;));</span>
+<span class="nc" id="L451">        dataPool.getEndUserlogindto().setEdap_authn_ssid(response.getCookie(&quot;edap-authn-ssid&quot;));</span>
+<span class="nc" id="L452">        dataPool.getEndUserlogindto().setCookies(response.getDetailedCookies());</span>
+<span class="nc" id="L453">    }</span>
+
+    public String getTenantAppId(String tenantShortName){
+   //   this.refreshAuthToken();
+<span class="nc" id="L457">    	Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;GET&quot;, dataPool.getDhssApiBaseUrl(env) + &quot;admin/tenants&quot;, null, dhssAdminReqHeaders());</span>
+<span class="nc" id="L458">        List&lt;HashMap&lt;Object,Object&gt;&gt; data = response.as(List.class);</span>
+
+<span class="nc bnc" id="L460" title="All 2 branches missed.">        for(HashMap&lt;Object,Object&gt; item : data){</span>
+<span class="nc bnc" id="L461" title="All 2 branches missed.">            if(item.get(&quot;shortName&quot;).equals(tenantShortName)){</span>
+<span class="nc" id="L462">                return String.valueOf(item.get(&quot;tenantId&quot;));</span>
+            }
+<span class="nc" id="L464">        }</span>
+<span class="nc" id="L465">        return null;</span>
+
+    }
+
+    public Boolean getTenantVanityUrlCustomerOwned(){
+<span class="nc" id="L470">        Response response = helper.sendApiRequestRelaxedHttpsCustomHeader(&quot;GET&quot;, dataPool.getDhssApiBaseUrl(env) + &quot;admin/tenants&quot;, null, dhssAdminReqHeaders());</span>
+<span class="nc" id="L471">        List&lt;HashMap&lt;Object,Object&gt;&gt; data = response.as(List.class);</span>
+
+<span class="nc bnc" id="L473" title="All 2 branches missed.">        for(HashMap&lt;Object,Object&gt; item : data){</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">            if(item.get(&quot;shortName&quot;).equals(configParser.inputParam.get(&quot;customerOwnedTenant.shortName&quot;))){</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">                if(dataPool.getServerAddress(env).equals( String.valueOf(item.get(&quot;tenantVanityURL&quot;))+&quot;/&quot;)){</span>
+<span class="nc" id="L476">                    return true;</span>
+                }
+
+            }
+<span class="nc" id="L480">        }</span>
+<span class="nc" id="L481">        return false;</span>
+
+    }
+
+    
+    
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

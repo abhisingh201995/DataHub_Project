@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PipelineHistorySummaryDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">PipelineHistorySummaryDTO.java</span></div><h1>PipelineHistorySummaryDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+/**
+ * @author pooja.g.gupta
+ *
+ */
+<span class="nc" id="L11">public class PipelineHistorySummaryDTO {</span>
+	@JsonProperty(&quot;edapTenantId&quot;)
+	public String edapTenantId;
+	public String tenantId;
+	public String shortName;
+	public List&lt;ViewPipelineHistorySummaryDTO&gt; pipelinehistorysummary;
+
+	public String getEdapTenantId() {
+<span class="nc" id="L19">		return edapTenantId;</span>
+	}
+
+	public void setEdapTenantId(String edapTenantId) {
+<span class="nc" id="L23">		this.edapTenantId = edapTenantId;</span>
+<span class="nc" id="L24">	}</span>
+
+	public String getTenantId() {
+<span class="nc" id="L27">		return tenantId;</span>
+	}
+
+	public void setTenantId(String tenantId) {
+<span class="nc" id="L31">		this.tenantId = tenantId;</span>
+<span class="nc" id="L32">	}</span>
+
+	public String getShortName() {
+<span class="nc" id="L35">		return shortName;</span>
+	}
+
+	public void setShortName(String shortName) {
+<span class="nc" id="L39">		this.shortName = shortName;</span>
+<span class="nc" id="L40">	}</span>
+
+	public List&lt;ViewPipelineHistorySummaryDTO&gt; getPipelineHistorySummary() {
+<span class="nc" id="L43">		return pipelinehistorysummary;</span>
+	}
+
+	public void setPipelineHistorySummary(List&lt;ViewPipelineHistorySummaryDTO&gt; pipelinehistorysummary) {
+<span class="nc" id="L47">		this.pipelinehistorysummary = pipelinehistorysummary;</span>
+<span class="nc" id="L48">	}</span>
+	}
+	
+
+	
+	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

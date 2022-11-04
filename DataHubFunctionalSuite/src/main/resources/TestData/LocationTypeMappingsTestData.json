@@ -1,0 +1,71 @@
+{
+  "LocationTypeMappingsTests.dhd_GetLTM_validTenant": [
+    {
+      "input": {
+        "description": "Get Valid Location Type Mapping.",
+        "URL": "dhd/admin/tenant/provisioning/create",
+        "method": "GET",
+        "payload": "",
+        "parameter": {
+          
+        },
+        "testcaseId": "----"
+      },
+      "output": {
+        "statusCode": "2100",
+     	"desiredJsonResponse":{
+
+    "edapTenantId": 2,
+    "tenantName": "c79_nonprd_05",
+    "shortName": "c79_nonprd_05",
+    "locationTypeMappingsAssignmentList": {
+        "minimum": "0",
+        "maximum": "25"
+    },
+    "locationTypeMappings": [
+        {
+            "locationTypeId": 2,
+            "locationTypeName": "Category",
+            "locationTypeDescription": "Category",
+            "locationTypeCategory": "Generic Category",
+            "locationTypeOrder": "10000",
+            "locationTypeMappingAssignment": "21"
+        },
+        {
+            "locationTypeId": 3,
+            "locationTypeName": "Category",
+            "locationTypeDescription": "Category",
+            "locationTypeCategory": "Generic Category",
+            "locationTypeOrder": "10000",
+            "locationTypeMappingAssignment": "22"
+        }
+    ]
+
+}
+      }
+    }
+  ],
+  "LocationTypeMappingsTests.dhd_GetLTM_InvalidCharsTenant":[{
+      "input": {
+        "description": "Validate the API response for creation of new DH tenant in DHD",
+        "URL": "dhd/admin/tenant/provisioning/create",
+        "method": "POST",
+        "payload": "",
+        "parameter": {
+          
+        },
+        "testcaseId": "------"
+      },
+      "output": {
+        "statusCode": "2100",
+     	"desiredJsonResponse":{
+
+    "edapTenantId": 28899,
+    "tenantName": "c79_nonprd_05",
+    "shortName": "c79_nonprd_05",
+    "locationTypeMappingsAssignmentList": {
+        "minimum": "0",
+        "maximum": "25"
+    }}}
+    }]
+}

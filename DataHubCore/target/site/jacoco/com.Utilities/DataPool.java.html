@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataPool.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">DataPool.java</span></div><h1>DataPool.java</h1><pre class="source lang-java linenums">package com.Utilities;
+
+import com.DataObjects.DhssDataObject.Adminlogindto;
+import com.DataObjects.DhssDataObject.EndUserlogindto;
+import com.DataObjects.DhssDataObject.Seedlogindto;
+import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
+import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
+import com.google.cloud.secretmanager.v1.SecretVersionName;
+import io.grpc.LoadBalancerRegistry;
+import io.grpc.internal.PickFirstLoadBalancerProvider;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+
+<span class="nc" id="L18">public class DataPool {</span>
+
+
+    private static String dhdApiBaseUrl;
+    private static String dhdWebBaseUrl;
+    private static String dhssApiBaseUrl;
+    private static String dhssWebBaseUrl;
+    private static String bitBucketUsername;
+    private static String bitBucketToken;
+    private static String dhssAdminUsername;
+    private static String dhssAdminPassword;
+    private static String dhdUsername;
+    private static String dhdPassword;
+    private static String teamsWebHook;
+    private static String serverAddress;
+
+    private String environment;
+
+
+    private String accessTokenDhd;
+
+<span class="nc" id="L39">    private String dateTime= LocalDateTime.now().toString();</span>
+
+    private static Adminlogindto adminlogindto;
+    private static Seedlogindto seedlogindto;
+    private static EndUserlogindto endUserlogindto;
+
+
+
+<span class="nc" id="L47">    private HashMap&lt;Object,String&gt; AllAccessToken = new HashMap&lt;&gt;();</span>
+
+    private String tenantsDataHubDirector;
+
+    private String wrapper;
+    private static DataPool dataPool;
+    private JSONObject testdata;
+
+    private String tenantNameUser;
+    private String tenantShortName;
+
+
+    public String getDateTime() {
+<span class="nc" id="L60">        return dateTime;</span>
+    }
+
+    public String getTenantShortName() {
+<span class="nc" id="L64">        return tenantShortName;</span>
+    }
+
+    public void setTenantShortName(String tenantShortName) {
+<span class="nc" id="L68">        this.tenantShortName = tenantShortName;</span>
+<span class="nc" id="L69">    }</span>
+
+    public String getTenantNameUser() {
+<span class="nc" id="L72">        return tenantNameUser;</span>
+    }
+
+    public void setTenantNameUser(String tenantNameUser) {
+<span class="nc" id="L76">        this.tenantNameUser = tenantNameUser;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getWrapper() {
+<span class="nc" id="L80">        return wrapper;</span>
+    }
+
+    public void setWrapper(String wrapper) {
+<span class="nc" id="L84">        this.wrapper = wrapper;</span>
+<span class="nc" id="L85">    }</span>
+
+    public String getTenantsDataHubDirector() {
+<span class="nc" id="L88">        return tenantsDataHubDirector;</span>
+    }
+
+    public void setTenantsDataHubDirector(String tenantsDataHubDirector) {
+<span class="nc" id="L92">        this.tenantsDataHubDirector = tenantsDataHubDirector;</span>
+<span class="nc" id="L93">    }</span>
+
+    public HashMap&lt;Object, JSONArray&gt; getTestDataPool() {
+<span class="nc" id="L96">        return testDataPool;</span>
+    }
+
+    public void setTestDataPool(HashMap&lt;Object, JSONArray&gt; testDataPool) {
+<span class="nc" id="L100">        this.testDataPool = testDataPool;</span>
+<span class="nc" id="L101">    }</span>
+
+    public String getAccessTokenDhd() {
+<span class="nc" id="L104">        return accessTokenDhd;</span>
+    }
+
+    public void setAccessTokenDhd(String accessTokenDhd) {
+<span class="nc" id="L108">        this.accessTokenDhd = accessTokenDhd;</span>
+<span class="nc" id="L109">    }</span>
+
+    public HashMap&lt;Object, String&gt; getAllAccessToken() {
+<span class="nc" id="L112">        return AllAccessToken;</span>
+    }
+
+    public void setAllAccessToken(HashMap&lt;Object, String&gt; allAccessToken) {
+<span class="nc" id="L116">        this.AllAccessToken = allAccessToken;</span>
+<span class="nc" id="L117">    }</span>
+
+
+<span class="nc" id="L120">    private HashMap&lt;Object, JSONArray&gt; testDataPool=new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L122">    private HashMap&lt;String, String&gt; testcaseMapping=new HashMap&lt;&gt;();</span>
+
+    public HashMap&lt;String, String&gt; getTestcaseMapping() {
+<span class="nc" id="L125">        return testcaseMapping;</span>
+    }
+
+    public void setTestcaseMapping(HashMap&lt;String, String&gt; testcaseMapping) {
+<span class="nc" id="L129">        this.testcaseMapping = testcaseMapping;</span>
+<span class="nc" id="L130">    }</span>
+
+<span class="nc" id="L132">    private HashMap&lt;String, String&gt; jsonSchemaPool=new HashMap&lt;&gt;();</span>
+
+    public HashMap&lt;String, String&gt; getJsonSchemaPool() {
+<span class="nc" id="L135">        return jsonSchemaPool;</span>
+    }
+
+    public void setJsonSchemaPool(HashMap&lt;String, String&gt; jsonSchemaPool) {
+<span class="nc" id="L139">        this.jsonSchemaPool = jsonSchemaPool;</span>
+<span class="nc" id="L140">    }</span>
+
+
+    public Adminlogindto getAdminlogindto() {
+<span class="nc" id="L144">        return adminlogindto;</span>
+    }
+
+    public void setAdminlogindto(Adminlogindto adminlogindto) {
+<span class="nc" id="L148">        this.adminlogindto = adminlogindto;</span>
+<span class="nc" id="L149">    }</span>
+
+    public Seedlogindto getSeedlogindto() {
+<span class="nc" id="L152">        return seedlogindto;</span>
+    }
+
+    public void setSeedlogindto(Seedlogindto seedlogindto) {
+<span class="nc" id="L156">        this.seedlogindto = seedlogindto;</span>
+<span class="nc" id="L157">    }</span>
+
+    public EndUserlogindto getEndUserlogindto() {
+<span class="nc" id="L160">        return endUserlogindto;</span>
+    }
+
+    public void setEndUserlogindto(EndUserlogindto endUserlogindto) {
+<span class="nc" id="L164">        DataPool.endUserlogindto = endUserlogindto;</span>
+<span class="nc" id="L165">    }</span>
+
+    public static String getDhdApiBaseUrl(String env) {
+<span class="nc" id="L168">        return dhdApiBaseUrl.replace(&quot;{replaceEnv}&quot;,env);</span>
+    }
+
+    public static String getDhdWebBaseUrl(String env) {
+<span class="nc" id="L172">        return dhdWebBaseUrl.replace(&quot;{replaceEnv}&quot;,env);</span>
+    }
+
+    public static String getDhssApiBaseUrl(String env) {
+<span class="nc" id="L176">        return dhssApiBaseUrl.replace(&quot;{replaceEnv}&quot;,env);</span>
+    }
+
+    public static String getDhssWebBaseUrl(String env) {
+<span class="nc" id="L180">        return dhssWebBaseUrl.replace(&quot;{replaceEnv}&quot;,env);</span>
+    }
+
+    public static String getBitBucketUsername() {
+<span class="nc" id="L184">        return bitBucketUsername;</span>
+    }
+
+    public static String getBitBucketToken() {
+<span class="nc" id="L188">        return bitBucketToken;</span>
+    }
+
+    public static String getDhssAdminUsername() {
+<span class="nc" id="L192">        return dhssAdminUsername;</span>
+    }
+
+    public static String getDhssAdminPassword() {
+<span class="nc" id="L196">        return dhssAdminPassword;</span>
+    }
+
+    public static String getDhdUsername() {
+<span class="nc" id="L200">        return dhdUsername;</span>
+    }
+
+    public static String getDhdPassword() {
+<span class="nc" id="L204">        return dhdPassword;</span>
+    }
+
+    public static String getTeamsWebHook() {
+<span class="nc" id="L208">        return teamsWebHook;</span>
+    }
+
+    public JSONObject getTestdata() {
+<span class="nc" id="L212">        return testdata;</span>
+    }
+
+    public String getEnvironment() {
+<span class="nc" id="L216">        return environment;</span>
+    }
+
+    public void setEnvironment(String environment) {
+<span class="nc" id="L220">        this.environment = environment;</span>
+<span class="nc" id="L221">    }</span>
+
+    public static String getServerAddress(String env) {
+
+<span class="nc" id="L225">        return serverAddress.replace(&quot;{replaceEnv}&quot;,env);</span>
+    }
+
+    public static DataPool getDataPool(){
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        if(dataPool ==null){</span>
+<span class="nc" id="L230">            dataPool =new DataPool();</span>
+<span class="nc" id="L231">            adminlogindto = new Adminlogindto();</span>
+<span class="nc" id="L232">            seedlogindto =  new Seedlogindto();</span>
+<span class="nc" id="L233">            endUserlogindto = new EndUserlogindto();</span>
+
+<span class="nc" id="L235">            String projectId=&quot;repd-e-eng-adm-01&quot;;</span>
+
+            String qaSecret;
+
+<span class="nc" id="L239">            LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());</span>
+<span class="nc" id="L240">            try (SecretManagerServiceClient client = SecretManagerServiceClient.create()) {</span>
+<span class="nc" id="L241">                SecretVersionName secretVersionName = SecretVersionName.of(projectId, &quot;qa_sensitive_key&quot;, &quot;latest&quot;);</span>
+<span class="nc" id="L242">                AccessSecretVersionResponse response = client.accessSecretVersion(secretVersionName);</span>
+<span class="nc" id="L243">                qaSecret = response.getPayload().getData().toStringUtf8();</span>
+<span class="nc" id="L244">                JSONObject qaData = (JSONObject) new JSONParser().parse(qaSecret);</span>
+
+<span class="nc" id="L246">                dhdUsername = (String) qaData.get(&quot;dhdUsername&quot;);</span>
+<span class="nc" id="L247">                dhdPassword = (String) qaData.get(&quot;dhdPassword&quot;);</span>
+<span class="nc" id="L248">                bitBucketUsername = (String) qaData.get(&quot;bitBucketUsername&quot;);</span>
+<span class="nc" id="L249">                bitBucketToken = (String) qaData.get(&quot;bitBucketToken&quot;);</span>
+<span class="nc" id="L250">                dhssAdminUsername = (String) qaData.get(&quot;dhssAdminUsername&quot;);</span>
+<span class="nc" id="L251">                dhssAdminPassword = (String) qaData.get(&quot;dhssAdminPassword&quot;);</span>
+<span class="nc" id="L252">                teamsWebHook = (String) qaData.get(&quot;teamsWebHook&quot;);</span>
+
+<span class="nc" id="L254">                dhdWebBaseUrl = (String) qaData.get(&quot;server&quot;)+&quot;admin/&quot;;</span>
+<span class="nc" id="L255">                dhdApiBaseUrl = (String) qaData.get(&quot;server&quot;)+&quot;api/v1/&quot;;</span>
+
+<span class="nc" id="L257">                dhssWebBaseUrl = (String) qaData.get(&quot;server&quot;)+&quot;selfservice/&quot;;</span>
+<span class="nc" id="L258">                dhssApiBaseUrl = (String) qaData.get(&quot;server&quot;)+&quot;selfservice/v1/edap/&quot;;</span>
+
+<span class="nc" id="L260">                serverAddress = (String) qaData.get(&quot;serverAdd&quot;);</span>
+
+<span class="nc" id="L262">            } catch (Exception e) {</span>
+<span class="nc" id="L263">                Log.error(e.toString());</span>
+<span class="nc" id="L264">            }</span>
+        }
+<span class="nc" id="L266">        return dataPool;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

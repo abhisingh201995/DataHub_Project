@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddTenantPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.WebPagesDhd</a> &gt; <span class="el_source">AddTenantPage.java</span></div><h1>AddTenantPage.java</h1><pre class="source lang-java linenums">package com.WebPagesDhd;
+
+import com.Utilities.SeleniumHelper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+
+public class AddTenantPage {
+
+    private MasterPage masterPage;
+
+    private WebDriver driver;
+<span class="nc" id="L13">    private SeleniumHelper seleniumHelper = new SeleniumHelper();</span>
+
+<span class="nc" id="L15">    private By pageHeader = By.xpath(&quot;//h1[normalize-space()='Add tenant']&quot;);</span>
+
+    //form field xpath
+<span class="nc" id="L18">    private By dimensionTenantId= By.xpath(&quot;//input[@id='id_WFDTENANT']&quot;);</span>
+<span class="nc" id="L19">    private By tenantDescription= By.xpath(&quot;//input[@id='id_tenant_description']&quot;);</span>
+<span class="nc" id="L20">    private By bigQueryDatasetPrefix= By.xpath(&quot;//input[@id='id_GBQTENANT']&quot;);</span>
+<span class="nc" id="L21">    private By dataProject = By.xpath(&quot;//select[@id='id_DATAPROJECT']&quot;);</span>
+<span class="nc" id="L22">    private By wfdClientId = By.xpath(&quot;//input[@id='id_WFDCLIENTID']&quot;);</span>
+<span class="nc" id="L23">    private By wfdClientSecret  = By.xpath(&quot;//input[@id='id_WFDCLIENTSECRET']&quot;);</span>
+<span class="nc" id="L24">    private By wfdUser = By.xpath(&quot;//input[@id='id_WFDUSER']&quot;);</span>
+<span class="nc" id="L25">    private By wfdPassword = By.xpath(&quot;//input[@id='id_WFDPASSWORD']&quot;);</span>
+<span class="nc" id="L26">    private By wfdAppKey = By.xpath(&quot;//input[@id='id_WFDAPPKEY']&quot;);</span>
+<span class="nc" id="L27">    private By wfdVanityUrl= By.xpath(&quot;//input[@id='id_WFDVANITYURL']&quot;);</span>
+<span class="nc" id="L28">    private By scrubbed = By.xpath(&quot;//select[@id='id_SCRUBBED']&quot;);</span>
+<span class="nc" id="L29">    private By defaultUserType=By.xpath(&quot;//select[@id='id_defaultusertype']&quot;);</span>
+<span class="nc" id="L30">    private By ddva= By.xpath(&quot;//select[@id='id_ddva']&quot;);</span>
+<span class="nc" id="L31">    private By performanceTier= By.xpath(&quot;//select[@id='id_PERFORMANCE_TIER']&quot;);</span>
+<span class="nc" id="L32">    private By timeZone= By.xpath(&quot;//select[@id='id_TIMEZONE']&quot;);</span>
+
+<span class="nc" id="L34">    private By saveButton=By.xpath(&quot;//input[@name='_save']&quot;);</span>
+<span class="nc" id="L35">    private By successSaveNotification=By.xpath(&quot;//div[@class='alert alert-success']&quot;);</span>
+<span class="nc" id="L36">    private By saveNotification = By.xpath(&quot;//div[@role='alert']&quot;);</span>
+
+<span class="nc" id="L38">    private By wfdConnectivityButton =By.xpath(&quot;//button[normalize-space()='WFD Connectivity']&quot;);</span>
+<span class="nc" id="L39">    private By wfdConnectivityStatus =By.xpath(&quot;//span[@id='successbadge']&quot;);</span>
+
+<span class="nc" id="L41">    private By hyperFindConfigured = By.xpath(&quot;//button[normalize-space()='Hyperfind Configured']&quot;);</span>
+<span class="nc" id="L42">    private By hyperFindConfiguredStatus= By.xpath(&quot;//span[@id='successbadgehyper']&quot;);</span>
+
+<span class="nc" id="L44">    private By installAndExecuteMaintenanceButton=By.xpath(&quot;//button[normalize-space()='Install and Execute Maintenance']&quot;);</span>
+
+
+<span class="nc" id="L47">    public AddTenantPage(WebDriver driver) {</span>
+
+<span class="nc" id="L49">        this.driver = driver;</span>
+<span class="nc" id="L50">        masterPage=new MasterPage(driver);</span>
+<span class="nc" id="L51">    }</span>
+
+    public MasterPage getMasterPage() {
+<span class="nc" id="L54">        return masterPage;</span>
+    }
+
+    public void setMasterPage(MasterPage masterPage) {
+<span class="nc" id="L58">        this.masterPage = masterPage;</span>
+<span class="nc" id="L59">    }</span>
+
+    public Boolean validatePageHeader(){
+<span class="nc" id="L62">        Boolean status=seleniumHelper.validateElementPresent(driver,pageHeader);</span>
+<span class="nc" id="L63">        Assert.assertTrue(status);</span>
+<span class="nc" id="L64">        return status;</span>
+    }
+
+    public void addTenant(String dimensionTenantId,
+                     String tenantDescription,
+                     String bigQueryDatasetPrefix,
+                     Integer dataProject,
+                     String wfdClientId,
+                     String wfdClientSecret,
+                     String wfdUser,
+                     String wfdPassword,
+                     String wfdAppKey,
+                     String wfdVanityUrl,
+                     String scrubbed,
+                     String defaultUserType,
+                     String ddva,
+                     String performanceTier,
+                     String timeZone){
+
+<span class="nc" id="L83">        seleniumHelper.enterTextElement(driver,this.dimensionTenantId,dimensionTenantId);</span>
+<span class="nc" id="L84">        seleniumHelper.enterTextElement(driver,this.tenantDescription,tenantDescription);</span>
+<span class="nc" id="L85">        seleniumHelper.enterTextElement(driver,this.bigQueryDatasetPrefix,bigQueryDatasetPrefix);</span>
+
+<span class="nc" id="L87">        seleniumHelper.selectFromDropdown(driver,this.dataProject,dataProject);</span>
+
+<span class="nc" id="L89">        seleniumHelper.enterTextElement(driver,this.wfdClientId,wfdClientId);</span>
+<span class="nc" id="L90">        seleniumHelper.enterTextElement(driver,this.wfdClientSecret,wfdClientSecret);</span>
+<span class="nc" id="L91">        seleniumHelper.enterTextElement(driver,this.wfdUser,wfdUser);</span>
+<span class="nc" id="L92">        seleniumHelper.enterTextElement(driver,this.wfdPassword,wfdPassword);</span>
+<span class="nc" id="L93">        seleniumHelper.enterTextElement(driver,this.wfdAppKey,wfdAppKey);</span>
+<span class="nc" id="L94">        seleniumHelper.enterTextElement(driver,this.wfdVanityUrl,wfdVanityUrl);</span>
+
+<span class="nc" id="L96">        seleniumHelper.selectFromDropdown(driver,this.scrubbed,scrubbed);</span>
+<span class="nc" id="L97">        seleniumHelper.selectFromDropdown(driver,this.defaultUserType,defaultUserType);</span>
+<span class="nc" id="L98">        seleniumHelper.selectFromDropdown(driver,this.ddva,ddva);</span>
+<span class="nc" id="L99">        seleniumHelper.selectFromDropdown(driver,this.performanceTier,performanceTier);</span>
+<span class="nc" id="L100">        seleniumHelper.selectFromDropdown(driver,this.timeZone,timeZone);</span>
+<span class="nc" id="L101">    }</span>
+
+    public void clickSaveButton(){
+<span class="nc" id="L104">        seleniumHelper.clickElement(driver,saveButton);</span>
+<span class="nc" id="L105">    }</span>
+
+    public void validateSuccessTenantSaveMessage(){
+<span class="nc" id="L108">        seleniumHelper.validateElementPresent(driver,successSaveNotification);</span>
+<span class="nc" id="L109">    }</span>
+
+    public String getTenantCreateStatusMessage(){
+<span class="nc" id="L112">        return seleniumHelper.getElementText(driver,saveNotification);</span>
+    }
+
+    public void clickOnWfdConnectivity(){
+<span class="nc" id="L116">        seleniumHelper.clickElement(driver, wfdConnectivityButton);</span>
+<span class="nc" id="L117">    }</span>
+
+    public Boolean checkWfdConnectivityStatus(){
+<span class="nc" id="L120">        Boolean status=seleniumHelper.validateElementPresentLong(driver, wfdConnectivityStatus);</span>
+<span class="nc" id="L121">        return status;</span>
+    }
+
+    public void clickOnHyperFindConfigured(){
+<span class="nc" id="L125">        seleniumHelper.clickElement(driver, hyperFindConfigured);</span>
+<span class="nc" id="L126">    }</span>
+
+    public Boolean checkHyperFindConfiguredStatus(){
+<span class="nc" id="L129">        Boolean status=seleniumHelper.validateElementPresentLong(driver, hyperFindConfiguredStatus);</span>
+<span class="nc" id="L130">        return status;</span>
+    }
+
+    public TenantConfigurationPage clickOnInstallAndExecuteMaintainace(){
+<span class="nc" id="L134">        seleniumHelper.clickElement(driver,installAndExecuteMaintenanceButton);</span>
+<span class="nc" id="L135">        return new TenantConfigurationPage(driver);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

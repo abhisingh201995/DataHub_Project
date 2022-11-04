@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalConstants.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.env.constants</a> &gt; <span class="el_source">GlobalConstants.java</span></div><h1>GlobalConstants.java</h1><pre class="source lang-java linenums">package com.env.constants;
+
+import com.Utilities.ConfigParser;
+import com.Utilities.DataPool;
+import com.Utilities.PropertyReader;
+
+<span class="nc" id="L7">public class GlobalConstants {</span>
+
+<span class="nc" id="L9">	 static ConfigParser configParser = ConfigParser.getConfigParser();</span>
+
+<span class="nc" id="L11">	 static String env=DataPool.getDataPool().getEnvironment();</span>
+
+<span class="nc" id="L13">	 public static final String DHSSAPI_TENANT_BASEURI = configParser.inputParam.get(&quot;server&quot;).replace(&quot;{replaceEnv}&quot;,env)+</span>
+<span class="nc" id="L14">			 PropertyReader.readProperty(ResourcesPaths.basePathDHSS);</span>
+	 
+<span class="nc" id="L16">	 public static final String DHDAPI_TENANT_BASEURI = configParser.inputParam.get(&quot;server&quot;).replace(&quot;{replaceEnv}&quot;,env)+</span>
+<span class="nc" id="L17">			 PropertyReader.readProperty(ResourcesPaths.basePathDHD);</span>
+
+	//LOCATION TYPE MAPPINGS: achauhan
+<span class="nc" id="L20">	public static final String DHSS_RESOURCE_LOCATION_TYPE_MAPPINGS = PropertyReader.readProperty(ResourcesPaths.locationtypemappings);</span>
+<span class="nc" id="L21">	public static final String DHD_RESOURCE_LOCATION_TYPE_MAPPINGS = PropertyReader.readProperty(ResourcesPaths.locationtypemappings);</span>
+
+	// CUSTOM_DRIVERS: achauhan
+<span class="nc" id="L24">	public static final String DHSS_RESOURCE_CUSTOM_DRIVERS = PropertyReader.readProperty(ResourcesPaths.customdrivermappings);</span>
+<span class="nc" id="L25">	public static final String DHD_RESOURCE_CUSTOM_DRIVERS = PropertyReader.readProperty(ResourcesPaths.customdrivermappings);</span>
+	
+	
+	// SETUP API: CUSTOM_DRIVERS: achauhan
+<span class="nc" id="L29">	public static final String DHSS_SETUPRESOURCE_CUSTOM_DRIVERS = PropertyReader.readProperty(ResourcesPaths.customdriverstatus);</span>
+<span class="nc" id="L30">	public static final String DHD_SETUPRESOURCE_CUSTOM_DRIVERS = PropertyReader.readProperty(ResourcesPaths.customdriverstatus);</span>
+	
+	
+	
+	
+	
+	
+	// STOP WRAPPER: achauhan
+<span class="nc" id="L38">	public static final String DHD_RESOURCE_STOP_WRAPPER = PropertyReader.readProperty(ResourcesPaths.stopwrapper);</span>
+<span class="nc" id="L39">	public static final String DHSS_RESOURCE_STOP_WRAPPER = PropertyReader.readProperty(ResourcesPaths.stopwrapper);</span>
+
+	// RESTART WRAPPER: achauhan
+<span class="nc" id="L42">	public static final String DHD_RESOURCE_RESTART_WRAPPER = PropertyReader.readProperty(ResourcesPaths.restartwrapper);</span>
+<span class="nc" id="L43">	public static final String DHSS_RESOURCE_RESTART_WRAPPER = PropertyReader.readProperty(ResourcesPaths.restartwrapper);</span>
+
+	// START WRAPPER: achauhan
+<span class="nc" id="L46">	public static final String DHD_RESOURCE_RUN_WRAPPER = PropertyReader.readProperty(ResourcesPaths.runwrapper);</span>
+<span class="nc" id="L47">	public static final String DHSS_RESOURCE_RUN_WRAPPER = PropertyReader.readProperty(ResourcesPaths.runwrapper);</span>
+
+	// recentjobstatus: achauhan
+<span class="nc" id="L50">	public static final String DHD_RESOURCE_RECENT_JOB_STATUS = PropertyReader.readProperty(ResourcesPaths.recentjobstatus);</span>
+<span class="nc" id="L51">	public static final String DHSS_RESOURCE_RECENT_JOB_STATUS= PropertyReader.readProperty(ResourcesPaths.recentjobstatus);</span>
+
+
+<span class="nc" id="L54">	public static final String DHSS_RESOURCE_PAYCODE_MAPPINGS = PropertyReader.readProperty(ResourcesPaths.paycodemappings);</span>
+
+<span class="nc" id="L56">	public static final String DHSS_RESOURCE_PIPELINE_HISTORY_SUMMARY = PropertyReader.readProperty(ResourcesPaths.pipelinehistorysummary);</span>
+<span class="nc" id="L57">	public static final String DHSS_RESOURCE_WRAPPER_HISTORY_SUMMARY = PropertyReader.readProperty(ResourcesPaths.wrapperhistorysummary);</span>
+
+<span class="nc" id="L59">	public static final String DHD_RESOURCE_PIPELINE_HISTORY_SUMMARY = PropertyReader.readProperty(ResourcesPaths.pipelinehistorysummary);</span>
+<span class="nc" id="L60">	public static final String DHD_RESOURCE_WRAPPER_HISTORY_SUMMARY = PropertyReader.readProperty(ResourcesPaths.wrapperhistorysummary);</span>
+
+<span class="nc" id="L62">	public static final String DHSS_RECENT_JOB_STATUS = PropertyReader.readProperty(ResourcesPaths.recentjobstatus);</span>
+	
+	
+	
+	//Pipeline settings: Abhishek
+<span class="nc" id="L67">	public static final String RESOURCE_PIPELINE_SETTINGS = PropertyReader.readProperty(ResourcesPaths.pipelinesettings);</span>
+
+<span class="nc" id="L69">	public static final String DHD_RESOURCE_PAYCODE_MAPPINGS = PropertyReader.readProperty(ResourcesPaths.paycodemappings);</span>
+<span class="nc" id="L70">	public static final String DHD_RESOURCE_SUMMARY_PIPELINEHISTORY = PropertyReader.readProperty(ResourcesPaths.paycodemappings);</span>
+
+<span class="nc" id="L72">	public static final String RESOURCE_ViewWrapper_PipelineHistory = PropertyReader.readProperty(ResourcesPaths.jobstatus);</span>
+
+	//View Alerts: Abhishek
+<span class="nc" id="L75">	public static final String RESOURCE_ViewAlerts = PropertyReader.readProperty(ResourcesPaths.alerts);</span>
+
+	//Alert Subscription: Abhishek
+<span class="nc" id="L78">	public static final String RESOURCE_AlertSubscriptions = PropertyReader.readProperty(ResourcesPaths.alertsubscriptions);</span>
+
+	//Upcoming Scheduled Jobs: Abhishek
+<span class="nc" id="L81">	public static final String RESOURCE_UpcomingScheduledJobs = PropertyReader.readProperty(ResourcesPaths.upcomingscheduledjobs);</span>
+
+	// dir/file paths
+	public static final String JSON_SCHEMA_DIR = &quot;.//src/main//resources//JsonSchema//&quot;;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

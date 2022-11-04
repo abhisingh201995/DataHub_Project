@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlertCatSubCatListDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.DataObjects.DhssDataObject</a> &gt; <span class="el_source">AlertCatSubCatListDTO.java</span></div><h1>AlertCatSubCatListDTO.java</h1><pre class="source lang-java linenums">package com.DataObjects.DhssDataObject;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+<span class="nc" id="L7">public class AlertCatSubCatListDTO {</span>
+    @JsonProperty(&quot;Pipeline Failure&quot;)
+    public List&lt;String&gt; PipelineFailure;
+    @JsonProperty(&quot;Mapping alerts&quot;)
+    public List&lt;String&gt; Mappingalerts;
+    public List&lt;String&gt; System;
+
+    public List&lt;String&gt; getPipelineFailure() {
+<span class="nc" id="L15">        return PipelineFailure;</span>
+    }
+
+    public void setPipelineFailure(List&lt;String&gt; pipelineFailure) {
+<span class="nc" id="L19">        PipelineFailure = pipelineFailure;</span>
+<span class="nc" id="L20">    }</span>
+
+    public List&lt;String&gt; getMappingalerts() {
+<span class="nc" id="L23">        return Mappingalerts;</span>
+    }
+
+    public void setMappingalerts(List&lt;String&gt; mappingalerts) {
+<span class="nc" id="L27">        Mappingalerts = mappingalerts;</span>
+<span class="nc" id="L28">    }</span>
+
+    public List&lt;String&gt; getSystem() {
+<span class="nc" id="L31">        return System;</span>
+    }
+
+    public void setSystem(List&lt;String&gt; system) {
+<span class="nc" id="L35">        System = system;</span>
+<span class="nc" id="L36">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

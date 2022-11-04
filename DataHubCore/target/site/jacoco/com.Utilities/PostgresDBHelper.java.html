@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PostgresDBHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">PostgresDBHelper.java</span></div><h1>PostgresDBHelper.java</h1><pre class="source lang-java linenums">package com.Utilities;
+
+import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
+import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
+import com.google.cloud.secretmanager.v1.SecretVersionName;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import io.restassured.internal.path.json.JSONAssertion;
+
+import javax.management.ObjectName;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class PostgresDBHelper {
+
+    private String CLOUD_SQL_CONNECTION_NAME;
+    private String DB_USER;
+    private String DB_PASS;
+    private String DB_NAME;
+
+    private static DataSource pool;
+
+<span class="nc" id="L28">    public PostgresDBHelper(String projectId) {</span>
+
+<span class="nc" id="L30">        try (SecretManagerServiceClient client = SecretManagerServiceClient.create()) {</span>
+<span class="nc" id="L31">            SecretVersionName secretVersionName = SecretVersionName.of(&quot;repd-e-eng-adm-01&quot;, &quot;sensitive_keys&quot;, &quot;latest&quot;);</span>
+<span class="nc" id="L32">            AccessSecretVersionResponse response = client.accessSecretVersion(secretVersionName);</span>
+<span class="nc" id="L33">            response.getPayload().getData().toStringUtf8();</span>
+<span class="nc" id="L34">            HashMap&lt;Object, Object&gt; data = new Gson().fromJson(response.getPayload().getData().toStringUtf8(), HashMap.class);</span>
+<span class="nc" id="L35">            DB_NAME = (String) ((LinkedTreeMap) ((LinkedTreeMap) data.get(projectId)).get(&quot;POSTGRES&quot;)).get(&quot;ENV_DATABASE_NAME&quot;);</span>
+<span class="nc" id="L36">            DB_USER = (String) ((LinkedTreeMap) ((LinkedTreeMap) data.get(projectId)).get(&quot;POSTGRES&quot;)).get(&quot;ENV_DATABASE_USER&quot;);</span>
+<span class="nc" id="L37">            DB_PASS = (String) ((LinkedTreeMap) ((LinkedTreeMap) data.get(projectId)).get(&quot;POSTGRES&quot;)).get(&quot;ENV_DATABASE_PASSWORD&quot;);</span>
+<span class="nc" id="L38">            CLOUD_SQL_CONNECTION_NAME = (String) ((LinkedTreeMap) ((LinkedTreeMap) data.get(projectId)).get(&quot;POSTGRES&quot;)).get(&quot;ENV_DATABASE_CONN&quot;);</span>
+
+<span class="nc" id="L40">        } catch (Exception e) {</span>
+<span class="nc" id="L41">            Log.error(e.toString());</span>
+<span class="nc" id="L42">        }</span>
+
+<span class="nc" id="L44">        HikariConfig config = new HikariConfig();</span>
+
+<span class="nc" id="L46">        config.setJdbcUrl(String.format(&quot;jdbc:postgresql:///%s&quot;, DB_NAME));</span>
+<span class="nc" id="L47">        config.setUsername(DB_USER); // e.g. &quot;root&quot;, &quot;postgres&quot;</span>
+<span class="nc" id="L48">        config.setPassword(DB_PASS); // e.g. &quot;my-password&quot;</span>
+
+<span class="nc" id="L50">        config.addDataSourceProperty(&quot;socketFactory&quot;, &quot;com.google.cloud.sql.postgres.SocketFactory&quot;);</span>
+<span class="nc" id="L51">        config.addDataSourceProperty(&quot;cloudSqlInstance&quot;, CLOUD_SQL_CONNECTION_NAME);</span>
+<span class="nc" id="L52">        config.addDataSourceProperty(&quot;ipTypes&quot;, &quot;PUBLIC,PRIVATE&quot;);</span>
+
+<span class="nc" id="L54">        config.setMaximumPoolSize(2);</span>
+<span class="nc" id="L55">        config.setMinimumIdle(2);</span>
+<span class="nc" id="L56">        config.setConnectionTimeout(10000);</span>
+<span class="nc" id="L57">        config.setIdleTimeout(600000);</span>
+<span class="nc" id="L58">        config.setMaxLifetime(1800000);</span>
+
+<span class="nc" id="L60">        pool = new HikariDataSource(config);</span>
+<span class="nc" id="L61">    }</span>
+
+
+    /**
+     * This method will query the postgres db
+     *
+     * @param query to be executed
+     * @return Resultset
+     */
+    public ResultSet getPostgresTableResultSet(String query) {
+<span class="nc" id="L71">        ResultSet results = null;</span>
+<span class="nc" id="L72">        try (Connection conn = pool.getConnection();</span>
+<span class="nc" id="L73">             PreparedStatement pstmt = conn.prepareStatement(query)) {</span>
+            // Execute the statement
+<span class="nc" id="L75">            results = pstmt.executeQuery();</span>
+<span class="nc" id="L76">            return results;</span>
+<span class="nc" id="L77">        } catch (SQLException exception) {</span>
+<span class="nc" id="L78">            throw new RuntimeException(&quot;Failed to execute the query :&quot; + query, exception);</span>
+        }
+    }
+
+
+    public List&lt;HashMap&lt;String, Object&gt;&gt; queryPostgresTable(String sql) {
+
+<span class="nc" id="L85">        List&lt;HashMap&lt;String, Object&gt;&gt; data = new ArrayList&lt;&gt;();</span>
+        HashMap&lt;String, Object&gt; rowData;
+<span class="nc" id="L87">        try (Connection conn = pool.getConnection()) {</span>
+            // PreparedStatements are compiled by the database immediately and executed at a later date.
+            // Most databases cache previously compiled queries, which improves efficiency.
+<span class="nc" id="L90">            String stmt1 = sql;</span>
+<span class="nc" id="L91">            try (PreparedStatement voteStmt = conn.prepareStatement(stmt1);) {</span>
+                // Execute the statement
+<span class="nc" id="L93">                ResultSet results = voteStmt.executeQuery();</span>
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                while (results.next()) {</span>
+<span class="nc" id="L96">                    rowData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L97">                    ResultSetMetaData resultSetMetaData = results.getMetaData();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                    for (int i = 1; i &lt;= resultSetMetaData.getColumnCount(); i++) {</span>
+<span class="nc" id="L99">                        String key = results.getMetaData().getColumnName(i);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                        if (results.getArray(key) != null) {</span>
+<span class="nc" id="L101">                            rowData.put(key, results.getArray(key).toString());</span>
+                        } else {
+<span class="nc" id="L103">                            rowData.put(key, &quot;&quot;);</span>
+                        }
+                    }
+
+<span class="nc" id="L107">                    data.add(rowData);</span>
+<span class="nc" id="L108">                }</span>
+
+            }
+<span class="nc" id="L111">        } catch (SQLException throwables) {</span>
+<span class="nc" id="L112">            throwables.printStackTrace();</span>
+<span class="nc" id="L113">        }</span>
+<span class="nc" id="L114">        return data;</span>
+    }
+
+    public int updateQueryPostgresTable(String query) {
+
+<span class="nc" id="L119">        int affectedrows = 0;</span>
+<span class="nc" id="L120">        try (Connection conn = pool.getConnection();</span>
+<span class="nc" id="L121">             PreparedStatement pstmt = conn.prepareStatement(query)) {</span>
+            // Execute the statement
+<span class="nc" id="L123">            affectedrows = pstmt.executeUpdate();</span>
+<span class="nc" id="L124">        } catch (SQLException exception) {</span>
+<span class="nc" id="L125">            throw new RuntimeException(&quot;Failed to execute the query :&quot; + query, exception);</span>
+<span class="nc" id="L126">        }</span>
+<span class="nc" id="L127">        return affectedrows;</span>
+    }
+
+    /*** * This method will wait till the value of the column changes to expected
+     *
+     * @param table
+     * @param column
+     * @param conditions
+     * @param in_expectedValueOfTheAttribute
+     * @param timeout
+     * @param sleepTime
+     * @return
+     * @throws Exception
+     */
+    public String waitForAColumnValueToChange(String table, String column, String conditions, String in_expectedValueOfTheAttribute, double timeout, long sleepTime , List&lt;String&gt; pipelineFailureStates) throws Exception {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        timeout = timeout &lt;= 0L ? 360L : timeout;</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        sleepTime = sleepTime &lt;= 0L ? 1000L : sleepTime;</span>
+<span class="nc" id="L144">        int timer = 0;</span>
+
+        String attributeValue;
+<span class="nc bnc" id="L147" title="All 6 branches missed.">        for (attributeValue = queryOnCondition(table, column, conditions); (attributeValue == null || !attributeValue.equals(in_expectedValueOfTheAttribute)) &amp;&amp; (long) timer &lt; timeout; ++timer) {</span>
+<span class="nc" id="L148">           new CommonUtils().sleep(sleepTime);</span>
+<span class="nc" id="L149">            attributeValue = queryOnCondition(table, column, conditions);</span>
+<span class="nc" id="L150">            Log.info(&quot;Attibute value &quot; + attributeValue);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            if (pipelineFailureStates.contains(attributeValue)) {</span>
+<span class="nc" id="L152">                return attributeValue;</span>
+            }
+        }
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (!in_expectedValueOfTheAttribute.equals(attributeValue)) {</span>
+<span class="nc" id="L157">            throw new RuntimeException(&quot;The expected state is &quot; + in_expectedValueOfTheAttribute + &quot; but the current state after &quot; + timeout + &quot; seconds is: &quot; + attributeValue);</span>
+        } else {
+<span class="nc" id="L159">            Log.debug(&quot;The expected value for &quot; + column + &quot; is &quot; + in_expectedValueOfTheAttribute + &quot; has been reached in&quot; + timer + &quot;s&quot;);</span>
+<span class="nc" id="L160">            return attributeValue;</span>
+        }
+    }
+
+    /**
+     * This method will query the database on the basis of the given condition
+     *
+     * @param table
+     * @param column     column to be selected
+     * @param conditions
+     * @return value of the column
+     * @throws Exception
+     */
+    public String queryOnCondition(String table, String column, String conditions) throws Exception {
+<span class="nc" id="L174">        String query = String.format(&quot;Select %s from %s where %s&quot;, column, table, conditions);</span>
+
+<span class="nc" id="L176">        String columnValue = null;</span>
+<span class="nc" id="L177">        ResultSet resultSet = getPostgresTableResultSet(query);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        while (resultSet.next()) {</span>
+<span class="nc" id="L179">            columnValue = resultSet.getString(column);</span>
+<span class="nc" id="L180">            Log.info(column + &quot; value is &quot; + columnValue);</span>
+        }
+<span class="nc" id="L182">        resultSet.close();</span>
+<span class="nc" id="L183">        return columnValue;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

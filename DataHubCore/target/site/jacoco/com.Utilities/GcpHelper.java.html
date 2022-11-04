@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GcpHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DataHubAutomationCore</a> &gt; <a href="index.source.html" class="el_package">com.Utilities</a> &gt; <span class="el_source">GcpHelper.java</span></div><h1>GcpHelper.java</h1><pre class="source lang-java linenums">package com.Utilities;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutureCallback;
+import com.google.api.core.ApiFutures;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.api.gax.paging.Page;
+import com.google.api.gax.rpc.ApiException;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.bigquery.*;
+import com.google.cloud.devtools.containeranalysis.v1.ContainerAnalysisClient;
+import com.google.cloud.pubsub.v1.Publisher;
+import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
+import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
+import com.google.cloud.secretmanager.v1.SecretVersionName;
+import com.google.cloud.storage.*;
+import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.ByteString;
+import com.google.pubsub.v1.ProjectName;
+import com.google.pubsub.v1.PubsubMessage;
+import com.google.pubsub.v1.TopicName;
+import io.grafeas.v1.GrafeasClient;
+import io.grafeas.v1.Occurrence;
+import io.grpc.LoadBalancerRegistry;
+import io.grpc.internal.PickFirstLoadBalancerProvider;
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
+
+import java.io.*;
+import java.nio.channels.Channels;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+public class GcpHelper {
+
+<span class="nc" id="L43">    public GcpHelper(String projectId) {</span>
+<span class="nc" id="L44">        this.projectId = projectId;</span>
+<span class="nc" id="L45">        LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());</span>
+<span class="nc" id="L46">        try (SecretManagerServiceClient client = SecretManagerServiceClient.create()) {</span>
+<span class="nc" id="L47">            SecretVersionName secretVersionName = SecretVersionName.of(projectId, &quot;service_account&quot;, &quot;latest&quot;);</span>
+<span class="nc" id="L48">            AccessSecretVersionResponse response = client.accessSecretVersion(secretVersionName);</span>
+<span class="nc" id="L49">            serviceKey = response.getPayload().getData().toStringUtf8();</span>
+<span class="nc" id="L50">            bigquery = getBigQueryService(projectId);</span>
+<span class="nc" id="L51">        } catch (Exception e) {</span>
+<span class="nc" id="L52">            Log.error(e.toString());</span>
+<span class="nc" id="L53">        }</span>
+<span class="nc" id="L54">    }</span>
+
+    private String projectId;
+    private String serviceKey;
+    private BigQuery bigquery;
+
+    public GoogleCredentials getGcpCredentials() {
+<span class="nc" id="L61">        GoogleCredentials credentials = null;</span>
+        try {
+<span class="nc" id="L63">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L64">            credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L65">        } catch (Exception e) {</span>
+<span class="nc" id="L66">            Log.error(e.toString());</span>
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">        return credentials;</span>
+    }
+
+    public List&lt;HashMap&lt;String, Object&gt;&gt; queryDataSet(String sql, List&lt;String&gt; columns) {
+<span class="nc" id="L72">        QueryJobConfiguration queryConfig =</span>
+<span class="nc" id="L73">                QueryJobConfiguration.newBuilder(sql)</span>
+<span class="nc" id="L74">                        .setUseLegacySql(false)</span>
+<span class="nc" id="L75">                        .build();</span>
+        // job ID so that we can safely retry.
+<span class="nc" id="L77">        JobId jobId = JobId.of(UUID.randomUUID().toString());</span>
+<span class="nc" id="L78">        Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).setJobId(jobId).build());</span>
+
+        // Wait for the query to complete.
+        try {
+<span class="nc" id="L82">            queryJob = queryJob.waitFor();</span>
+<span class="nc" id="L83">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L84">            Log.error(e.toString());</span>
+<span class="nc" id="L85">        }</span>
+
+        // Check for errors
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (queryJob == null) {</span>
+<span class="nc" id="L89">            throw new RuntimeException(&quot;Job no longer exists&quot;);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        } else if (queryJob.getStatus().getError() != null) {</span>
+            // You can also look at queryJob.getStatus().getExecutionErrors() for all
+            // errors, not just the latest one.
+<span class="nc" id="L93">            throw new RuntimeException(queryJob.getStatus().getError().toString());</span>
+        }
+
+        // Get the results.
+<span class="nc" id="L97">        TableResult result = null;</span>
+        try {
+<span class="nc" id="L99">            result = queryJob.getQueryResults();</span>
+<span class="nc" id="L100">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L101">            e.printStackTrace();</span>
+<span class="nc" id="L102">        }</span>
+
+<span class="nc" id="L104">        List&lt;HashMap&lt;String, Object&gt;&gt; outputData = new ArrayList&lt;&gt;();</span>
+
+        // Print all pages of the results.
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        for (FieldValueList row : result.iterateAll()) {</span>
+
+<span class="nc" id="L109">            columns.forEach(item -&gt; {</span>
+<span class="nc" id="L110">                HashMap&lt;String, Object&gt; data = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L111">                data.put(item, row.get(item).getRecordValue().get(0).getStringValue());</span>
+<span class="nc" id="L112">                outputData.add(data);</span>
+<span class="nc" id="L113">            });</span>
+
+
+<span class="nc" id="L116">        }</span>
+<span class="nc" id="L117">        return outputData;</span>
+    }
+
+    /**
+     * This method will upload the given file to the GCP bucket
+     *
+     * @param bucketName
+     * @param objectName
+     * @param filePath
+     */
+    public void uploadObject(String bucketName, String objectName, String filePath) {
+
+<span class="nc" id="L129">        Storage storage = null;</span>
+        try {
+
+<span class="nc" id="L132">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L133">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+
+<span class="nc" id="L135">            storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+<span class="nc" id="L136">        } catch (Exception e) {</span>
+<span class="nc" id="L137">            throw new RuntimeException(&quot;Failed to create the connection with GCP&quot;, e);</span>
+<span class="nc" id="L138">        }</span>
+<span class="nc" id="L139">        BlobId blobId = BlobId.of(bucketName, objectName);</span>
+<span class="nc" id="L140">        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();</span>
+        try {
+<span class="nc" id="L142">            storage.create(blobInfo, Files.readAllBytes(Paths.get(filePath)));</span>
+<span class="nc" id="L143">        } catch (IOException e) {</span>
+<span class="nc" id="L144">            System.out.println(&quot;unable to read file&quot;);</span>
+<span class="nc" id="L145">        }</span>
+
+<span class="nc" id="L147">        Log.info(</span>
+                &quot;File &quot; + filePath + &quot; uploaded to bucket &quot; + bucketName + &quot; as &quot; + objectName);
+<span class="nc" id="L149">    }</span>
+
+    /**
+     * Publishing data to PubSub topic
+     *
+     * @param projectId
+     * @param topicId
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void publishToPubSub(String projectId, String topicId, JSONObject message)
+            throws IOException, InterruptedException {
+<span class="nc" id="L161">        LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());</span>
+<span class="nc" id="L162">        TopicName topicName = TopicName.of(projectId, topicId);</span>
+<span class="nc" id="L163">        Publisher publisher = null;</span>
+
+        try {
+
+<span class="nc" id="L167">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L168">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+            // Create a publisher instance with default settings bound to the topic
+<span class="nc" id="L170">            publisher = Publisher.newBuilder(topicName).setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();</span>
+
+            // List&lt;String&gt; messages = Arrays.asList(&quot;first message&quot;, &quot;second message&quot;);
+
+<span class="nc" id="L174">            ByteString data = ByteString.copyFromUtf8(message.toJSONString());</span>
+<span class="nc" id="L175">            PubsubMessage pubsubMessage = PubsubMessage.newBuilder().setData(data).build();</span>
+
+            // Once published, returns a server-assigned message id (unique within the topic)
+<span class="nc" id="L178">            ApiFuture&lt;String&gt; future = publisher.publish(pubsubMessage);</span>
+
+            // Add an asynchronous callback to handle success / failure
+<span class="nc" id="L181">            ApiFutures.addCallback(</span>
+                    future,
+<span class="nc" id="L183">                    new ApiFutureCallback&lt;String&gt;() {</span>
+
+                        @Override
+                        public void onFailure(Throwable throwable) {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                            if (throwable instanceof ApiException) {</span>
+<span class="nc" id="L188">                                ApiException apiException = ((ApiException) throwable);</span>
+                                // details on the API exception
+<span class="nc" id="L190">                                Log.info(apiException.getStatusCode().getCode().toString());</span>
+
+                            }
+<span class="nc" id="L193">                            Log.error(&quot;Error publishing message : &quot; + message.toString());</span>
+<span class="nc" id="L194">                        }</span>
+
+                        @Override
+                        public void onSuccess(String messageId) {
+                            // Once published, returns server-assigned message ids (unique within the topic)
+<span class="nc" id="L199">                            Log.info(&quot;Message Published Successfully with id: &quot; + messageId);</span>
+
+<span class="nc" id="L201">                        }</span>
+                    },
+<span class="nc" id="L203">                    MoreExecutors.directExecutor());</span>
+
+        } finally {
+<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (publisher != null) {</span>
+                // When finished with the publisher, shutdown to free up resources.
+<span class="nc" id="L208">                publisher.shutdown();</span>
+<span class="nc" id="L209">                publisher.awaitTermination(1, TimeUnit.MINUTES);</span>
+            }
+        }
+<span class="nc" id="L212">    }</span>
+
+    public void getVulnerabilityScanReport(String projectId, String resourceUrl) throws IOException {
+
+<span class="nc" id="L216">        resourceUrl = &quot;https://gcr.io/repd-e-eng-01/bdpmgr_7.0.3@sha256:2c070c982f6b569625bb7b643d72f55da716f3dc1ec3420a7a2f4042bf65796a&quot;;</span>
+<span class="nc" id="L217">        projectId = &quot;repd-e-eng-01&quot;;</span>
+
+
+<span class="nc" id="L220">        final String projectName = ProjectName.format(projectId);</span>
+<span class="nc" id="L221">        final String filterStr = String.format(&quot;resourceUrl=\&quot;%s\&quot;&quot;, resourceUrl);</span>
+
+<span class="nc" id="L223">        GrafeasClient client = ContainerAnalysisClient.create().getGrafeasClient();</span>
+
+<span class="nc" id="L225">        int i = 0;</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        for (Occurrence o : client.listOccurrences(projectName, filterStr).iterateAll()) {</span>
+            // Write custom code to process each Occurrence here
+<span class="nc" id="L228">            System.out.println(o.getName());</span>
+<span class="nc" id="L229">            i++;</span>
+<span class="nc" id="L230">        }</span>
+
+<span class="nc" id="L232">        System.out.println(&quot;Total vulnerability = &quot; + i);</span>
+
+<span class="nc" id="L234">    }</span>
+
+    public List&lt;String&gt; listBucketObjects(String bucketName) {
+
+<span class="nc" id="L238">        Storage storage = null;</span>
+        try {
+<span class="nc" id="L240">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L241">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L242">            storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+<span class="nc" id="L243">        } catch (Exception e) {</span>
+<span class="nc" id="L244">            System.out.println(&quot;Unable to get authentication json&quot;);</span>
+<span class="nc" id="L245">        }</span>
+<span class="nc" id="L246">        Page&lt;Blob&gt; blobs = storage.list(bucketName);</span>
+
+<span class="nc" id="L248">        List&lt;String&gt; files = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">        for (Blob blob : blobs.iterateAll()) {</span>
+<span class="nc" id="L250">            System.out.println(blob.getName());</span>
+<span class="nc" id="L251">            files.add(blob.getName());</span>
+<span class="nc" id="L252">        }</span>
+
+<span class="nc" id="L254">        return files;</span>
+    }
+
+    public String readFileFromBucket(String bucketName, String fileName) {
+<span class="nc" id="L258">        Storage storage = null;</span>
+        try {
+<span class="nc" id="L260">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L261">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L262">            storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+<span class="nc" id="L263">        } catch (Exception e) {</span>
+<span class="nc" id="L264">            System.out.println(&quot;Unable to get authentication json&quot;);</span>
+<span class="nc" id="L265">        }</span>
+<span class="nc" id="L266">        Blob blob = storage.get(bucketName, fileName);</span>
+
+<span class="nc" id="L268">        String fileContent = new String(blob.getContent());</span>
+<span class="nc" id="L269">        return fileContent;</span>
+    }
+
+    public HashMap&lt;String, Object&gt; getBucketDetails(String bucketName) {
+
+<span class="nc" id="L274">        Storage storage = null;</span>
+        try {
+<span class="nc" id="L276">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L277">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L278">            storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+<span class="nc" id="L279">        } catch (Exception e) {</span>
+<span class="nc" id="L280">            System.out.println(&quot;Unable to get authentication json&quot;);</span>
+<span class="nc" id="L281">        }</span>
+
+<span class="nc" id="L283">        Bucket bucket =</span>
+<span class="nc" id="L284">                storage.get(bucketName, Storage.BucketGetOption.fields(Storage.BucketField.values()));</span>
+
+<span class="nc" id="L286">        HashMap&lt;String, Object&gt; bucketMetaData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L287">        bucketMetaData.put(&quot;BucketName&quot;, bucket.getName());</span>
+<span class="nc" id="L288">        bucketMetaData.put(&quot;DefaultEventBasedHold&quot;, bucket.getDefaultEventBasedHold());</span>
+<span class="nc" id="L289">        bucketMetaData.put(&quot;DefaultKmsKeyName&quot;, bucket.getDefaultKmsKeyName());</span>
+<span class="nc" id="L290">        bucketMetaData.put(&quot;Id&quot;, bucket.getGeneratedId());</span>
+<span class="nc" id="L291">        bucketMetaData.put(&quot;IndexPage&quot;, bucket.getIndexPage());</span>
+<span class="nc" id="L292">        bucketMetaData.put(&quot;Location&quot;, bucket.getLocation());</span>
+<span class="nc" id="L293">        bucketMetaData.put(&quot;LocationType&quot;, bucket.getLocationType());</span>
+<span class="nc" id="L294">        bucketMetaData.put(&quot;Metageneration&quot;, bucket.getMetageneration());</span>
+<span class="nc" id="L295">        bucketMetaData.put(&quot;NotFoundPage&quot;, bucket.getNotFoundPage());</span>
+<span class="nc" id="L296">        bucketMetaData.put(&quot;RetentionEffectiveTime&quot;, bucket.getRetentionEffectiveTime());</span>
+<span class="nc" id="L297">        bucketMetaData.put(&quot;RetentionPeriod&quot;, bucket.getRetentionPeriod());</span>
+<span class="nc" id="L298">        bucketMetaData.put(&quot;RetentionPolicyIsLocked&quot;, bucket.retentionPolicyIsLocked());</span>
+<span class="nc" id="L299">        bucketMetaData.put(&quot;RequesterPays&quot;, bucket.requesterPays());</span>
+<span class="nc" id="L300">        bucketMetaData.put(&quot;SelfLink&quot;, bucket.getSelfLink());</span>
+<span class="nc" id="L301">        bucketMetaData.put(&quot;StorageClass&quot;, bucket.getStorageClass().name());</span>
+<span class="nc" id="L302">        bucketMetaData.put(&quot;TimeCreated&quot;, bucket.getCreateTime());</span>
+<span class="nc" id="L303">        bucketMetaData.put(&quot;VersioningEnabled&quot;, bucket.versioningEnabled());</span>
+
+<span class="nc bnc" id="L305" title="All 2 branches missed.">        if (bucket.getLifecycleRules() != null) {</span>
+
+<span class="nc bnc" id="L307" title="All 2 branches missed.">            for (BucketInfo.LifecycleRule rule : bucket.getLifecycleRules()) {</span>
+<span class="nc" id="L308">                bucketMetaData.put(&quot;LifeCycleRule&quot;, rule);</span>
+<span class="nc" id="L309">            }</span>
+        }
+
+<span class="nc" id="L312">        return bucketMetaData;</span>
+
+    }
+
+    public List&lt;String&gt; listDatasets() {
+<span class="nc" id="L317">        List&lt;String&gt; datasetList = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L319">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L320">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L321">            BigQuery bigquery = BigQueryOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+
+<span class="nc" id="L323">            Page&lt;Dataset&gt; datasets = bigquery.listDatasets(projectId, BigQuery.DatasetListOption.pageSize(100));</span>
+<span class="nc bnc" id="L324" title="All 2 branches missed.">            if (datasets == null) {</span>
+<span class="nc" id="L325">                System.out.println(&quot;Dataset does not contain any models&quot;);</span>
+<span class="nc" id="L326">                return datasetList;</span>
+            }
+
+<span class="nc" id="L329">            datasets.iterateAll().forEach(dataset -&gt; {</span>
+<span class="nc" id="L330">                datasetList.add(dataset.getDatasetId().getDataset());</span>
+<span class="nc" id="L331">            });</span>
+
+<span class="nc" id="L333">        } catch (BigQueryException | FileNotFoundException e) {</span>
+<span class="nc" id="L334">            System.out.println(&quot;Project does not contain any datasets \n&quot; + e.toString());</span>
+<span class="nc" id="L335">        } catch (IOException e) {</span>
+<span class="nc" id="L336">            e.printStackTrace();</span>
+<span class="nc" id="L337">        }</span>
+<span class="nc" id="L338">        return datasetList;</span>
+
+    }
+
+    public List&lt;String&gt; listTables(String datasetName) {
+<span class="nc" id="L343">        List&lt;String&gt; listTable = new ArrayList&lt;&gt;();</span>
+
+        try {
+<span class="nc" id="L346">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L347">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L348">            BigQuery bigquery = BigQueryOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+
+<span class="nc" id="L350">            DatasetId datasetId = DatasetId.of(projectId, datasetName);</span>
+<span class="nc" id="L351">            Page&lt;Table&gt; tables = bigquery.listTables(datasetId, BigQuery.TableListOption.pageSize(100));</span>
+
+<span class="nc" id="L353">            tables.iterateAll().forEach(table -&gt; {</span>
+<span class="nc" id="L354">                listTable.add(table.getTableId().getTable());</span>
+<span class="nc" id="L355">            });</span>
+
+<span class="nc" id="L357">            System.out.println(&quot;Tables listed successfully.&quot;);</span>
+<span class="nc" id="L358">        } catch (BigQueryException | FileNotFoundException e) {</span>
+<span class="nc" id="L359">            System.out.println(&quot;Tables were not listed. Error occurred: &quot; + e.toString());</span>
+<span class="nc" id="L360">        } catch (IOException e) {</span>
+<span class="nc" id="L361">            e.printStackTrace();</span>
+<span class="nc" id="L362">        }</span>
+
+<span class="nc" id="L364">        return listTable;</span>
+    }
+
+    public Table getBigQueryTableDetails(String datasetName, String tableName) {
+
+<span class="nc" id="L369">        Table table = null;</span>
+
+        try {
+<span class="nc" id="L372">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L373">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L374">            BigQuery bigquery = BigQueryOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+<span class="nc" id="L375">            TableId tableId = TableId.of(projectId, datasetName, tableName);</span>
+<span class="nc" id="L376">            table = bigquery.getTable(tableId);</span>
+
+<span class="nc" id="L378">        } catch (BigQueryException | FileNotFoundException e) {</span>
+<span class="nc" id="L379">            System.out.println(&quot;Table not retrieved. \n&quot; + e.toString());</span>
+<span class="nc" id="L380">        } catch (IOException e) {</span>
+<span class="nc" id="L381">            System.out.println(&quot;Unable to read auth file&quot;);</span>
+<span class="nc" id="L382">        }</span>
+<span class="nc" id="L383">        return table;</span>
+    }
+
+    /**
+     * This method is used to load data from local CSV to the big query table
+     *
+     * @param datasetName
+     * @param tableName
+     * @param csvPath
+     * @param formatOptions
+     */
+    public void loadCsvFileToBigqueryTable(String datasetName, String tableName, Path csvPath, FormatOptions formatOptions) {
+        try {
+            // Initialize client that will be used to send requests. This client only needs to be created
+            // once, and can be reused for multiple requests.
+<span class="nc" id="L398">            InputStream targetStream = new ByteArrayInputStream(serviceKey.getBytes());</span>
+<span class="nc" id="L399">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+<span class="nc" id="L400">            BigQuery bigquery = BigQueryOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+
+<span class="nc" id="L402">            TableId tableId = TableId.of(projectId, datasetName, tableName);</span>
+
+<span class="nc" id="L404">            WriteChannelConfiguration writeChannelConfiguration =</span>
+<span class="nc" id="L405">                    WriteChannelConfiguration.newBuilder(tableId).setFormatOptions(formatOptions).build();</span>
+
+            // The location and JobName must be specified; other fields can be auto-detected.
+<span class="nc" id="L408">            String jobName = &quot;jobId_&quot; + UUID.randomUUID().toString();</span>
+<span class="nc" id="L409">            JobId jobId = JobId.newBuilder().setLocation(&quot;us&quot;).setJob(jobName).build();</span>
+
+            // Imports a local file into a table.
+<span class="nc" id="L412">            try (TableDataWriteChannel writer = bigquery.writer(jobId, writeChannelConfiguration);</span>
+<span class="nc" id="L413">                 OutputStream stream = Channels.newOutputStream(writer)) {</span>
+
+                // This example writes CSV data from a local file,
+                // but bytes can also be written in batch from memory.
+                // In addition to CSV, other formats such as
+                // Newline-Delimited JSON (https://jsonlines.org/) are
+                // supported.
+<span class="nc" id="L420">                Files.copy(csvPath, stream);</span>
+            }
+
+            // Get the Job created by the TableDataWriteChannel and wait for it to complete.
+<span class="nc" id="L424">            Job job = bigquery.getJob(jobId);</span>
+<span class="nc" id="L425">            Job completedJob = job.waitFor();</span>
+<span class="nc bnc" id="L426" title="All 2 branches missed.">            if (completedJob == null) {</span>
+<span class="nc" id="L427">                System.out.println(&quot;Job not executed since it no longer exists.&quot;);</span>
+<span class="nc" id="L428">                return;</span>
+<span class="nc bnc" id="L429" title="All 2 branches missed.">            } else if (completedJob.getStatus().getError() != null) {</span>
+<span class="nc" id="L430">                throw new RuntimeException(&quot;BigQuery was unable to load local file to the table due to an error: \n&quot; +</span>
+<span class="nc" id="L431">                        job.getStatus().getError());</span>
+            }
+            // Get output status
+<span class="nc" id="L434">            JobStatistics.LoadStatistics stats = job.getStatistics();</span>
+            // logger.info(&quot;Successfully loaded %d rows. \n&quot;, stats.getOutputRows());
+<span class="nc" id="L436">        } catch (Exception e) {</span>
+<span class="nc" id="L437">            throw new RuntimeException(&quot;Failed to load the data from csv to BigQuery table &quot;, e);</span>
+<span class="nc" id="L438">        }</span>
+<span class="nc" id="L439">    }</span>
+
+    /**
+     * This method executes batch query to the big query table
+     *
+     * @param query
+     */
+    public TableResult queryBatch(String query) {
+
+<span class="nc bnc" id="L448" title="All 4 branches missed.">        if (StringUtils.isEmpty(query) || StringUtils.isEmpty(projectId)) {</span>
+<span class="nc" id="L449">            throw new IllegalArgumentException(&quot;Please provide valid arguments to execute the query&quot;);</span>
+        }
+
+        try {
+<span class="nc" id="L453">            BigQuery bigquery = getBigQueryService(projectId);</span>
+<span class="nc" id="L454">            QueryJobConfiguration queryConfig =</span>
+<span class="nc" id="L455">                    QueryJobConfiguration.newBuilder(query)</span>
+                            // Run at batch priority, which won't count toward concurrent rate limit.
+<span class="nc" id="L457">                            .setPriority(QueryJobConfiguration.Priority.BATCH)</span>
+<span class="nc" id="L458">                            .build();</span>
+
+<span class="nc" id="L460">            TableResult results = bigquery.query(queryConfig);</span>
+<span class="nc" id="L461">            Log.info(&quot;Query is getting executed ...\n&quot; + query);</span>
+<span class="nc" id="L462">            results.iterateAll()</span>
+<span class="nc" id="L463">                    .forEach(row -&gt; row.forEach(val -&gt; System.out.printf(&quot;%s,&quot;, val.toString())));</span>
+<span class="nc" id="L464">            Log.info(&quot;Query batch performed successfully.&quot;);</span>
+<span class="nc" id="L465">            return results;</span>
+<span class="nc" id="L466">        } catch (Exception e) {</span>
+<span class="nc" id="L467">            throw new RuntimeException(&quot;Failed to execute the query  &quot; + query, e);</span>
+        }
+    }
+
+
+    /**
+     * This method is used to execute the script and stored procedures in BigQuery
+     *
+     * @param script
+     */
+    public void queryScript(String script) {
+
+<span class="nc bnc" id="L479" title="All 4 branches missed.">        if (StringUtils.isEmpty(script) || StringUtils.isEmpty(projectId)) {</span>
+<span class="nc" id="L480">            throw new IllegalArgumentException(&quot;Please provide valid arguments to execute the query&quot;);</span>
+        }
+        try {
+            // Initialize client that will be used to send requests. This client only needs to be created
+            // once, and can be reused for multiple requests.
+<span class="nc" id="L485">            BigQuery bigquery = getBigQueryService(projectId);</span>
+
+<span class="nc" id="L487">            QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(script).build();</span>
+<span class="nc" id="L488">            Job createJob = bigquery.create(JobInfo.of(queryConfig));</span>
+            // Wait for the whole script to finish.
+<span class="nc" id="L490">            Log.info(&quot;Waiting for the script to finish ....!!&quot;);</span>
+<span class="nc" id="L491">            JobInfo jobInfo = createJob.waitFor();</span>
+
+<span class="nc" id="L493">        } catch (Exception e) {</span>
+<span class="nc" id="L494">            throw new RuntimeException(&quot;Failed to execute the Script  &quot; + script, e);</span>
+<span class="nc" id="L495">        }</span>
+<span class="nc" id="L496">    }</span>
+
+    /**
+     * This method will execute the query with the  given params
+     */
+    public void queryWithAdditionalParameter(String query, int param) {
+
+<span class="nc bnc" id="L503" title="All 4 branches missed.">        if (StringUtils.isEmpty(query) || StringUtils.isEmpty(projectId)) {</span>
+<span class="nc" id="L504">            throw new IllegalArgumentException(&quot;Please provide valid arguments to execute the query&quot;);</span>
+        }
+
+        try {
+            // Initialize client that will be used to send requests. This client only needs to be created
+            // once, and can be reused for multiple requests.
+<span class="nc" id="L510">            BigQuery bigquery = getBigQueryService(projectId);</span>
+            // Note: Standard SQL is required to use query parameters.
+<span class="nc" id="L512">            QueryJobConfiguration queryConfig =</span>
+<span class="nc" id="L513">                    QueryJobConfiguration.newBuilder(query)</span>
+<span class="nc" id="L514">                            .addPositionalParameter(QueryParameterValue.int64(param))</span>
+<span class="nc" id="L515">                            .build();</span>
+
+<span class="nc" id="L517">            bigquery.query(queryConfig);</span>
+<span class="nc" id="L518">            Log.info(&quot;Query with positional parameters performed successfully.&quot; + query);</span>
+<span class="nc" id="L519">        } catch (Exception e) {</span>
+<span class="nc" id="L520">            throw new RuntimeException(&quot;Failed to execute the query  &quot; + query, e);</span>
+<span class="nc" id="L521">        }</span>
+<span class="nc" id="L522">    }</span>
+
+
+    /**
+     * This method is used to create the dataset in the
+     *
+     * @param datasetName
+     */
+    public void createDataset(String datasetName) {
+
+<span class="nc bnc" id="L532" title="All 4 branches missed.">        if (StringUtils.isEmpty(datasetName) || StringUtils.isEmpty(projectId)) {</span>
+<span class="nc" id="L533">            throw new IllegalArgumentException(&quot;Invalid Arguments..!!&quot;);</span>
+        }
+
+        try {
+<span class="nc bnc" id="L537" title="All 2 branches missed.">            if (!isDataSetExists(projectId, datasetName)) {</span>
+<span class="nc" id="L538">                Log.info(&quot;Creating dataset &quot; + datasetName);</span>
+<span class="nc" id="L539">                BigQuery bigquery = getBigQueryService(projectId);</span>
+<span class="nc" id="L540">                DatasetInfo datasetInfo = DatasetInfo.newBuilder(Preconditions.checkNotNull(datasetName)).build();</span>
+<span class="nc" id="L541">                Dataset newDataset = bigquery.create(datasetInfo);</span>
+<span class="nc" id="L542">                String newDatasetName = newDataset.getDatasetId().getDataset();</span>
+<span class="nc" id="L543">                Log.info(newDatasetName + &quot; created successfully&quot;);</span>
+<span class="nc" id="L544">            } else {</span>
+<span class="nc" id="L545">                Log.info(&quot;Dataset &quot; + datasetName + &quot; already exists..!!&quot;);</span>
+            }
+<span class="nc" id="L547">        } catch (BigQueryException e) {</span>
+<span class="nc" id="L548">            throw new RuntimeException(&quot;Failed to create the dataset &quot; + datasetName, e);</span>
+<span class="nc" id="L549">        }</span>
+<span class="nc" id="L550">    }</span>
+
+    public boolean isDataSetExists(String projectId, String datasetName) {
+<span class="nc" id="L553">        boolean isDataSetExists = false;</span>
+        try {
+            // Initialize client that will be used to send requests. This client only needs to be created
+            // once, and can be reused for multiple requests.
+<span class="nc" id="L557">            BigQuery bigquery = getBigQueryService(projectId);</span>
+<span class="nc" id="L558">            DatasetId datasetId = DatasetId.of(projectId, datasetName);</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">            isDataSetExists = (bigquery.getDataset(datasetId) == null) ? false : true;</span>
+<span class="nc" id="L560">        } catch (BigQueryException e) {</span>
+<span class="nc" id="L561">            Log.error(&quot;Failed to check the database existence &quot; + datasetName);</span>
+<span class="nc" id="L562">        }</span>
+<span class="nc" id="L563">        return isDataSetExists;</span>
+    }
+
+    /**
+     * This method will return the big query client that will be used to send requests.
+     * This client only needs to be created once, and can be reused for multiple requests
+     *
+     * @param projectId
+     * @return
+     */
+    private BigQuery getBigQueryService(String projectId) {
+<span class="nc" id="L574">        GoogleCredentials credentials = null;</span>
+        try {
+<span class="nc" id="L576">            credentials = getGcpCredentials();</span>
+<span class="nc" id="L577">            return BigQueryOptions.newBuilder().setCredentials(credentials).build().getService();</span>
+<span class="nc" id="L578">        } catch (Exception e) {</span>
+<span class="nc" id="L579">            throw new RuntimeException(&quot;Failed to get the BigQuery Service for Project Id &quot; + projectId);</span>
+        }
+    }
+
+    /** Anupam Sinha
+     * Validate the GCP service account file for its validity
+     * @param serviceAccountFile
+     * @return
+     */
+    public Boolean validateGcpCredFile(String serviceAccountFile) {
+        try {
+
+<span class="nc" id="L591">            InputStream targetStream = new ByteArrayInputStream(serviceAccountFile.getBytes());</span>
+<span class="nc" id="L592">            GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream);</span>
+
+<span class="nc" id="L594">        } catch (Exception e) {</span>
+<span class="nc" id="L595">            System.out.println(&quot;Unable to establish connection with authfile provided&quot;);</span>
+<span class="nc" id="L596">            return false;</span>
+<span class="nc" id="L597">        }</span>
+
+<span class="nc" id="L599">        return true;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
